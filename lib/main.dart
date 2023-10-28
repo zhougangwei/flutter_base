@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'my_chart.dart';
+
 void main() {
   runApp(ShoppingApp());
 }
@@ -18,24 +20,20 @@ class ShoppingApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping App'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // 处理搜索逻辑
-            },
-          ),
         ],
       ),
       body: Center(
         child: Text('Home Page'),
       ),
       drawer: AppDrawer(), // 添加侧边栏
+      endDrawer: CartDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
