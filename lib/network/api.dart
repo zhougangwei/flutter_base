@@ -1,49 +1,14 @@
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
 import '../sp/sp_utils.dart';
+import 'config.dart';
 
 
-class ApiUrl {
-  final String url;
-  final String avatarUrl;
-  final String loginUrl;
-  final String nginxFdfsUrl;
 
-  ApiUrl({
-    required this.url,
-    required this.avatarUrl,
-    required this.loginUrl,
-    required this.nginxFdfsUrl,
-  });
-}
 
-class Config {
-  final ApiUrl apiUrl;
-  final String navigationBarTextStyle;
-  final String navigationBarBackgroundColor;
 
-  Config({
-    required this.apiUrl,
-    required this.navigationBarTextStyle,
-    required this.navigationBarBackgroundColor,
-  });
-}
-
-final apiUrl = ApiUrl(
-  url: 'http://twoshop.cn/api.html',
-  avatarUrl: '',
-  loginUrl: '',
-  nginxFdfsUrl: '',
-);
-
-final config = Config(
-  apiUrl: apiUrl,
-  navigationBarTextStyle: 'white',
-  navigationBarBackgroundColor: '#072D8C',
-);
 
 final String url = config.apiUrl.url;
 final String loginUrl = config.apiUrl.loginUrl;
@@ -86,12 +51,7 @@ Future<Map<String, dynamic>> ax({
     if (showToast) {
       final title = responseData['msg'] ?? '操作失败，请稍后再试~';
       final duration = title.toString().length > 11 ? 3000 : 1500;
-      Fluttertoast.showToast(
-        msg: title,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: duration ~/ 1000,
-      );
+
     }
     return responseData;
   }
@@ -227,10 +187,6 @@ Future<Map<String, dynamic>> upload({
 }
 
 void errorToShow(String message) {
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.CENTER,
-  );
+
 }
 

@@ -40,7 +40,6 @@ dependencies:
   share_plus: ^4.0.4
   shared_preferences: ^2.1.1
   xml2json: ^5.3.1
-  fluttertoast: ^8.2.1
 
 dependency_overrides:
   collection: ^1.17.2
@@ -58,5 +57,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:
-    - assets/images/

@@ -64,7 +64,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
       timer?.cancel();
       timer = null;
     }
-
+    print('执行到这了start11'+secNum.toString());
     canGetCode = false;
     changeEvent(changeText.replaceFirst(RegExp(r'x|X'), secNum.toString()));
     setTimeToStorage();
@@ -73,6 +73,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
         changeEvent(changeText.replaceFirst(RegExp(r'x|X'), secNum.toString()));
       } else {
         timer.cancel();
+        print('执行到这了start'+secNum.toString());
         changeEvent(endText);
         secNum = seconds;
         canGetCode = true;
@@ -84,6 +85,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
     canGetCode = true;
     timer?.cancel();
     secNum = seconds;
+    print('执行到这了reset');
     changeEvent(endText);
   }
 

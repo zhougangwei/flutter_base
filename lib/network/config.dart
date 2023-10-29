@@ -13,9 +13,9 @@ class SystemInfo {
 
   factory SystemInfo.fromJson(Map<String, dynamic> json) {
     return SystemInfo(
-      statusBarHeight: json['statusBarHeight'].toDouble(),
-      windowWidth: json['windowWidth'].toDouble(),
-      windowHeight: json['windowHeight'].toDouble(),
+      statusBarHeight: 1,
+      windowWidth: 1,
+      windowHeight: 1,
     );
   }
 }
@@ -64,7 +64,7 @@ class Config {
       nginxFdfsUrl: '',
     );
 
-    ApiUrl apiUrl = dev;
+    ApiUrl apiUrl = production;
     if (environment == 'production') {
       apiUrl = production;
     }

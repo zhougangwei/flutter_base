@@ -1,3 +1,7 @@
+import 'package:atest/cart/cart.dart';
+import 'package:atest/wishlist/wishlist.dart';
+import 'package:atest/mine/mine.dart';
+import 'package:atest/shop/shop.dart';
 import 'package:flutter/material.dart';
 
 import 'my_chart.dart';
@@ -19,22 +23,40 @@ class ShoppingApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    // 添加您的页面组件
+    ShopPage(),
+    WishListPage(),
+    Cart(),
+    Mine(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping App'),
-        actions: [
-        ],
+        actions: [],
       ),
-      body: Center(
-        child: Text('Home Page'),
-      ),
-      drawer: AppDrawer(), // 添加侧边栏
+      body: _pages[_currentIndex],
+      drawer: AppDrawer(),
+      // 添加侧边栏
       endDrawer: CartDrawer(),
       bottomNavigationBar: BottomNavigationBar(
+        onTap: _onTabTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.shop),
