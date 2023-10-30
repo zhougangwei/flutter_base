@@ -111,19 +111,15 @@ class _ShopPageState extends State<ShopPage> {
   @override
   void initState() {
     super.initState();
-    getPageList();
-    getTypeList();
-    relatedlist();
+    //getPageList();
+    //getTypeList();
+    //relatedlist();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: [
-          GoodCastList()
-        ],
-      ),
-    );
+    return
+          GoodCastList();
+
   }
 }

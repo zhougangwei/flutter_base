@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:atest/utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import '../generated/json/base/json_convert_content.dart';
 import '../network/api.dart';
 import '../network/user.dart';
+import 'bean/good_cat_bean_entity.dart';
 
 class GoodCastList extends StatefulWidget {
   @override
@@ -11,7 +13,7 @@ class GoodCastList extends StatefulWidget {
 }
 
 class _GoodCastListState extends State<GoodCastList> {
-  List<dynamic> getGoodsCatlist = [];
+  List<GoodCatBeanEntity> getGoodsCatlist = [];
 
   @override
   void initState() {
@@ -21,13 +23,13 @@ class _GoodCastListState extends State<GoodCastList> {
 
   void getGoodsCat() {
     HttpClient().getGoodsCat({}).then((res) {
-      if (res.status) {
+      if (res['status']) {
         setState(() {
-          getGoodsCatlist = res.data;
+          getGoodsCatlist = jsonConvert.convertListNotNull<GoodCatBeanEntity>(res['data'])??[];
         });
       }
     }).catchError((err) {
-      // Handle error
+      err.toString();
     });
   }
 
@@ -37,7 +39,7 @@ class _GoodCastListState extends State<GoodCastList> {
         itemCount: getGoodsCatlist.length,
         itemBuilder: (context, index) {
           var item = getGoodsCatlist[index];
-          if (item['child'].length > 0) {
+          if (item.child.length > 0) {
             return Container(
               margin: EdgeInsets.only(left: 20, right: 20),
               child: Column(
@@ -46,7 +48,7 @@ class _GoodCastListState extends State<GoodCastList> {
                   Divider(color: Colors.blue, thickness: 1),
                   SizedBox(height: 40),
                   Text(
-                    item['name'],
+                    item.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -56,14 +58,14 @@ class _GoodCastListState extends State<GoodCastList> {
                   SizedBox(height: 40),
                   Divider(color: Colors.grey, thickness: 1),
                   Row(
-                    children: item['child'].map<Widget>((ite) {
+                    children: item.child.map<Widget>((ite) {
                       return Expanded(
                         flex: 6,
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            ite['name'],
+                            ite.name,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -75,11 +77,11 @@ class _GoodCastListState extends State<GoodCastList> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: item['goods'].map<Widget>((it) {
+                        children: item.goods.map<Widget>((it) {
                           return Expanded(
                             flex: 6,
                             child: GestureDetector(
-                              onTap: () => goodsinfo(it['id']),
+                              onTap: () => goodsinfo(it.id),
                               child: Container(
                                 decoration: BoxDecoration(
                                   boxShadow: [
@@ -94,13 +96,13 @@ class _GoodCastListState extends State<GoodCastList> {
                                 child: Column(
                                   children: [
                                     Image.network(
-                                      it['image_url'],
+                                      it.imageUrl,
                                       width: double.infinity,
                                       height: 390,
                                     ),
                                     SizedBox(height: 15),
                                     Text(
-                                      it['name'],
+                                      it.name,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -112,7 +114,7 @@ class _GoodCastListState extends State<GoodCastList> {
                                       MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '$${it['price']}-$${it['mktprice']}',
+                                          '\$$it.price-\$$it.mktprice',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
