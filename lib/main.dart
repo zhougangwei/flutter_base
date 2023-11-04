@@ -42,6 +42,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
     });
+
+
   }
 
   @override
@@ -50,7 +52,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Shopping App'),
         actions: [],
-      ),
+      ),/*
+      body:  IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),*/
       body: _pages[_currentIndex],
       drawer: AppDrawer(),
       // 添加侧边栏

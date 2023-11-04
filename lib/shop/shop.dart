@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:atest/shop/custom_goods_scrollview.dart';
 import 'package:atest/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import '../network/api.dart';
 import '../network/user.dart';
+import 'banner.dart';
 import 'good_cast_list.dart';
 
 class ShopPage extends StatefulWidget {
@@ -18,10 +20,7 @@ class _ShopPageState extends State<ShopPage> {
   List<dynamic> TypeList = [];
   String keyworde = '';
   bool showlist = false;
-  var datapost = {
-    "page": 1,
-    "limit": 4
-  };
+  var datapost = {"page": 1, "limit": 4};
 
   void getPageList() {
     HttpClient().getPageList({}).then((res) {
@@ -54,8 +53,6 @@ class _ShopPageState extends State<ShopPage> {
       keyworde = '';
     });
   }
-
-
 
   void collection(int id, int index) {
     Map<String, dynamic> data = {
@@ -118,8 +115,6 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-          GoodCastList();
-
+    return CustomGoodsScrollView();
   }
 }
