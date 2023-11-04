@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../generated/json/base/json_convert_content.dart';
 import '../network/user.dart';
 import 'banner.dart';
+import 'bean/feature_entity.dart';
 import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
 
@@ -16,8 +18,8 @@ class CustomGoodsScrollView extends StatefulWidget {
 class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
   List<GoodCatBeanEntity> getGoodsCatlist = [];
   List<TypeItemEntity> typeList = [];
-  List<TypeItemEntity> featurednlist = [];
-  var datapost = {"page": 1, "limit": 4};
+  List<FeatureEntity> featurednlist = [];
+  var datapost = {"page": "1", "limit": "4"};
 
   @override
   void initState() {
@@ -35,9 +37,15 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     data['where'] = jsonEncode(type);
     HttpClient().relatedlist(data).then((res) {
       if (res['status']) {
-        featurednlist = (res['data']['list']);
+        setState(() {
+          featurednlist = jsonConvert
+                  .convertListNotNull<FeatureEntity>(res['data']['list']) ??
+              [];
+        });
       }
-    }).catchError((err) {});
+    }).catchError((err) {
+      err.toString();
+    });
   }
 
   void getGoodsCat() {
@@ -77,12 +85,13 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
       slivers: [
         SliverToBoxAdapter(child: CarouselBanner()),
         buildTypeList(),
-        buildSliverList(),
+        buildFeatured(),
+        buildGoodCastList(),
       ],
     ));
   }
 
-  SliverList buildSliverList() {
+  SliverList buildGoodCastList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -92,18 +101,19 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
               margin: EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 children: [
-                  SizedBox(height: 40),
+                  SizedBox(height: 20),
                   Divider(color: Colors.blue, thickness: 1),
-                  SizedBox(height: 40),
+                  SizedBox(height: 20),
                   Text(
                     item.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.black,
+                      fontSize: 16,
+                      color: Color(0xFF072D8C),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 10),
                   Divider(color: Colors.grey, thickness: 1),
                   Row(
                     children: item.child.map<Widget>((ite) {
@@ -112,66 +122,69 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(10),
-                          child: Text(
-                            ite.name,
-                            textAlign: TextAlign.center,
-                          ),
+                          child: Text(ite.name,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              )),
                         ),
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 30),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: item.goods.map<Widget>((it) {
-                          return Expanded(
-                            flex: 6,
-                            child: GestureDetector(
-                              onTap: () => goodsinfo(it.id),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 10,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                ),
-                                padding: EdgeInsets.all(20),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      it.imageUrl,
-                                      width: double.infinity,
-                                      height: 390,
-                                    ),
-                                    SizedBox(height: 15),
-                                    Text(
-                                      it.name,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      '\$$it.price-\$$it.mktprice',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                  SizedBox(height: 10),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 一行显示
+                      childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                      crossAxisSpacing: 10, // 子项之间的横向间距
+                      mainAxisSpacing: 10, // 两个子项
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      var it = item.goods[index];
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              CachedNetworkImage(imageUrl: it.imageUrl),
+                              SizedBox(height: 15),
+                              Text(
+                                it.name,
+                                maxLines: 1,
+                                textAlign: TextAlign.left,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Color(0xff333333),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
+                              SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "\$" + it.price + "-" + "\$" + it.mktprice,
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Color(0xff333333),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             );
@@ -186,13 +199,13 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
 
   SliverPadding buildTypeList() {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+          crossAxisCount: 3,
           crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 1.0,
+          mainAxisSpacing: 8,
+          childAspectRatio: 141/182,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -202,16 +215,20 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                 meninfo(item.id, item.name);
               },
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    item.image,
-                    width: 100,
-                    height: 100,
+                  CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: CachedNetworkImageProvider(
+                      item.image,
+                    ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 8),
                   Text(
                     item.name,
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
@@ -228,4 +245,70 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
   }
 
   void meninfo(double id, String name) {}
+
+  buildFeatured() {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            var item = featurednlist[index];
+            return GestureDetector(
+              onTap: () {
+                goodsinfo(item.id);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    Container(
+                      child: CachedNetworkImage(
+                        imageUrl: item.image_url,
+                        width: double.infinity,
+                        height: 390,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: 20,
+                      right: 20,
+                      child: GestureDetector(
+                        onTap: () {
+                          collection(item.id, index);
+                        },
+                        child: Icon(
+                          item.isfav == false
+                              ? Icons.favorite_border
+                              : Icons.favorite,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          childCount: featurednlist.length,
+        ),
+      ),
+    );
+  }
+
+  void collection(double id, int index) {}
 }
