@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../network/user.dart';
 import 'banner.dart';
@@ -24,9 +25,9 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
   @override
   void initState() {
     super.initState();
-    getGoodsCat();
     getTypeList();
     relatedList();
+    getGoodsCat();
   }
 
   void relatedList() {
@@ -137,7 +138,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                   GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: 4,
+                    itemCount: item.goods.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // 一行显示
                       childAspectRatio: 335 / 475, // 调整子项的宽高比例
@@ -205,7 +206,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
           crossAxisCount: 3,
           crossAxisSpacing: 16,
           mainAxisSpacing: 8,
-          childAspectRatio: 141/182,
+          childAspectRatio: 141 / 182,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -244,70 +245,114 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     );
   }
 
-  void meninfo(double id, String name) {}
+  void meninfo(int id, String name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ClassifyPage(id:id,name:name)),
+    );
+
+
+  }
 
   buildFeatured() {
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16.0,
-          mainAxisSpacing: 16.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            var item = featurednlist[index];
-            return GestureDetector(
-              onTap: () {
-                goodsinfo(item.id);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    Container(
-                      child: CachedNetworkImage(
-                        imageUrl: item.image_url,
-                        width: double.infinity,
-                        height: 390,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 20,
-                      right: 20,
-                      child: GestureDetector(
-                        onTap: () {
-                          collection(item.id, index);
-                        },
-                        child: Icon(
-                          item.isfav == false
-                              ? Icons.favorite_border
-                              : Icons.favorite,
-                          size: 40,
+    return SliverToBoxAdapter(
+        child: GestureDetector(
+      child: Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                child: Container(
+                  width: 132,
+                  child: Column(
+                    children: [
+                      Text(
+                        "Featured",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                  ],
+                      Divider(color: Colors.grey, thickness: 1)
+                    ],
+                  ),
                 ),
               ),
-            );
-          },
-          childCount: featurednlist.length,
+            ),
+
+            GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: featurednlist.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // 一行显示
+                childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                crossAxisSpacing: 10, // 子项之间的横向间距
+                mainAxisSpacing: 10, // 两个子项
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                var item = featurednlist[index];
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CachedNetworkImage(imageUrl: item.image_url),
+                        Text(
+                          item.cat_name,
+                          maxLines: 1,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Color(0xff333333),
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            item.name,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Color(0xff333333),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '\$${item.price}-\$${item.mktprice}',
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Color(0xff333333),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
         ),
       ),
-    );
+    ));
   }
 
   void collection(double id, int index) {}

@@ -69,6 +69,14 @@ FeatureEntity $FeatureEntityFromJson(Map<String, dynamic> json) {
   if (params != null) {
     featureEntity.params = params;
   }
+  final String? cat_name = jsonConvert.convert<String>(json['cat_name']);
+  if (cat_name != null) {
+    featureEntity.cat_name = cat_name;
+  }
+  final String? image_url = jsonConvert.convert<String>(json['image_url']);
+  if (image_url != null) {
+    featureEntity.image_url = image_url;
+  }
   final double? commentsCount = jsonConvert.convert<double>(
       json['comments_count']);
   if (commentsCount != null) {
@@ -178,6 +186,8 @@ Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
   data['unit'] = entity.unit;
   data['params'] = entity.params;
   data['comments_count'] = entity.commentsCount;
+  data['image_url'] = entity.image_url;
+  data['cat_name'] = entity.cat_name;
   data['view_count'] = entity.viewCount;
   data['buy_count'] = entity.buyCount;
   data['uptime'] = entity.uptime;
@@ -220,6 +230,8 @@ extension FeatureEntityExtension on FeatureEntity {
     String? params,
     double? commentsCount,
     double? viewCount,
+    String? image_url,
+    String? cat_name,
     double? buyCount,
     dynamic uptime,
     dynamic downtime,
@@ -258,6 +270,8 @@ extension FeatureEntityExtension on FeatureEntity {
       ..params = params ?? this.params
       ..commentsCount = commentsCount ?? this.commentsCount
       ..viewCount = viewCount ?? this.viewCount
+      ..cat_name = cat_name ?? this.cat_name
+      ..image_url = image_url ?? this.image_url
       ..buyCount = buyCount ?? this.buyCount
       ..uptime = uptime ?? this.uptime
       ..downtime = downtime ?? this.downtime

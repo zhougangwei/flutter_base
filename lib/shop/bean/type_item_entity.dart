@@ -5,7 +5,7 @@ export 'package:atest/generated/json/type_item_entity.g.dart';
 
 @JsonSerializable()
 class TypeItemEntity {
-	late double id;
+	late int id;
 	late String name = '';
 	dynamic params;
 	@JSONField(name: "image_id")

@@ -3,7 +3,7 @@ import 'package:atest/shop/bean/type_item_entity.dart';
 
 TypeItemEntity $TypeItemEntityFromJson(Map<String, dynamic> json) {
   final TypeItemEntity typeItemEntity = TypeItemEntity();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     typeItemEntity.id = id;
   }
@@ -43,7 +43,7 @@ Map<String, dynamic> $TypeItemEntityToJson(TypeItemEntity entity) {
 
 extension TypeItemEntityExtension on TypeItemEntity {
   TypeItemEntity copyWith({
-    double? id,
+    int? id,
     String? name,
     dynamic params,
     String? imageId,

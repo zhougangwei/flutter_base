@@ -8,6 +8,7 @@ class FeatureEntity {
 	late double id;
 	late String bn = '';
 	late String name = '';
+	late String cat_name = '';
 	late String brief = '';
 	late String price = '';
 	late String mktprice = '';
