@@ -9,12 +9,12 @@ import '../network/user.dart';
 import '../widget/carousel.dart';
 import 'bean/good_cat_bean_entity.dart';
 
-class CarouselBanner extends StatefulWidget {
+class HomeCarouselBanner extends StatefulWidget {
   @override
-  _CarouselBannerState createState() => _CarouselBannerState();
+  _HomeCarouselBannerState createState() => _HomeCarouselBannerState();
 }
 
-class _CarouselBannerState extends State<CarouselBanner> {
+class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
   List<String> bannerList = [];
 
   @override
@@ -26,7 +26,6 @@ class _CarouselBannerState extends State<CarouselBanner> {
   void getBanner() {
     var data = {"page": 1, "limit": 10, "code": 'tpl1_slider'};
     HttpClient().openbanner(data).then((res) {
-      // console.log(res)
       setState(() {
         if (res['status']) {
          List<BannerBeanEntity> list = jsonConvert.convertListNotNull<BannerBeanEntity>(res['data']['list'])??[];

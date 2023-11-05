@@ -3,7 +3,7 @@ import 'package:atest/shop/bean/feature_entity.dart';
 
 FeatureEntity $FeatureEntityFromJson(Map<String, dynamic> json) {
   final FeatureEntity featureEntity = FeatureEntity();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     featureEntity.id = id;
   }
@@ -212,7 +212,7 @@ Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
 
 extension FeatureEntityExtension on FeatureEntity {
   FeatureEntity copyWith({
-    double? id,
+    int? id,
     String? bn,
     String? name,
     String? brief,
@@ -295,7 +295,7 @@ extension FeatureEntityExtension on FeatureEntity {
 
 FeatureProduct $FeatureProductFromJson(Map<String, dynamic> json) {
   final FeatureProduct featureProduct = FeatureProduct();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     featureProduct.id = id;
   }
@@ -422,7 +422,7 @@ Map<String, dynamic> $FeatureProductToJson(FeatureProduct entity) {
 
 extension FeatureProductExtension on FeatureProduct {
   FeatureProduct copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     dynamic barcode,
     String? sn,
@@ -473,7 +473,7 @@ extension FeatureProductExtension on FeatureProduct {
 
 FeatureCanshu $FeatureCanshuFromJson(Map<String, dynamic> json) {
   final FeatureCanshu featureCanshu = FeatureCanshu();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     featureCanshu.id = id;
   }
@@ -503,7 +503,7 @@ Map<String, dynamic> $FeatureCanshuToJson(FeatureCanshu entity) {
 
 extension FeatureCanshuExtension on FeatureCanshu {
   FeatureCanshu copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     String? value,
     dynamic sort,

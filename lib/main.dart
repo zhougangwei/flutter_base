@@ -29,6 +29,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int _currentIndex = 0;
   final List<Widget> _pages = [
     // 添加您的页面组件
@@ -42,21 +44,48 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
     });
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Shopping App'),
-        actions: [],
-      ),/*
+        backgroundColor: Color(0xff072D8C),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.account_circle), // 自定义图标
+              onPressed: () {
+                // 打开endDrawer
+                _scaffoldKey.currentState?.openEndDrawer();
+              },
+            ),
+          ],
+          leadingWidth: 150,
+          leading: Container(
+            width: 120 ,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // 图片点击后执行的代码
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: Image.asset('assets/images/icon-logo.png', width:40),
+                ),
+                Image.asset('assets/images/icon-logo.png',width: 60),
+              ],
+            ),
+          )),
+      /*
       body:  IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),*/
+
       body: _pages[_currentIndex],
       drawer: AppDrawer(),
       // 添加侧边栏

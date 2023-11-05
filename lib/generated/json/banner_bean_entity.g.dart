@@ -3,7 +3,7 @@ import 'package:atest/shop/bean/banner_bean_entity.dart';
 
 BannerBeanEntity $BannerBeanEntityFromJson(Map<String, dynamic> json) {
   final BannerBeanEntity bannerBeanEntity = BannerBeanEntity();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     bannerBeanEntity.id = id;
   }
@@ -53,7 +53,7 @@ Map<String, dynamic> $BannerBeanEntityToJson(BannerBeanEntity entity) {
 
 extension BannerBeanEntityExtension on BannerBeanEntity {
   BannerBeanEntity copyWith({
-    double? id,
+    int? id,
     double? positionId,
     String? code,
     String? name,

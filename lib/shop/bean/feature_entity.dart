@@ -5,7 +5,7 @@ export 'package:atest/generated/json/feature_entity.g.dart';
 
 @JsonSerializable()
 class FeatureEntity {
-	late double id;
+	late int id;
 	late String bn = '';
 	late String name = '';
 	late String cat_name = '';
@@ -72,7 +72,7 @@ class FeatureEntity {
 
 @JsonSerializable()
 class FeatureProduct {
-	late double id;
+	late int id;
 	@JSONField(name: "goods_id")
 	late double goodsId;
 	dynamic barcode;
@@ -121,7 +121,7 @@ class FeatureProduct {
 
 @JsonSerializable()
 class FeatureCanshu {
-	late double id;
+	late int id;
 	@JSONField(name: "goods_id")
 	late double goodsId;
 	late String value = '';

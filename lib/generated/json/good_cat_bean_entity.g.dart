@@ -3,7 +3,7 @@ import 'package:atest/shop/bean/good_cat_bean_entity.dart';
 
 GoodCatBeanEntity $GoodCatBeanEntityFromJson(Map<String, dynamic> json) {
   final GoodCatBeanEntity goodCatBeanEntity = GoodCatBeanEntity();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanEntity.id = id;
   }
@@ -54,7 +54,7 @@ Map<String, dynamic> $GoodCatBeanEntityToJson(GoodCatBeanEntity entity) {
 
 extension GoodCatBeanEntityExtension on GoodCatBeanEntity {
   GoodCatBeanEntity copyWith({
-    double? id,
+    int? id,
     String? name,
     String? imageId,
     double? typeId,
@@ -75,7 +75,7 @@ extension GoodCatBeanEntityExtension on GoodCatBeanEntity {
 
 GoodCatBeanChild $GoodCatBeanChildFromJson(Map<String, dynamic> json) {
   final GoodCatBeanChild goodCatBeanChild = GoodCatBeanChild();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanChild.id = id;
   }
@@ -130,7 +130,7 @@ Map<String, dynamic> $GoodCatBeanChildToJson(GoodCatBeanChild entity) {
 
 extension GoodCatBeanChildExtension on GoodCatBeanChild {
   GoodCatBeanChild copyWith({
-    double? id,
+    int? id,
     double? parentId,
     String? name,
     double? typeId,
@@ -155,7 +155,7 @@ extension GoodCatBeanChildExtension on GoodCatBeanChild {
 
 GoodCatBeanGoods $GoodCatBeanGoodsFromJson(Map<String, dynamic> json) {
   final GoodCatBeanGoods goodCatBeanGoods = GoodCatBeanGoods();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanGoods.id = id;
   }
@@ -402,7 +402,7 @@ Map<String, dynamic> $GoodCatBeanGoodsToJson(GoodCatBeanGoods entity) {
 
 extension GoodCatBeanGoodsExtension on GoodCatBeanGoods {
   GoodCatBeanGoods copyWith({
-    double? id,
+    int? id,
     String? bn,
     String? name,
     String? brief,
@@ -500,7 +500,7 @@ extension GoodCatBeanGoodsExtension on GoodCatBeanGoods {
 GoodCatBeanGoodsProduct $GoodCatBeanGoodsProductFromJson(
     Map<String, dynamic> json) {
   final GoodCatBeanGoodsProduct goodCatBeanGoodsProduct = GoodCatBeanGoodsProduct();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanGoodsProduct.id = id;
   }
@@ -628,7 +628,7 @@ Map<String, dynamic> $GoodCatBeanGoodsProductToJson(
 
 extension GoodCatBeanGoodsProductExtension on GoodCatBeanGoodsProduct {
   GoodCatBeanGoodsProduct copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     dynamic barcode,
     String? sn,
@@ -680,7 +680,7 @@ extension GoodCatBeanGoodsProductExtension on GoodCatBeanGoodsProduct {
 GoodCatBeanGoodsCanshu $GoodCatBeanGoodsCanshuFromJson(
     Map<String, dynamic> json) {
   final GoodCatBeanGoodsCanshu goodCatBeanGoodsCanshu = GoodCatBeanGoodsCanshu();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanGoodsCanshu.id = id;
   }
@@ -711,7 +711,7 @@ Map<String, dynamic> $GoodCatBeanGoodsCanshuToJson(
 
 extension GoodCatBeanGoodsCanshuExtension on GoodCatBeanGoodsCanshu {
   GoodCatBeanGoodsCanshu copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     String? value,
     dynamic sort,
@@ -727,7 +727,7 @@ extension GoodCatBeanGoodsCanshuExtension on GoodCatBeanGoodsCanshu {
 GoodCatBeanGoodsBrand $GoodCatBeanGoodsBrandFromJson(
     Map<String, dynamic> json) {
   final GoodCatBeanGoodsBrand goodCatBeanGoodsBrand = GoodCatBeanGoodsBrand();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     goodCatBeanGoodsBrand.id = id;
   }
@@ -753,7 +753,7 @@ Map<String, dynamic> $GoodCatBeanGoodsBrandToJson(
 
 extension GoodCatBeanGoodsBrandExtension on GoodCatBeanGoodsBrand {
   GoodCatBeanGoodsBrand copyWith({
-    double? id,
+    int? id,
     String? name,
     String? logo,
   }) {

@@ -4,7 +4,7 @@ import 'dart:convert';
 
 @JsonSerializable()
 class BannerBeanEntity {
-	late double id;
+	late int id;
 	@JSONField(name: "position_id")
 	late double positionId;
 	late String code = '';

@@ -1,4 +1,5 @@
 import 'package:atest/shop/bean/good_cat_bean_entity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,6 @@ class Carousel extends StatefulWidget {
 
 class _CarouselState extends State<Carousel>
     with SingleTickerProviderStateMixin {
-  int _currentIndex = 0;
   List<String> imageUrls = [];
 
   @override
@@ -40,12 +40,20 @@ class _CarouselState extends State<Carousel>
           if (imageUrls.isEmpty) {
             return Container();
           }
-          return Image.network(imageUrls[index]);
+          return Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            child: CachedNetworkImage(
+                imageUrl:imageUrls[index],
+                fit: BoxFit.cover),
+          );
         },
         options: CarouselOptions(
+          clipBehavior:Clip.none,
           height: 200,
+          viewportFraction:1,
           autoPlay: true,
-          enlargeCenterPage: true,
+          enlargeCenterPage: false,
           enableInfiniteScroll: true,
         ),
       ),

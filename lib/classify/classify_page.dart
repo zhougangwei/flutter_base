@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../generated/json/base/json_convert_content.dart';
+import '../good/custom_nav_bar.dart';
+import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
 
@@ -47,7 +49,12 @@ class _ClassifyPageState extends State<ClassifyPage> {
     });
   }
 
-  goodsinfo(it) {}
+  goodsinfo(int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: id)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +68,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
     ));
   }
 
-  void meninfo(double id, String name) {}
+  void meninfo(int id, String name) {}
 
   buildFeatured() {
     return SliverToBoxAdapter(
@@ -105,53 +112,56 @@ class _ClassifyPageState extends State<ClassifyPage> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 var item = featurednlist[index];
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CachedNetworkImage(imageUrl: item.image_url),
-                        Text(
-                          item.cat_name,
-                          maxLines: 1,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Color(0xff333333),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            item.name,
+                return GestureDetector(
+                  onTap: () =>  goodsinfo(item.id),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          CachedNetworkImage(imageUrl: item.image_url),
+                          Text(
+                            item.cat_name,
+                            maxLines: 1,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
                             style: TextStyle(
                               color: Color(0xff333333),
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '\$${item.price}-\$${item.mktprice}',
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              item.name,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Color(0xff333333),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '\$${item.price}-\$${item.mktprice}',
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Color(0xff333333),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -163,5 +173,5 @@ class _ClassifyPageState extends State<ClassifyPage> {
     ));
   }
 
-  void collection(double id, int index) {}
+  void collection(int id, int index) {}
 }

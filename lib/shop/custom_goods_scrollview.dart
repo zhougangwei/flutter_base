@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:atest/good/good_page.dart';
+import 'package:atest/widget/YourCustomBadge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../network/user.dart';
-import 'banner.dart';
+import 'home_banner.dart';
 import 'bean/feature_entity.dart';
 import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
@@ -63,7 +65,12 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     });
   }
 
-  goodsinfo(it) {}
+  goodsinfo(it) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: it)),
+    );
+  }
 
   void getTypeList() {
     HttpClient().getTypeList({}).then((res) {
@@ -84,7 +91,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
-        SliverToBoxAdapter(child: CarouselBanner()),
+        SliverToBoxAdapter(child: HomeCarouselBanner()),
         buildTypeList(),
         buildFeatured(),
         buildGoodCastList(),
@@ -147,7 +154,8 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       var it = item.goods[index];
-                      return Card(
+                      return GestureDetector(
+                        onTap: ()=> goodsinfo(it.id),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -245,14 +253,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     );
   }
 
-  void meninfo(int id, String name) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ClassifyPage(id:id,name:name)),
-    );
 
-
-  }
 
   buildFeatured() {
     return SliverToBoxAdapter(
@@ -297,53 +298,58 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 var item = featurednlist[index];
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CachedNetworkImage(imageUrl: item.image_url),
-                        Text(
-                          item.cat_name,
-                          maxLines: 1,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Color(0xff333333),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            item.name,
+                return GestureDetector(
+                  onTap: () {
+                    goodsinfo(item.id);
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          CachedNetworkImage(imageUrl: item.image_url),
+                          Text(
+                            item.cat_name,
+                            maxLines: 1,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
                             style: TextStyle(
                               color: Color(0xff333333),
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '\$${item.price}-\$${item.mktprice}',
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              item.name,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Color(0xff333333),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '\$${item.price}-\$${item.mktprice}',
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Color(0xff333333),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -355,5 +361,12 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     ));
   }
 
-  void collection(double id, int index) {}
+  void collection(int id, int index) {}
+
+  void meninfo(int id, String name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ClassifyPage(id:id,name:name)),
+    );
+  }
 }
