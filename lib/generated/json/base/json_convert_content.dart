@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:atest/shop/bean/banner_bean_entity.dart';
 import 'package:atest/shop/bean/feature_entity.dart';
+import 'package:atest/shop/bean/good_bean_entity.dart';
 import 'package:atest/shop/bean/good_cat_bean_entity.dart';
 import 'package:atest/shop/bean/type_item_entity.dart';
 
@@ -147,6 +148,20 @@ class JsonConvert {
       return data.map<FeatureCanshu>((Map<String, dynamic> e) =>
           FeatureCanshu.fromJson(e)).toList() as M;
     }
+    if (<GoodBeanEntity>[] is M) {
+      return data.map<GoodBeanEntity>((Map<String, dynamic> e) =>
+          GoodBeanEntity.fromJson(e)).toList() as M;
+    }
+
+
+    if (<GoodBeanProduct>[] is M) {
+      return data.map<GoodBeanProduct>((Map<String, dynamic> e) =>
+          GoodBeanProduct.fromJson(e)).toList() as M;
+    }
+    if (<GoodBeanCanshu>[] is M) {
+      return data.map<GoodBeanCanshu>((Map<String, dynamic> e) =>
+          GoodBeanCanshu.fromJson(e)).toList() as M;
+    }
     if (<GoodCatBeanEntity>[] is M) {
       return data.map<GoodCatBeanEntity>((Map<String, dynamic> e) =>
           GoodCatBeanEntity.fromJson(e)).toList() as M;
@@ -200,6 +215,9 @@ class JsonConvertClassCollection {
     (FeatureEntity).toString(): FeatureEntity.fromJson,
     (FeatureProduct).toString(): FeatureProduct.fromJson,
     (FeatureCanshu).toString(): FeatureCanshu.fromJson,
+    (GoodBeanEntity).toString(): GoodBeanEntity.fromJson,
+    (GoodBeanProduct).toString(): GoodBeanProduct.fromJson,
+    (GoodBeanCanshu).toString(): GoodBeanCanshu.fromJson,
     (GoodCatBeanEntity).toString(): GoodCatBeanEntity.fromJson,
     (GoodCatBeanChild).toString(): GoodCatBeanChild.fromJson,
     (GoodCatBeanGoods).toString(): GoodCatBeanGoods.fromJson,

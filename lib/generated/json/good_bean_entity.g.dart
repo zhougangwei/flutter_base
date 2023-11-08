@@ -1,178 +1,196 @@
 import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/feature_entity.dart';
+import 'package:atest/shop/bean/good_bean_entity.dart';
 
-FeatureEntity $FeatureEntityFromJson(Map<String, dynamic> json) {
-  final FeatureEntity featureEntity = FeatureEntity();
+GoodBeanEntity $GoodBeanEntityFromJson(Map<String, dynamic> json) {
+  final GoodBeanEntity goodBeanEntity = GoodBeanEntity();
   final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
-    featureEntity.id = id;
+    goodBeanEntity.id = id;
   }
   final String? bn = jsonConvert.convert<String>(json['bn']);
   if (bn != null) {
-    featureEntity.bn = bn;
+    goodBeanEntity.bn = bn;
   }
   final String? name = jsonConvert.convert<String>(json['name']);
   if (name != null) {
-    featureEntity.name = name;
-  }
-  final String? cat_name = jsonConvert.convert<String>(json['cat_name']);
-  if (cat_name != null) {
-    featureEntity.cat_name = cat_name;
+    goodBeanEntity.name = name;
   }
   final String? brief = jsonConvert.convert<String>(json['brief']);
   if (brief != null) {
-    featureEntity.brief = brief;
+    goodBeanEntity.brief = brief;
   }
   final String? price = jsonConvert.convert<String>(json['price']);
   if (price != null) {
-    featureEntity.price = price;
+    goodBeanEntity.price = price;
   }
   final String? mktprice = jsonConvert.convert<String>(json['mktprice']);
   if (mktprice != null) {
-    featureEntity.mktprice = mktprice;
+    goodBeanEntity.mktprice = mktprice;
   }
   final String? imageId = jsonConvert.convert<String>(json['image_id']);
   if (imageId != null) {
-    featureEntity.imageId = imageId;
+    goodBeanEntity.imageId = imageId;
   }
-  final double? goodsCatId = jsonConvert.convert<double>(json['goods_cat_id']);
+  final int? goodsCatId = jsonConvert.convert<int>(json['goods_cat_id']);
   if (goodsCatId != null) {
-    featureEntity.goodsCatId = goodsCatId;
+    goodBeanEntity.goodsCatId = goodsCatId;
   }
-  final double? goodsTypeId = jsonConvert.convert<double>(
-      json['goods_type_id']);
+  final int? goodsTypeId = jsonConvert.convert<int>(json['goods_type_id']);
   if (goodsTypeId != null) {
-    featureEntity.goodsTypeId = goodsTypeId;
+    goodBeanEntity.goodsTypeId = goodsTypeId;
   }
-  final double? brandId = jsonConvert.convert<double>(json['brand_id']);
+  final int? brandId = jsonConvert.convert<int>(json['brand_id']);
   if (brandId != null) {
-    featureEntity.brandId = brandId;
+    goodBeanEntity.brandId = brandId;
   }
-  final double? isNomalVirtual = jsonConvert.convert<double>(
+  final int? isNomalVirtual = jsonConvert.convert<int>(
       json['is_nomal_virtual']);
   if (isNomalVirtual != null) {
-    featureEntity.isNomalVirtual = isNomalVirtual;
+    goodBeanEntity.isNomalVirtual = isNomalVirtual;
   }
-  final double? marketable = jsonConvert.convert<double>(json['marketable']);
+  final int? marketable = jsonConvert.convert<int>(json['marketable']);
   if (marketable != null) {
-    featureEntity.marketable = marketable;
+    goodBeanEntity.marketable = marketable;
   }
-  final double? stock = jsonConvert.convert<double>(json['stock']);
+  final int? stock = jsonConvert.convert<int>(json['stock']);
   if (stock != null) {
-    featureEntity.stock = stock;
+    goodBeanEntity.stock = stock;
   }
   final String? weight = jsonConvert.convert<String>(json['weight']);
   if (weight != null) {
-    featureEntity.weight = weight;
+    goodBeanEntity.weight = weight;
   }
   final String? unit = jsonConvert.convert<String>(json['unit']);
   if (unit != null) {
-    featureEntity.unit = unit;
+    goodBeanEntity.unit = unit;
   }
+  final String? intro = jsonConvert.convert<String>(json['intro']);
+  if (intro != null) {
+    goodBeanEntity.intro = intro;
+  }
+
   final String? params = jsonConvert.convert<String>(json['params']);
   if (params != null) {
-    featureEntity.params = params;
+    goodBeanEntity.params = params;
   }
-  final double? commentsCount = jsonConvert.convert<double>(
-      json['comments_count']);
+  final int? commentsCount = jsonConvert.convert<int>(json['comments_count']);
   if (commentsCount != null) {
-    featureEntity.commentsCount = commentsCount;
+    goodBeanEntity.commentsCount = commentsCount;
   }
-  final double? viewCount = jsonConvert.convert<double>(json['view_count']);
+  final int? viewCount = jsonConvert.convert<int>(json['view_count']);
   if (viewCount != null) {
-    featureEntity.viewCount = viewCount;
+    goodBeanEntity.viewCount = viewCount;
   }
-  final String? image_url = jsonConvert.convert<String>(json['image_url']);
-  if (image_url != null) {
-    featureEntity.image_url = image_url;
-  }
-  final double? buyCount = jsonConvert.convert<double>(json['buy_count']);
+  final int? buyCount = jsonConvert.convert<int>(json['buy_count']);
   if (buyCount != null) {
-    featureEntity.buyCount = buyCount;
+    goodBeanEntity.buyCount = buyCount;
   }
   final dynamic uptime = json['uptime'];
   if (uptime != null) {
-    featureEntity.uptime = uptime;
+    goodBeanEntity.uptime = uptime;
   }
   final dynamic downtime = json['downtime'];
   if (downtime != null) {
-    featureEntity.downtime = downtime;
+    goodBeanEntity.downtime = downtime;
   }
-  final double? sort = jsonConvert.convert<double>(json['sort']);
+  final int? sort = jsonConvert.convert<int>(json['sort']);
   if (sort != null) {
-    featureEntity.sort = sort;
+    goodBeanEntity.sort = sort;
   }
-  final double? isRecommend = jsonConvert.convert<double>(json['is_recommend']);
+  final int? isRecommend = jsonConvert.convert<int>(json['is_recommend']);
   if (isRecommend != null) {
-    featureEntity.isRecommend = isRecommend;
+    goodBeanEntity.isRecommend = isRecommend;
   }
-  final double? isHot = jsonConvert.convert<double>(json['is_hot']);
+  final int? isHot = jsonConvert.convert<int>(json['is_hot']);
   if (isHot != null) {
-    featureEntity.isHot = isHot;
+    goodBeanEntity.isHot = isHot;
   }
   final List<dynamic>? labelIds = (json['label_ids'] as List<dynamic>?)?.map(
           (e) => e).toList();
   if (labelIds != null) {
-    featureEntity.labelIds = labelIds;
+    goodBeanEntity.labelIds = labelIds;
+  }
+  final String? newSpec = jsonConvert.convert<String>(json['new_spec']);
+  if (newSpec != null) {
+    goodBeanEntity.newSpec = newSpec;
   }
   final dynamic ctime = json['ctime'];
   if (ctime != null) {
-    featureEntity.ctime = ctime;
+    goodBeanEntity.ctime = ctime;
   }
-  final double? utime = jsonConvert.convert<double>(json['utime']);
+  final int? utime = jsonConvert.convert<int>(json['utime']);
   if (utime != null) {
-    featureEntity.utime = utime;
+    goodBeanEntity.utime = utime;
   }
   final dynamic isdel = json['isdel'];
   if (isdel != null) {
-    featureEntity.isdel = isdel;
+    goodBeanEntity.isdel = isdel;
   }
-  final double? isCombo = jsonConvert.convert<double>(json['is_combo']);
+  final int? isCombo = jsonConvert.convert<int>(json['is_combo']);
   if (isCombo != null) {
-    featureEntity.isCombo = isCombo;
+    goodBeanEntity.isCombo = isCombo;
   }
-  final double? categoryId = jsonConvert.convert<double>(json['category_id']);
+  final int? categoryId = jsonConvert.convert<int>(json['category_id']);
   if (categoryId != null) {
-    featureEntity.categoryId = categoryId;
+    goodBeanEntity.categoryId = categoryId;
   }
   final String? scoreSum = jsonConvert.convert<String>(json['score_sum']);
   if (scoreSum != null) {
-    featureEntity.scoreSum = scoreSum;
+    goodBeanEntity.scoreSum = scoreSum;
   }
-  final FeatureProduct? product = jsonConvert.convert<FeatureProduct>(
+  final String? catName = jsonConvert.convert<String>(json['cat_name']);
+  if (catName != null) {
+    goodBeanEntity.catName = catName;
+  }
+  final String? home = jsonConvert.convert<String>(json['home']);
+  if (home != null) {
+    goodBeanEntity.home = home;
+  }
+  final String? imageUrl = jsonConvert.convert<String>(json['image_url']);
+  if (imageUrl != null) {
+    goodBeanEntity.imageUrl = imageUrl;
+  }
+  final String? tags = jsonConvert.convert<String>(json['Tags']);
+  if (tags != null) {
+    goodBeanEntity.tags = tags;
+  }
+  final double? bai = jsonConvert.convert<double>(json['bai']);
+  if (bai != null) {
+    goodBeanEntity.bai = bai;
+  }
+  final GoodBeanProduct? product = jsonConvert.convert<GoodBeanProduct>(
       json['product']);
   if (product != null) {
-    featureEntity.product = product;
+    goodBeanEntity.product = product;
   }
   final List<String>? album = (json['album'] as List<dynamic>?)?.map(
           (e) => jsonConvert.convert<String>(e) as String).toList();
   if (album != null) {
-    featureEntity.album = album;
+    goodBeanEntity.album = album;
   }
   final bool? isfav = jsonConvert.convert<bool>(json['isfav']);
   if (isfav != null) {
-    featureEntity.isfav = isfav;
+    goodBeanEntity.isfav = isfav;
   }
-  final List<FeatureCanshu>? canshu = (json['canshu'] as List<dynamic>?)
+  final List<GoodBeanCanshu>? canshu = (json['canshu'] as List<dynamic>?)
       ?.map(
-          (e) => jsonConvert.convert<FeatureCanshu>(e) as FeatureCanshu)
+          (e) => jsonConvert.convert<GoodBeanCanshu>(e) as GoodBeanCanshu)
       .toList();
   if (canshu != null) {
-    featureEntity.canshu = canshu;
+    goodBeanEntity.canshu = canshu;
   }
   final dynamic category = json['category'];
   if (category != null) {
-    featureEntity.category = category;
+    goodBeanEntity.category = category;
   }
-  return featureEntity;
+  return goodBeanEntity;
 }
 
-Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
+Map<String, dynamic> $GoodBeanEntityToJson(GoodBeanEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['id'] = entity.id;
   data['bn'] = entity.bn;
   data['name'] = entity.name;
-  data['cat_name'] = entity.cat_name;
   data['brief'] = entity.brief;
   data['price'] = entity.price;
   data['mktprice'] = entity.mktprice;
@@ -185,10 +203,10 @@ Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
   data['stock'] = entity.stock;
   data['weight'] = entity.weight;
   data['unit'] = entity.unit;
+  data['intro'] = entity.intro;
   data['params'] = entity.params;
   data['comments_count'] = entity.commentsCount;
   data['view_count'] = entity.viewCount;
-  data['image_url'] = entity.image_url;
   data['buy_count'] = entity.buyCount;
   data['uptime'] = entity.uptime;
   data['downtime'] = entity.downtime;
@@ -196,12 +214,18 @@ Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
   data['is_recommend'] = entity.isRecommend;
   data['is_hot'] = entity.isHot;
   data['label_ids'] = entity.labelIds;
+  data['new_spec'] = entity.newSpec;
   data['ctime'] = entity.ctime;
   data['utime'] = entity.utime;
   data['isdel'] = entity.isdel;
   data['is_combo'] = entity.isCombo;
   data['category_id'] = entity.categoryId;
   data['score_sum'] = entity.scoreSum;
+  data['cat_name'] = entity.catName;
+  data['home'] = entity.home;
+  data['image_url'] = entity.imageUrl;
+  data['Tags'] = entity.tags;
+  data['bai'] = entity.bai;
   data['product'] = entity.product.toJson();
   data['album'] = entity.album;
   data['isfav'] = entity.isfav;
@@ -210,52 +234,56 @@ Map<String, dynamic> $FeatureEntityToJson(FeatureEntity entity) {
   return data;
 }
 
-extension FeatureEntityExtension on FeatureEntity {
-  FeatureEntity copyWith({
+extension GoodBeanEntityExtension on GoodBeanEntity {
+  GoodBeanEntity copyWith({
     int? id,
     String? bn,
     String? name,
-    String? cat_name,
     String? brief,
     String? price,
     String? mktprice,
     String? imageId,
-    double? goodsCatId,
-    double? goodsTypeId,
-    double? brandId,
-    double? isNomalVirtual,
-    double? marketable,
-    double? stock,
+    int? goodsCatId,
+    int? goodsTypeId,
+    int? brandId,
+    int? isNomalVirtual,
+    int? marketable,
+    int? stock,
     String? weight,
     String? unit,
+    String? intro,
     String? params,
-    double? commentsCount,
-    double? viewCount,
-    String? image_url,
-    double? buyCount,
+    int? commentsCount,
+    int? viewCount,
+    int? buyCount,
     dynamic uptime,
     dynamic downtime,
-    double? sort,
-    double? isRecommend,
-    double? isHot,
+    int? sort,
+    int? isRecommend,
+    int? isHot,
     List<dynamic>? labelIds,
+    String? newSpec,
     dynamic ctime,
-    double? utime,
+    int? utime,
     dynamic isdel,
-    double? isCombo,
-    double? categoryId,
+    int? isCombo,
+    int? categoryId,
     String? scoreSum,
-    FeatureProduct? product,
+    String? catName,
+    String? home,
+    String? imageUrl,
+    String? tags,
+    double? bai,
+    GoodBeanProduct? product,
     List<String>? album,
     bool? isfav,
-    List<FeatureCanshu>? canshu,
+    List<GoodBeanCanshu>? canshu,
     dynamic category,
   }) {
-    return FeatureEntity()
+    return GoodBeanEntity()
       ..id = id ?? this.id
       ..bn = bn ?? this.bn
       ..name = name ?? this.name
-      ..cat_name = cat_name ?? this.cat_name
       ..brief = brief ?? this.brief
       ..price = price ?? this.price
       ..mktprice = mktprice ?? this.mktprice
@@ -268,10 +296,10 @@ extension FeatureEntityExtension on FeatureEntity {
       ..stock = stock ?? this.stock
       ..weight = weight ?? this.weight
       ..unit = unit ?? this.unit
+      ..intro = intro ?? this.intro
       ..params = params ?? this.params
       ..commentsCount = commentsCount ?? this.commentsCount
       ..viewCount = viewCount ?? this.viewCount
-      ..image_url = image_url ?? this.image_url
       ..buyCount = buyCount ?? this.buyCount
       ..uptime = uptime ?? this.uptime
       ..downtime = downtime ?? this.downtime
@@ -279,12 +307,18 @@ extension FeatureEntityExtension on FeatureEntity {
       ..isRecommend = isRecommend ?? this.isRecommend
       ..isHot = isHot ?? this.isHot
       ..labelIds = labelIds ?? this.labelIds
+      ..newSpec = newSpec ?? this.newSpec
       ..ctime = ctime ?? this.ctime
       ..utime = utime ?? this.utime
       ..isdel = isdel ?? this.isdel
       ..isCombo = isCombo ?? this.isCombo
       ..categoryId = categoryId ?? this.categoryId
       ..scoreSum = scoreSum ?? this.scoreSum
+      ..catName = catName ?? this.catName
+      ..home = home ?? this.home
+      ..imageUrl = imageUrl ?? this.imageUrl
+      ..tags = tags ?? this.tags
+      ..bai = bai ?? this.bai
       ..product = product ?? this.product
       ..album = album ?? this.album
       ..isfav = isfav ?? this.isfav
@@ -293,107 +327,113 @@ extension FeatureEntityExtension on FeatureEntity {
   }
 }
 
-FeatureProduct $FeatureProductFromJson(Map<String, dynamic> json) {
-  final FeatureProduct featureProduct = FeatureProduct();
+
+
+
+
+
+GoodBeanProduct $GoodBeanProductFromJson(Map<String, dynamic> json) {
+  final GoodBeanProduct goodBeanProduct = GoodBeanProduct();
   final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
-    featureProduct.id = id;
+    goodBeanProduct.id = id;
   }
-  final double? goodsId = jsonConvert.convert<double>(json['goods_id']);
+  final int? goodsId = jsonConvert.convert<int>(json['goods_id']);
   if (goodsId != null) {
-    featureProduct.goodsId = goodsId;
+    goodBeanProduct.goodsId = goodsId;
   }
   final dynamic barcode = json['barcode'];
   if (barcode != null) {
-    featureProduct.barcode = barcode;
+    goodBeanProduct.barcode = barcode;
   }
   final String? sn = jsonConvert.convert<String>(json['sn']);
   if (sn != null) {
-    featureProduct.sn = sn;
+    goodBeanProduct.sn = sn;
   }
   final String? price = jsonConvert.convert<String>(json['price']);
   if (price != null) {
-    featureProduct.price = price;
+    goodBeanProduct.price = price;
   }
   final String? mktprice = jsonConvert.convert<String>(json['mktprice']);
   if (mktprice != null) {
-    featureProduct.mktprice = mktprice;
+    goodBeanProduct.mktprice = mktprice;
   }
-  final double? marketable = jsonConvert.convert<double>(json['marketable']);
+  final int? marketable = jsonConvert.convert<int>(json['marketable']);
   if (marketable != null) {
-    featureProduct.marketable = marketable;
+    goodBeanProduct.marketable = marketable;
   }
-  final double? stock = jsonConvert.convert<double>(json['stock']);
+  final int? stock = jsonConvert.convert<int>(json['stock']);
   if (stock != null) {
-    featureProduct.stock = stock;
+    goodBeanProduct.stock = stock;
   }
   final String? spesDesc = jsonConvert.convert<String>(json['spes_desc']);
   if (spesDesc != null) {
-    featureProduct.spesDesc = spesDesc;
+    goodBeanProduct.spesDesc = spesDesc;
   }
-  final double? isDefalut = jsonConvert.convert<double>(json['is_defalut']);
+  final int? isDefalut = jsonConvert.convert<int>(json['is_defalut']);
   if (isDefalut != null) {
-    featureProduct.isDefalut = isDefalut;
+    goodBeanProduct.isDefalut = isDefalut;
   }
   final String? imageId = jsonConvert.convert<String>(json['image_id']);
   if (imageId != null) {
-    featureProduct.imageId = imageId;
+    goodBeanProduct.imageId = imageId;
   }
   final dynamic isdel = json['isdel'];
   if (isdel != null) {
-    featureProduct.isdel = isdel;
+    goodBeanProduct.isdel = isdel;
   }
   final String? name = jsonConvert.convert<String>(json['name']);
   if (name != null) {
-    featureProduct.name = name;
+    goodBeanProduct.name = name;
   }
   final String? bn = jsonConvert.convert<String>(json['bn']);
   if (bn != null) {
-    featureProduct.bn = bn;
+    goodBeanProduct.bn = bn;
   }
   final String? imagePath = jsonConvert.convert<String>(json['image_path']);
   if (imagePath != null) {
-    featureProduct.imagePath = imagePath;
+    goodBeanProduct.imagePath = imagePath;
   }
-  final double? totalStock = jsonConvert.convert<double>(json['total_stock']);
+  final int? totalStock = jsonConvert.convert<int>(json['total_stock']);
   if (totalStock != null) {
-    featureProduct.totalStock = totalStock;
+    goodBeanProduct.totalStock = totalStock;
   }
-  final double? isCombo = jsonConvert.convert<double>(json['is_combo']);
+  final int? isCombo = jsonConvert.convert<int>(json['is_combo']);
   if (isCombo != null) {
-    featureProduct.isCombo = isCombo;
+    goodBeanProduct.isCombo = isCombo;
   }
   final List<dynamic>? gradePrice = (json['grade_price'] as List<dynamic>?)
       ?.map(
           (e) => e)
       .toList();
   if (gradePrice != null) {
-    featureProduct.gradePrice = gradePrice;
+    goodBeanProduct.gradePrice = gradePrice;
   }
   final List<dynamic>? gradeInfo = (json['grade_info'] as List<dynamic>?)?.map(
           (e) => e).toList();
   if (gradeInfo != null) {
-    featureProduct.gradeInfo = gradeInfo;
+    goodBeanProduct.gradeInfo = gradeInfo;
   }
+
   final String? amount = jsonConvert.convert<String>(json['amount']);
   if (amount != null) {
-    featureProduct.amount = amount;
+    goodBeanProduct.amount = amount;
   }
   final List<dynamic>? promotionList = (json['promotion_list'] as List<
       dynamic>?)?.map(
           (e) => e).toList();
   if (promotionList != null) {
-    featureProduct.promotionList = promotionList;
+    goodBeanProduct.promotionList = promotionList;
   }
-  final double? promotionAmount = jsonConvert.convert<double>(
+  final int? promotionAmount = jsonConvert.convert<int>(
       json['promotion_amount']);
   if (promotionAmount != null) {
-    featureProduct.promotionAmount = promotionAmount;
+    goodBeanProduct.promotionAmount = promotionAmount;
   }
-  return featureProduct;
+  return goodBeanProduct;
 }
 
-Map<String, dynamic> $FeatureProductToJson(FeatureProduct entity) {
+Map<String, dynamic> $GoodBeanProductToJson(GoodBeanProduct entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['id'] = entity.id;
   data['goods_id'] = entity.goodsId;
@@ -414,38 +454,39 @@ Map<String, dynamic> $FeatureProductToJson(FeatureProduct entity) {
   data['is_combo'] = entity.isCombo;
   data['grade_price'] = entity.gradePrice;
   data['grade_info'] = entity.gradeInfo;
+  data['default_spes_desc'] = entity.defaultSpesDesc;
   data['amount'] = entity.amount;
   data['promotion_list'] = entity.promotionList;
   data['promotion_amount'] = entity.promotionAmount;
   return data;
 }
 
-extension FeatureProductExtension on FeatureProduct {
-  FeatureProduct copyWith({
+extension GoodBeanProductExtension on GoodBeanProduct {
+  GoodBeanProduct copyWith({
     int? id,
-    double? goodsId,
+    int? goodsId,
     dynamic barcode,
     String? sn,
     String? price,
     String? mktprice,
-    double? marketable,
-    double? stock,
+    int? marketable,
+    int? stock,
     String? spesDesc,
-    double? isDefalut,
+    int? isDefalut,
     String? imageId,
     dynamic isdel,
     String? name,
     String? bn,
     String? imagePath,
-    double? totalStock,
-    double? isCombo,
+    int? totalStock,
+    int? isCombo,
     List<dynamic>? gradePrice,
     List<dynamic>? gradeInfo,
     String? amount,
     List<dynamic>? promotionList,
-    double? promotionAmount,
+    int? promotionAmount,
   }) {
-    return FeatureProduct()
+    return GoodBeanProduct()
       ..id = id ?? this.id
       ..goodsId = goodsId ?? this.goodsId
       ..barcode = barcode ?? this.barcode
@@ -465,34 +506,40 @@ extension FeatureProductExtension on FeatureProduct {
       ..isCombo = isCombo ?? this.isCombo
       ..gradePrice = gradePrice ?? this.gradePrice
       ..gradeInfo = gradeInfo ?? this.gradeInfo
+      ..defaultSpesDesc = defaultSpesDesc ?? this.defaultSpesDesc
       ..amount = amount ?? this.amount
       ..promotionList = promotionList ?? this.promotionList
       ..promotionAmount = promotionAmount ?? this.promotionAmount;
   }
 }
 
-FeatureCanshu $FeatureCanshuFromJson(Map<String, dynamic> json) {
-  final FeatureCanshu featureCanshu = FeatureCanshu();
+
+
+
+
+
+GoodBeanCanshu $GoodBeanCanshuFromJson(Map<String, dynamic> json) {
+  final GoodBeanCanshu goodBeanCanshu = GoodBeanCanshu();
   final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
-    featureCanshu.id = id;
+    goodBeanCanshu.id = id;
   }
-  final double? goodsId = jsonConvert.convert<double>(json['goods_id']);
+  final int? goodsId = jsonConvert.convert<int>(json['goods_id']);
   if (goodsId != null) {
-    featureCanshu.goodsId = goodsId;
+    goodBeanCanshu.goodsId = goodsId;
   }
   final String? value = jsonConvert.convert<String>(json['value']);
   if (value != null) {
-    featureCanshu.value = value;
+    goodBeanCanshu.value = value;
   }
   final dynamic sort = json['sort'];
   if (sort != null) {
-    featureCanshu.sort = sort;
+    goodBeanCanshu.sort = sort;
   }
-  return featureCanshu;
+  return goodBeanCanshu;
 }
 
-Map<String, dynamic> $FeatureCanshuToJson(FeatureCanshu entity) {
+Map<String, dynamic> $GoodBeanCanshuToJson(GoodBeanCanshu entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['id'] = entity.id;
   data['goods_id'] = entity.goodsId;
@@ -501,14 +548,14 @@ Map<String, dynamic> $FeatureCanshuToJson(FeatureCanshu entity) {
   return data;
 }
 
-extension FeatureCanshuExtension on FeatureCanshu {
-  FeatureCanshu copyWith({
+extension GoodBeanCanshuExtension on GoodBeanCanshu {
+  GoodBeanCanshu copyWith({
     int? id,
-    double? goodsId,
+    int? goodsId,
     String? value,
     dynamic sort,
   }) {
-    return FeatureCanshu()
+    return GoodBeanCanshu()
       ..id = id ?? this.id
       ..goodsId = goodsId ?? this.goodsId
       ..value = value ?? this.value

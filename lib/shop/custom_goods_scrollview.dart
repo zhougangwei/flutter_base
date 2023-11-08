@@ -4,9 +4,11 @@ import 'package:atest/good/good_page.dart';
 import 'package:atest/widget/YourCustomBadge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
+import '../network/json_cache_manager.dart';
 import '../network/user.dart';
 import 'home_banner.dart';
 import 'bean/feature_entity.dart';
@@ -73,8 +75,15 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
   }
 
   void getTypeList() {
+    setState(() {
+      var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
+              JsonCacheManager().getJson("typeList")) ??
+          [];
+      typeList = cacheTypeList;
+    });
     HttpClient().getTypeList({}).then((res) {
       if (res['status']) {
+        JsonCacheManager().cacheJson("typeList", res['data']);
         setState(() {
           typeList =
               jsonConvert.convertListNotNull<TypeItemEntity>(res['data']) ?? [];
@@ -155,7 +164,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                     itemBuilder: (BuildContext context, int index) {
                       var it = item.goods[index];
                       return GestureDetector(
-                        onTap: ()=> goodsinfo(it.id),
+                        onTap: () => goodsinfo(it.id),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -253,8 +262,6 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     );
   }
 
-
-
   buildFeatured() {
     return SliverToBoxAdapter(
         child: GestureDetector(
@@ -285,7 +292,6 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
                 ),
               ),
             ),
-
             GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -366,7 +372,7 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
   void meninfo(int id, String name) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ClassifyPage(id:id,name:name)),
+      MaterialPageRoute(builder: (context) => ClassifyPage(id: id, name: name)),
     );
   }
 }

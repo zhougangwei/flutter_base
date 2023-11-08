@@ -14,7 +14,7 @@ class HttpClient {
     return await post(url: url, params: params, auth: false, showToast: false);
   }
 
-  Future getTypeList(Map<String, dynamic> params) async {
+  Future getTypeList(Map<String, dynamic> params ) async {
     params['method'] = 'goodsType.goodsTypeList';
     return await post(url: url, params: params, auth: false, showToast: false);
   }

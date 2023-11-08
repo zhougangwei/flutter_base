@@ -9,37 +9,25 @@ import '../network/user.dart';
 import '../widget/carousel.dart';
 
 class GoodCarouselBanner extends StatefulWidget {
+  final List<String>? bannerList;
+
+  const GoodCarouselBanner({super.key, required this.bannerList});
+
   @override
   _GoodCarouselBannerState createState() => _GoodCarouselBannerState();
 }
 
 class _GoodCarouselBannerState extends State<GoodCarouselBanner> {
-  List<String> bannerList = [];
-
   @override
   void initState() {
     super.initState();
-    getBanner();
-  }
-
-  void getBanner() {
-    var data = {"page": 1, "limit": 10, "code": 'tpl1_slider'};
-    HttpClient().openbanner(data).then((res) {
-      setState(() {
-        if (res['status']) {
-         List<BannerBeanEntity> list = jsonConvert.convertListNotNull<BannerBeanEntity>(res['data']['list'])??[];
-          for (var i in list) {
-            this.bannerList.add(i.img);
-          }
-        }
-      });
-    }).catchError((err) {
-      err.toString();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Carousel(bannerList);
+    if (widget.bannerList == null || widget.bannerList!.isEmpty) {
+      return Container();
+    }
+    return Carousel(widget.bannerList!!);
   }
 }
