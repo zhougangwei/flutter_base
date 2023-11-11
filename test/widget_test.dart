@@ -1,6 +1,6 @@
-// This is a basic Flutter widget custom_goods_scrollview.dart.
+// This is a basic Flutter widget shop_goods_scrollview.dart.
 //
-// To perform an interaction with a widget in your custom_goods_scrollview.dart, use the WidgetTester
+// To perform an interaction with a widget in your shop_goods_scrollview.dart, use the WidgetTester
 // utility in the flutter_test package. For example, you can send tap and scroll
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:atest/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke custom_goods_scrollview.dart', (WidgetTester tester) async {
+  testWidgets('Counter increments smoke shop_goods_scrollview.dart', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 

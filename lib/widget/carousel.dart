@@ -32,7 +32,6 @@ class _CarouselState extends State<Carousel>
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
       child: CarouselSlider.builder(
         itemCount: imageUrls.length,
         itemBuilder: (BuildContext context, int index, int realIndex) {
@@ -50,7 +49,6 @@ class _CarouselState extends State<Carousel>
         },
         options: CarouselOptions(
           clipBehavior:Clip.none,
-          height: 200,
           viewportFraction:1,
           autoPlay: true,
           enlargeCenterPage: false,

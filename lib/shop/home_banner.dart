@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:atest/shop/bean/banner_bean_entity.dart';
 import 'package:atest/utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../network/api.dart';
 import '../network/user.dart';
@@ -41,6 +42,8 @@ class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Carousel(bannerList);
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(20.h),
+        child: Carousel(bannerList));
   }
 }

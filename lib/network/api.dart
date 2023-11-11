@@ -23,7 +23,7 @@ Future<Map<String, dynamic>> ax({
   bool showToast = true,
 }) async {
 
-  final token = await  SharedPreferencesUtils.getString("token");
+  final token =   SharedPreferencesUtils.getString("token");
 
   if (auth && token == null) {
     errorToShow('Please log in first');

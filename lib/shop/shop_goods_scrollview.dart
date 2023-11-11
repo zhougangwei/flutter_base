@@ -1,26 +1,26 @@
 import 'dart:convert';
 
 import 'package:atest/good/good_page.dart';
-import 'package:atest/widget/YourCustomBadge.dart';
+import 'package:atest/top/rounded_searchbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../network/json_cache_manager.dart';
 import '../network/user.dart';
-import 'home_banner.dart';
 import 'bean/feature_entity.dart';
 import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
+import 'home_banner.dart';
 
-class CustomGoodsScrollView extends StatefulWidget {
+class ShopGoodsScrollView extends StatefulWidget {
   @override
-  _CustomGoodsScrollViewState createState() => _CustomGoodsScrollViewState();
+  _ShopGoodsScrollViewState createState() => _ShopGoodsScrollViewState();
 }
 
-class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
+class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
   List<GoodCatBeanEntity> getGoodsCatlist = [];
   List<TypeItemEntity> typeList = [];
   List<FeatureEntity> featurednlist = [];
@@ -34,73 +34,21 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
     getGoodsCat();
   }
 
-  void relatedList() {
-    var data = datapost;
-    var type = {
-      'recommend': 1,
-    };
-    data['where'] = jsonEncode(type);
-    HttpClient().relatedlist(data).then((res) {
-      if (res['status']) {
-        setState(() {
-          featurednlist = jsonConvert
-                  .convertListNotNull<FeatureEntity>(res['data']['list']) ??
-              [];
-        });
-      }
-    }).catchError((err) {
-      err.toString();
-    });
-  }
-
-  void getGoodsCat() {
-    HttpClient().getGoodsCat({}).then((res) {
-      if (res['status']) {
-        setState(() {
-          getGoodsCatlist =
-              jsonConvert.convertListNotNull<GoodCatBeanEntity>(res['data']) ??
-                  [];
-        });
-      }
-    }).catchError((err) {
-      err.toString();
-    });
-  }
-
-  goodsinfo(it) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => GoodPage(goods_id: it)),
-    );
-  }
-
-  void getTypeList() {
-    setState(() {
-      var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
-              JsonCacheManager().getJson("typeList")) ??
-          [];
-      typeList = cacheTypeList;
-    });
-    HttpClient().getTypeList({}).then((res) {
-      if (res['status']) {
-        JsonCacheManager().cacheJson("typeList", res['data']);
-        setState(() {
-          typeList =
-              jsonConvert.convertListNotNull<TypeItemEntity>(res['data']) ?? [];
-        });
-      }
-    }).catchError((err) {
-      err.toString();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
-        SliverToBoxAdapter(child: HomeCarouselBanner()),
+        SliverToBoxAdapter(child: RoundedSearchBar()),
+        SliverToBoxAdapter(
+            child: Container(
+                height: 305.h,
+                padding: EdgeInsets.only(
+                    top: ScreenUtil().setWidth(20),
+                    left: ScreenUtil().setWidth(30),
+                    right: ScreenUtil().setWidth(30)),
+                child: HomeCarouselBanner())),
         buildTypeList(),
         buildFeatured(),
         buildGoodCastList(),
@@ -365,6 +313,66 @@ class _CustomGoodsScrollViewState extends State<CustomGoodsScrollView> {
         ),
       ),
     ));
+  }
+
+  void relatedList() {
+    var data = datapost;
+    var type = {
+      'recommend': 1,
+    };
+    data['where'] = jsonEncode(type);
+    HttpClient().relatedlist(data).then((res) {
+      if (res['status']) {
+        setState(() {
+          featurednlist = jsonConvert
+                  .convertListNotNull<FeatureEntity>(res['data']['list']) ??
+              [];
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
+  }
+
+  void getGoodsCat() {
+    HttpClient().getGoodsCat({}).then((res) {
+      if (res['status']) {
+        setState(() {
+          getGoodsCatlist =
+              jsonConvert.convertListNotNull<GoodCatBeanEntity>(res['data']) ??
+                  [];
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
+  }
+
+  goodsinfo(it) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: it)),
+    );
+  }
+
+  void getTypeList() {
+    setState(() {
+      var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
+              JsonCacheManager().getJson("typeList")) ??
+          [];
+      typeList = cacheTypeList;
+    });
+    HttpClient().getTypeList({}).then((res) {
+      if (res['status']) {
+        JsonCacheManager().cacheJson("typeList", res['data']);
+        setState(() {
+          typeList =
+              jsonConvert.convertListNotNull<TypeItemEntity>(res['data']) ?? [];
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
   }
 
   void collection(int id, int index) {}

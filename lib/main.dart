@@ -3,23 +3,49 @@ import 'package:atest/wishlist/wishlist.dart';
 import 'package:atest/mine/mine.dart';
 import 'package:atest/shop/shop.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
+import 'generated/l10n.dart';
+import 'language/current_locale.dart';
 import 'my_chart.dart';
 
-void main() {
-  runApp(ShoppingApp());
+void main() async {
+  await ScreenUtil.ensureScreenSize();
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => CurrentLocale())],
+    child: ShoppingApp(),
+  ));
 }
 
 class ShoppingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shopping App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
+    ScreenUtil.init(
+      context,
+      designSize: Size(750, 1624), // 设计稿尺寸（宽度和高度）
+      minTextAdapt: false, // 不允许字体缩放
     );
+
+    return Consumer<CurrentLocale>(builder: (context, currentLocale, _) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        supportedLocales: S.delegate.supportedLocales,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          S.delegate
+        ],
+        locale: currentLocale.value,
+        title: "nihao",
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomePage(),
+      );
+    });
   }
 }
 
@@ -51,19 +77,37 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xff072D8C),
+          backgroundColor: Color(0xff072D8C),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.account_circle), // 自定义图标
-              onPressed: () {
-                // 打开endDrawer
-                _scaffoldKey.currentState?.openEndDrawer();
-              },
+            Row(
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
+                    child:
+                        Image.asset('assets/images/image/icon-1.png', width: 37.w)),
+                SizedBox(width: 28.w),
+                GestureDetector(
+                    onTap: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
+                    child:
+                        Image.asset('assets/images/image/icon-2.png', width: 37.w)),
+                SizedBox(width: 28.w),
+                GestureDetector(
+                    onTap: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
+                    child:
+                        Image.asset('assets/images/image/icon-3.png', width: 37.w)),
+                SizedBox(width: 34.w),
+              ],
             ),
           ],
           leadingWidth: 150,
           leading: Container(
-            width: 120 ,
+            width: 120,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,9 +118,12 @@ class _HomePageState extends State<HomePage> {
                     // 图片点击后执行的代码
                     _scaffoldKey.currentState?.openDrawer();
                   },
-                  child: Image.asset('assets/images/icon-logo.png', width:40),
+                  child:
+                  Container(
+                      padding:EdgeInsets.only(left:30.w,right: 10.w) ,
+                      child: Icon(Icons.menu, color: Colors.white)),
                 ),
-                Image.asset('assets/images/icon-logo.png',width: 60),
+                Image.asset('assets/images/image/icon-logo.png', width: 113.w),
               ],
             ),
           )),

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:atest/shop/custom_goods_scrollview.dart';
+import 'package:atest/shop/shop_goods_scrollview.dart';
 import 'package:atest/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import '../network/user.dart';
@@ -71,6 +71,6 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomGoodsScrollView();
+    return ShopGoodsScrollView();
   }
 }

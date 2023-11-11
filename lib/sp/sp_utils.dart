@@ -24,7 +24,7 @@ class SharedPreferencesUtils {
     await _preferences?.setInt(key, value);
   }
 
-  static Future<String> getString(String key, {String defaultValue = ''}) async {
+  static String getString(String key, {String defaultValue = ''})  {
     return _preferences?.getString(key) ?? defaultValue;
   }
 

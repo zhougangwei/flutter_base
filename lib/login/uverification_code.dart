@@ -41,7 +41,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
   }
 
   void checkKeepRunning() async {
-    var string = await SharedPreferencesUtils.getString(
+    var string =  SharedPreferencesUtils.getString(
         uniqueKey + '_uCountDownTimestamp');
     final lastTimestamp = int.tryParse(string);
     if (lastTimestamp == null) {
