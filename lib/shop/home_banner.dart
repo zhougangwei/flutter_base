@@ -29,7 +29,9 @@ class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
     HttpClient().openbanner(data).then((res) {
       setState(() {
         if (res['status']) {
-         List<BannerBeanEntity> list = jsonConvert.convertListNotNull<BannerBeanEntity>(res['data']['list'])??[];
+          List<BannerBeanEntity> list = jsonConvert
+                  .convertListNotNull<BannerBeanEntity>(res['data']['list']) ??
+              [];
           for (var i in list) {
             this.bannerList.add(i.img);
           }
@@ -42,8 +44,14 @@ class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(20.h),
-        child: Carousel(bannerList));
+    return Container(
+        height: 305.h,
+        padding: EdgeInsets.only(
+            top: ScreenUtil().setWidth(20),
+            left: ScreenUtil().setWidth(30),
+            right: ScreenUtil().setWidth(30)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.h),
+            child: Carousel(bannerList)));
   }
 }

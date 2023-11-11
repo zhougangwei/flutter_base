@@ -41,14 +41,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
         SliverToBoxAdapter(child: RoundedSearchBar()),
-        SliverToBoxAdapter(
-            child: Container(
-                height: 305.h,
-                padding: EdgeInsets.only(
-                    top: ScreenUtil().setWidth(20),
-                    left: ScreenUtil().setWidth(30),
-                    right: ScreenUtil().setWidth(30)),
-                child: HomeCarouselBanner())),
+        SliverToBoxAdapter(child: HomeCarouselBanner()),
         buildTypeList(),
         buildFeatured(),
         buildGoodCastList(),

@@ -4,10 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../generated/json/base/json_convert_content.dart';
-import '../good/custom_nav_bar.dart';
 import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
+import '../top/rounded_searchbar.dart';
+import '../widget/custom_scaffoldr.dart';
 
 class ClassifyPage extends StatefulWidget {
   final int id;
@@ -23,6 +24,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
   List<FeatureEntity> featurednlist = [];
   var datapost = {"page": "1", "limit": "10", "order": "price asc"};
   String classifyName = '';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
 
   void relatedList() {
     var data = datapost;
-    print(jsonEncode(data) +"----data");
+    print(jsonEncode(data) + "----data");
     HttpClient().relatedlist(data).then((res) {
       if (res['status']) {
         setState(() {
@@ -58,14 +60,16 @@ class _ClassifyPageState extends State<ClassifyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScafflold(
         body: CustomScrollView(
-      physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-      slivers: [
-        SliverToBoxAdapter(child: Text(classifyName)),
-        buildFeatured(),
-      ],
-    ));
+          physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+          slivers: [
+            SliverToBoxAdapter(child: RoundedSearchBar()),
+            SliverToBoxAdapter(child: Text(classifyName
+            )),
+            buildFeatured(),
+          ],
+        ));
   }
 
   void meninfo(int id, String name) {}
@@ -113,7 +117,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
               itemBuilder: (BuildContext context, int index) {
                 var item = featurednlist[index];
                 return GestureDetector(
-                  onTap: () =>  goodsinfo(item.id),
+                  onTap: () => goodsinfo(item.id),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
