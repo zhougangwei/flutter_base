@@ -26,7 +26,7 @@ class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
 
   void getBanner() {
     var data = {"page": 1, "limit": 10, "code": 'tpl1_slider'};
-    HttpClient().openbanner(data).then((res) {
+    ApiClient().openbanner(data).then((res) {
       setState(() {
         if (res['status']) {
           List<BannerBeanEntity> list = jsonConvert

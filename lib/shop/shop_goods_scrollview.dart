@@ -314,7 +314,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
       'recommend': 1,
     };
     data['where'] = jsonEncode(type);
-    HttpClient().relatedlist(data).then((res) {
+    ApiClient().relatedlist(data).then((res) {
       if (res['status']) {
         setState(() {
           featurednlist = jsonConvert
@@ -328,7 +328,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
   }
 
   void getGoodsCat() {
-    HttpClient().getGoodsCat({}).then((res) {
+    ApiClient().getGoodsCat({}).then((res) {
       if (res['status']) {
         setState(() {
           getGoodsCatlist =
@@ -355,7 +355,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
           [];
       typeList = cacheTypeList;
     });
-    HttpClient().getTypeList({}).then((res) {
+    ApiClient().getTypeList({}).then((res) {
       if (res['status']) {
         JsonCacheManager().cacheJson("typeList", res['data']);
         setState(() {

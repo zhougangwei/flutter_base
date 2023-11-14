@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../generated/json/base/json_convert_content.dart';
+import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
+import '../widget/custom_scaffoldr.dart';
 import '../widget/number_box.dart';
 import '../widget/rating_widget.dart';
+import 'good_foot.dart';
 import 'goods_banner.dart';
 
 class GoodPage extends StatefulWidget {
@@ -24,11 +27,12 @@ class _GoodPageState extends State<GoodPage> {
   GoodBeanEntity? goods_data;
 
   int? product_id;
-
   List<String>? goodsparams;
   bool _isExpanded = false;
   Map<String, dynamic>? Size;
   Map<String, dynamic>? default_spes_desc;
+
+  late S localizations;
 
   @override
   void initState() {
@@ -38,7 +42,8 @@ class _GoodPageState extends State<GoodPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     localizations = S.of(context);
+    return CustomScafflold(
       body: CustomScrollView(
         physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
         slivers: [
@@ -52,7 +57,7 @@ class _GoodPageState extends State<GoodPage> {
 
   void getGoodsInfo() {
     var data = {"id": widget.goods_id.toString()};
-    HttpClient().getdetial(data).then((res) {
+    ApiClient().getdetial(data).then((res) {
       if (mounted) {
         if (res['status']) {
           setState(() {
@@ -74,7 +79,7 @@ class _GoodPageState extends State<GoodPage> {
 
   getparams() {
     //获取商品参数
-    HttpClient().getgoodsparams({"id": widget.goods_id}).then((res) {
+    ApiClient().getgoodsparams({"id": widget.goods_id}).then((res) {
       if (mounted) {
         if (res['status']) {
           setState(() {
@@ -94,7 +99,7 @@ class _GoodPageState extends State<GoodPage> {
     }
     var datapost = {"page": "1", "limit": "4"};
     datapost['where'] = '{"goods_cat_id":${categoryId}}';
-    HttpClient().relatedlist(datapost).then((res) {
+    ApiClient().relatedlist(datapost).then((res) {
       if (mounted) {
         if (res['status']) {
           setState(() {
@@ -111,6 +116,7 @@ class _GoodPageState extends State<GoodPage> {
 
   GoodsInfoPage() {
     return Column(
+
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -130,7 +136,7 @@ class _GoodPageState extends State<GoodPage> {
                       RatingWidget(
                           size: 15,
                           initialRating:
-                              double.parse(goods_data?.scoreSum ?? "5.0")),
+                              5),
                       Text('(${goods_data?.scoreSum ?? ''})',
                           style: TextStyle(fontSize: 10)),
                     ],
@@ -159,13 +165,16 @@ class _GoodPageState extends State<GoodPage> {
                         },
                         child: Text("072D8CFF")),
                   ),
-                  ObtainHtmlPanelList(),
+                  ObtainHtmlPanelList("DESCRIPTION",getHtml()),
+                  ObtainHtmlPanelList("REVIEWS",Container()),
+
                 ])),
+        GoodFoot()
       ],
     );
   }
 
-  ExpansionPanelList ObtainHtmlPanelList() {
+  ExpansionPanelList ObtainHtmlPanelList(String title,Widget body) {
     return ExpansionPanelList(
         elevation: 0,
         dividerColor: Colors.transparent,
@@ -190,11 +199,11 @@ class _GoodPageState extends State<GoodPage> {
                       width: double.infinity,
                       child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("DESCRIPTION")),
+                          child: Text(title)),
                     ),
                   ));
             },
-            body: getHtml(),
+            body: body,
             isExpanded: _isExpanded,
           ),
         ]);

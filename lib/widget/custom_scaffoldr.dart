@@ -25,7 +25,7 @@ class CustomScafflold extends StatelessWidget implements PreferredSizeWidget {
         appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
         drawer: AppDrawer(),
         endDrawer: CartDrawer(),
-        body: this.body ?? Container(),
-        bottomNavigationBar: this.bottomNavigationBar ?? Container());
+        body: this.body ,
+        bottomNavigationBar: this.bottomNavigationBar);
   }
 }

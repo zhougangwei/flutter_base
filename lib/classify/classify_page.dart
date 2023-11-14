@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
 import '../good/good_page.dart';
@@ -38,7 +39,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
   void relatedList() {
     var data = datapost;
     print(jsonEncode(data) + "----data");
-    HttpClient().relatedlist(data).then((res) {
+    ApiClient().relatedlist(data).then((res) {
       if (res['status']) {
         setState(() {
           featurednlist = jsonConvert
@@ -62,14 +63,24 @@ class _ClassifyPageState extends State<ClassifyPage> {
   Widget build(BuildContext context) {
     return CustomScafflold(
         body: CustomScrollView(
-          physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-          slivers: [
-            SliverToBoxAdapter(child: RoundedSearchBar()),
-            SliverToBoxAdapter(child: Text(classifyName
-            )),
-            buildFeatured(),
-          ],
-        ));
+      physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+      slivers: [
+        SliverToBoxAdapter(child: RoundedSearchBar()),
+        SliverToBoxAdapter(
+            child: Center(
+          child: Padding(
+            padding:  EdgeInsets.all(40.w),
+            child: Text(
+              textAlign: TextAlign.center,
+              classifyName,
+              style: TextStyle(
+                  fontSize: 62.sp, color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+          ),
+        )),
+        buildFeatured(),
+      ],
+    ));
   }
 
   void meninfo(int id, String name) {}

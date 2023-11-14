@@ -1,15 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 import '../sp/sp_utils.dart';
 import 'config.dart';
-
-
-
-
-
-
 final String url = config.apiUrl.url;
 final String loginUrl = config.apiUrl.loginUrl;
 final String nginxFdfsUrl = config.apiUrl.nginxFdfsUrl;
@@ -23,7 +18,7 @@ Future<Map<String, dynamic>> ax({
   bool showToast = true,
 }) async {
 
-  final token =   SharedPreferencesUtils.getString("token");
+  final token =   SPUtils.getString("token");
 
   if (auth && token == null) {
     errorToShow('Please log in first');
@@ -43,7 +38,7 @@ Future<Map<String, dynamic>> ax({
   final responseData = jsonDecode(response.body);
 
   if (responseData['data'] == 14007) {
-    await SharedPreferencesUtils.setString('token', '');
+     SPUtils.setString('token', '');
     errorToShow('Please log in first');
   }
 

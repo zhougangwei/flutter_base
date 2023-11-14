@@ -41,7 +41,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
   }
 
   void checkKeepRunning() async {
-    var string =  SharedPreferencesUtils.getString(
+    var string =  SPUtils.getString(
         uniqueKey + '_uCountDownTimestamp');
     final lastTimestamp = int.tryParse(string);
     if (lastTimestamp == null) {
@@ -52,7 +52,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
     final nowTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     if (keepRunning && lastTimestamp > nowTimestamp) {
       secNum = lastTimestamp - nowTimestamp;
-      SharedPreferencesUtils.remove(uniqueKey + '_uCountDownTimestamp');
+      SPUtils.remove(uniqueKey + '_uCountDownTimestamp');
       start();
     } else {
       changeEvent(startText);
@@ -100,7 +100,7 @@ class UVerificationCodeState extends State<UVerificationCode> {
 
     if (secNum > 0 && secNum <= seconds) {
       final nowTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      SharedPreferencesUtils.setString(
+      SPUtils.setString(
         uniqueKey + '_uCountDownTimestamp',
         (nowTimestamp + secNum).toString(),
       );

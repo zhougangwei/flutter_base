@@ -1,13 +1,13 @@
 import 'api.dart';
 
-class HttpClient {
-  static final HttpClient _instance = HttpClient._internal();
+class ApiClient {
+  static final ApiClient _instance = ApiClient._internal();
 
-  factory HttpClient() {
+  factory ApiClient() {
     return _instance;
   }
 
-  HttpClient._internal();
+  ApiClient._internal();
 
   Future openbanner(Map<String, dynamic> params) async {
     params['method'] = 'advert.getAdvertList';
@@ -120,79 +120,79 @@ class HttpClient {
   }
 
 // 删除购物车item
-  Future<dynamic> delShip({Map<String, dynamic>? params}) async {
+  Future<dynamic> delShip(Map<String, dynamic> params) async {
     params?['method'] = 'cartShip.delShip';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 删除购物车item
-  Future<dynamic> catdel({Map<String, dynamic>? params}) async {
+  Future<dynamic> catdel(Map<String, dynamic> params) async {
     params?['method'] = 'cart.del';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 修改购物车数量
-  Future<dynamic> setnums({Map<String, dynamic>? params}) async {
+  Future<dynamic> setnums(Map<String, dynamic> params) async {
     params?['method'] = 'cart.setnums';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 添加购物车
-  Future<dynamic> cartadd({Map<String, dynamic>? params}) async {
+  Future<dynamic> cartadd(Map<String, dynamic> params) async {
     params?['method'] = 'cart.add';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 创建订单
-  Future<dynamic> createorder({Map<String, dynamic>? params}) async {
+  Future<dynamic> createorder(Map<String, dynamic> params) async {
     params?['method'] = 'order.create';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 支付订单
-  Future<dynamic> payorder({Map<String, dynamic>? params}) async {
+  Future<dynamic> payorder(Map<String, dynamic> params) async {
     params?['method'] = 'user.pay';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 获取支付的二维码
-  Future<dynamic> createcode({Map<String, dynamic>? params}) async {
+  Future<dynamic> createcode(Map<String, dynamic> params) async {
     params?['method'] = 'user.qrcode';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 查看订单详情
-  Future<dynamic> orderdetails({Map<String, dynamic>? params}) async {
+  Future<dynamic> orderdetails(Map<String, dynamic> params) async {
     params?['method'] = 'order.details';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 取消订单
-  Future<dynamic> cancelorder({Map<String, dynamic>? params}) async {
+  Future<dynamic> cancelorder(Map<String, dynamic> params) async {
     params?['method'] = 'order.cancel';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
 // 获取用户收藏列表
-  Future<dynamic> goodscollectionlist({Map<String, dynamic>? params}) async {
+  Future<dynamic> goodscollectionlist(Map<String, dynamic> params) async {
     params?['method'] = 'user.goodscollectionlist';
     return await post(url: url, params: params, showToast: false);
   }
 
 // 切换商品规格
-  Future<dynamic> getProductInfo({Map<String, dynamic>? params}) async {
+  Future<dynamic> getProductInfo(Map<String, dynamic> params) async {
     params?['method'] = 'goods.getproductinfo';
     return await post(url: url, params: params, auth: false, showToast: false);
   }
 
 // 获取底部信息
-  Future<dynamic> getSettingList({Map<String, dynamic>? params}) async {
+  Future<dynamic> getSettingList(Map<String, dynamic> params) async {
     params?['method'] = 'user.getSettingList';
     return await post(url: url, params: params, auth: false, showToast: false);
   }
 
 // 折扣列表
-  Future<dynamic> getPromotionList({Map<String, dynamic>? params}) async {
+  Future<dynamic> getPromotionList(Map<String, dynamic> params) async {
     params?['method'] = 'promotion.getPromotionList';
     return await post(url: url, params: params, auth: false, showToast: false);
   }

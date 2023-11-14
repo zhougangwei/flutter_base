@@ -45,7 +45,7 @@ class _ShopPageState extends State<ShopPage> {
       'goods_id': id,
     };
 
-    HttpClient().goodscollection(data).then((res) {
+    ApiClient().goodscollection(data).then((res) {
       if (res.status) {
         CommonUtils.successToShow(res.msg);
         setState(() {

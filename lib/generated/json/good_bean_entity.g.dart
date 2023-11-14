@@ -68,8 +68,7 @@ GoodBeanEntity $GoodBeanEntityFromJson(Map<String, dynamic> json) {
   if (intro != null) {
     goodBeanEntity.intro = intro;
   }
-
-  final String? params = jsonConvert.convert<String>(json['params']);
+  final String? params = jsonConvert.convert<String>(json['spes_desc']);
   if (params != null) {
     goodBeanEntity.params = params;
   }
@@ -204,7 +203,7 @@ Map<String, dynamic> $GoodBeanEntityToJson(GoodBeanEntity entity) {
   data['weight'] = entity.weight;
   data['unit'] = entity.unit;
   data['intro'] = entity.intro;
-  data['params'] = entity.params;
+  data['spes_desc'] = entity.params;
   data['comments_count'] = entity.commentsCount;
   data['view_count'] = entity.viewCount;
   data['buy_count'] = entity.buyCount;
@@ -327,11 +326,6 @@ extension GoodBeanEntityExtension on GoodBeanEntity {
   }
 }
 
-
-
-
-
-
 GoodBeanProduct $GoodBeanProductFromJson(Map<String, dynamic> json) {
   final GoodBeanProduct goodBeanProduct = GoodBeanProduct();
   final int? id = jsonConvert.convert<int>(json['id']);
@@ -414,7 +408,12 @@ GoodBeanProduct $GoodBeanProductFromJson(Map<String, dynamic> json) {
   if (gradeInfo != null) {
     goodBeanProduct.gradeInfo = gradeInfo;
   }
-
+  final Map<String, dynamic>? defaultSpesDesc =
+  (json['default_spes_desc'] as Map<String, dynamic>).map(
+          (k, e) => MapEntry(k, e));
+  if (defaultSpesDesc != null) {
+    goodBeanProduct.defaultSpesDesc = defaultSpesDesc;
+  }
   final String? amount = jsonConvert.convert<String>(json['amount']);
   if (amount != null) {
     goodBeanProduct.amount = amount;
@@ -482,6 +481,7 @@ extension GoodBeanProductExtension on GoodBeanProduct {
     int? isCombo,
     List<dynamic>? gradePrice,
     List<dynamic>? gradeInfo,
+    Map<String, dynamic>? defaultSpesDesc,
     String? amount,
     List<dynamic>? promotionList,
     int? promotionAmount,
@@ -512,11 +512,6 @@ extension GoodBeanProductExtension on GoodBeanProduct {
       ..promotionAmount = promotionAmount ?? this.promotionAmount;
   }
 }
-
-
-
-
-
 
 GoodBeanCanshu $GoodBeanCanshuFromJson(Map<String, dynamic> json) {
   final GoodBeanCanshu goodBeanCanshu = GoodBeanCanshu();
