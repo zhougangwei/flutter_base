@@ -350,10 +350,10 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
 
   void getTypeList() {
     setState(() {
-      var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
+     /* var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
               JsonCacheManager().getJson("typeList")) ??
           [];
-      typeList = cacheTypeList;
+      typeList = cacheTypeList;*/
     });
     ApiClient().getTypeList({}).then((res) {
       if (res['status']) {

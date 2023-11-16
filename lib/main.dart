@@ -1,4 +1,5 @@
 import 'package:atest/cart/cart.dart';
+import 'package:atest/login/login_locale.dart';
 import 'package:atest/widget/app_drawer.dart';
 import 'package:atest/widget/custom_app_bar.dart';
 import 'package:atest/widget/custom_scaffoldr.dart';
@@ -17,7 +18,9 @@ import 'my_chart.dart';
 void main() async {
   await ScreenUtil.ensureScreenSize();
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => CurrentLocale())],
+    providers: [ChangeNotifierProvider(create: (context) => CurrentLocale()),
+      ChangeNotifierProvider(create: (context) => LoginStatus()),
+    ],
     child: ShoppingApp(),
   ));
 }
@@ -59,15 +62,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   int _currentIndex = 0;
   final List<Widget> _pages = [
     // 添加您的页面组件
     ShopPage(),
     WishListPage(),
     Cart(),
-    Mine(),
+    MinePage(),
   ];
 
   void _onTabTapped(int index) {

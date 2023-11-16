@@ -6,11 +6,16 @@ import 'package:atest/utils/common_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../generated/l10n.dart';
 import '../network/api.dart';
 import '../network/user.dart';
+import 'login_locale.dart';
 
 class LoginPopup extends StatefulWidget {
+  final VoidCallback? onPressed;
+  LoginPopup({this.onPressed});
+
   @override
   _LoginPopupState createState() => _LoginPopupState();
 }
@@ -19,7 +24,7 @@ class _LoginPopupState extends State<LoginPopup> {
   final verificationCodeKey = GlobalKey<UVerificationCodeState>();
 
   bool showLogin = false;
-  int loginType = 2; //1登录，2注册，3忘记密码
+  int loginType = 1; //1登录，2注册，3忘记密码
   String codeTips = 'Get Code';
   String codeImage = '';
   int loginStatus = 1;
@@ -38,6 +43,12 @@ class _LoginPopupState extends State<LoginPopup> {
     setState(() {
       showLogin = !showLogin;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getcodeimage();
   }
 
   void changeLoginType(int type) {
@@ -87,7 +98,7 @@ class _LoginPopupState extends State<LoginPopup> {
     });
   }
 
-  void submit() {
+  void submit(BuildContext context) {
     var data = {
       "code": code,
       "email": email,
@@ -115,24 +126,24 @@ class _LoginPopupState extends State<LoginPopup> {
         return errorToShow('Inconsistent input, please confirm');
       }
       ApiClient().login(data).then((res) {
+        widget.onPressed!();
         SPUtils.setString('token', res.data);
         successToShow('Login succeeded');
         // await ApiClient().userInfo();
-        Timer(Duration(milliseconds: 800), () {
-          loginType = 1;
-          showLogin = false;
-        });
+        loginType = 1;
+        showLogin = false;
+        Navigator.of(context).pop();
       });
     } else if (loginType == 1) {
       // 密码登录
       ApiClient().passwordlogin(data).then((res) {
         SPUtils.setString('token', res.data);
+        widget.onPressed!();
         successToShow('Sign succeeded');
         // await ApiClient().userInfo();
-        Timer(Duration(milliseconds: 800), () {
-          loginType = 1;
-          showLogin = false;
-        });
+        loginType = 1;
+        showLogin = false;
+        Navigator.of(context).pop();
       });
     } else if (loginType == 3) {
       // 找回密码
@@ -141,10 +152,9 @@ class _LoginPopupState extends State<LoginPopup> {
       }
       ApiClient().forgetpwd(data).then((res) {
         successToShow('Plase sign');
-        Timer(Duration(milliseconds: 800), () {
-          loginType = 1;
-          showLogin = false;
-        });
+        loginType = 1;
+        showLogin = false;
+        Navigator.of(context).pop();
       });
     }
   }
@@ -159,15 +169,17 @@ class _LoginPopupState extends State<LoginPopup> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-                height: 31.h,
+                height: 60.h,
                 width: double.infinity,
                 color: Theme.of(context).primaryColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
+                      color: Colors.white,
                       icon: Icon(Icons.close),
                       onPressed: () {
                         setState(() {
@@ -191,7 +203,8 @@ class _LoginPopupState extends State<LoginPopup> {
                       )
                     ])),
             SizedBox(height: 37.h),
-            Padding(
+            Container(
+              height: 88.h,
               padding: EdgeInsets.only(left: 32.w, right: 32.w),
               child: TextField(
                 style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
@@ -203,7 +216,7 @@ class _LoginPopupState extends State<LoginPopup> {
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Enter Email',
+                  hintText: localizations.plsEmail,
                 ),
               ),
             ),
@@ -217,8 +230,7 @@ class _LoginPopupState extends State<LoginPopup> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 88.h,
+                    Expanded(
                       child: TextField(
                         style: TextStyle(
                             fontSize: 24.sp, color: Color(0xff666666)),
@@ -265,42 +277,44 @@ class _LoginPopupState extends State<LoginPopup> {
                   ),
                 )),
             if (loginType == 2 || loginType == 3) SizedBox(height: 37.h),
-            Container(
-                height: 88.h,
-                padding: EdgeInsets.only(left: 32.w, right: 32.w),
-                child: TextField(
-                  controller: againPwdController,
-                  onChanged: (value) {
-                    setState(() {
-                      againPwd = value;
-                    });
-                  },
-                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter Password Again',
-                  ),
-                )),
+            if (loginType == 2 || loginType == 3)
+              Container(
+                  height: 88.h,
+                  padding: EdgeInsets.only(left: 32.w, right: 32.w),
+                  child: TextField(
+                    controller: againPwdController,
+                    onChanged: (value) {
+                      setState(() {
+                        againPwd = value;
+                      });
+                    },
+                    style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: localizations.entertPwsAgain),
+                  )),
             SizedBox(height: 37.h),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                    height: 88.h,
-                    child: TextField(
-                      style:
-                      TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-                      controller: captchaController,
-                      onChanged: (value) {
-                        setState(() {
-                          captcha = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: localizations.plsCapcha,
-                      ),
-                    )),
+                Expanded(
+                    child: Container(
+                  height: 88.h,
+                  padding: EdgeInsets.only(left: 32.w, right: 27.w),
+                  child: TextField(
+                    style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                    controller: captchaController,
+                    onChanged: (value) {
+                      setState(() {
+                        captcha = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: localizations.plsCapcha,
+                    ),
+                  ),
+                )),
                 GestureDetector(
                   onTap: getcodeimage,
                   child: Builder(builder: (context) {
@@ -308,17 +322,18 @@ class _LoginPopupState extends State<LoginPopup> {
                       return CachedNetworkImage(
                           imageUrl: codeImage, height: 87.h, width: 181.w);
                     } else {
-                      return Container();
+                      return Container(
+                          color: Colors.black, height: 87.h, width: 181.w);
                     }
                   }),
-                )
+                ),
+                SizedBox(width: 34.w)
               ],
             ),
             SizedBox(height: 37.h),
             if (loginType == 2)
               Container(
-                  height: 30,
-                  width: 200,
+                  padding: EdgeInsets.only(left: 32.w, right: 32.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -337,45 +352,73 @@ class _LoginPopupState extends State<LoginPopup> {
                     ],
                   ))
             else if (loginType == 1)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => changeLoginType(2),
-                    child: Text(localizations.signUp),
-                  ),
-                  GestureDetector(
-                    onTap: () => changeLoginType(3),
-                    child: Text('Forgot Password'),
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.only(left: 32.w, right: 32.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => changeLoginType(2),
+                      child: Text(localizations.signUp,
+                          style: TextStyle(
+                              color: Color(0xff072D8C), fontSize: 24.sp)),
+                    ),
+                    GestureDetector(
+                      onTap: () => changeLoginType(3),
+                      child: Text(localizations.str17,
+                          style: TextStyle(
+                              color: Color(0xff072D8C), fontSize: 24.sp)),
+                    ),
+                  ],
+                ),
               )
             else
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => changeLoginType(1),
-                    child: Text('Login'),
-                  ),
-                  GestureDetector(
-                    onTap: () => changeLoginType(2),
-                    child: Text('Sign Up'),
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.only(left: 32.w, right: 32.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => changeLoginType(1),
+                      child: Text(localizations.logIn,
+                          style: TextStyle(
+                              color: Color(0xff072D8C), fontSize: 24.sp)),
+                    ),
+                    GestureDetector(
+                      onTap: () => changeLoginType(2),
+                      child: Text(localizations.signUp,
+                          style: TextStyle(
+                              color: Color(0xff072D8C), fontSize: 24.sp)),
+                    ),
+                  ],
+                ),
               ),
-            GestureDetector(
-              onTap: submit,
-              child: Container(
-                color: Colors.white,
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  loginType == 2
-                      ? 'Sign Up'
-                      : (loginType == 1 ? 'Login' : 'Submit'),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+            SizedBox(height: 40.h),
+            Container(
+              height: 75.h,
+              margin: EdgeInsets.only(left: 32.w, right: 32.w, bottom: 70.h),
+              alignment: Alignment.center,
+
+              child: GestureDetector(
+                onTap: () {
+                  submit(context);
+                },
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: Theme.of(context).primaryColor,
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    loginType == 2
+                        ? localizations.signUp
+                        : (loginType == 1
+                            ? localizations.logIn
+                            : localizations.submit),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -386,53 +429,29 @@ class _LoginPopupState extends State<LoginPopup> {
     );
   }
 
-  Column getForgetHeaderContainer(S localizations) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          localizations.changePassword,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 36.sp,
-          ),
-        ),
-        Text(localizations.str16),
-      ],
-    );
+  void successToShow(String s) {
+    print("successToShow" +s);
   }
 
-  Column getSignUpHeaderContainer(S localizations) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          localizations.signUp,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 36.sp,
-          ),
-        ),
-        Text(localizations.str16),
-      ],
-    );
-  }
-
-  void successToShow(String s) {}
-
-  Widget getSignInHeaderContainer(localizations) {
+  Widget getSignInHeaderContainer(title, content) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          localizations.logIn,
+          title,
           style: TextStyle(
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 36.sp,
           ),
         ),
-        Text(localizations.str16),
+        SizedBox(height: 20.h),
+        Text(content,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24.sp,
+            )),
       ],
     );
   }
@@ -440,13 +459,17 @@ class _LoginPopupState extends State<LoginPopup> {
   getHeaderContainer(S localizations) {
     switch (loginType) {
       case 1:
-        return getSignInHeaderContainer(localizations);
+        return getSignInHeaderContainer(
+            localizations.logIn, localizations.str16);
       case 2:
-        return getSignUpHeaderContainer(localizations);
+        return getSignInHeaderContainer(
+            localizations.signUp, localizations.str16);
       case 3:
-        return getForgetHeaderContainer(localizations);
+        return getSignInHeaderContainer(
+            localizations.changePassword, localizations.str16);
       default:
-        return getSignInHeaderContainer(localizations);
+        return getSignInHeaderContainer(
+            localizations.logIn, localizations.str16);
     }
   }
 }

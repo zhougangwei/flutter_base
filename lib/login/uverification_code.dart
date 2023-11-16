@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../sp/sp_utils.dart';
 
@@ -109,6 +110,11 @@ class UVerificationCodeState extends State<UVerificationCode> {
 
   @override
   Widget build(BuildContext context) {
-    return Text('$showText');
+    return Container(
+      color: Color(0xffD9E0EE),
+        alignment: Alignment.center,
+        width: 181.w,height: 87.h,
+        child: Text('$showText',style: TextStyle(
+        color: Color(0xff333333), fontSize: 28.sp)));
   }
 }

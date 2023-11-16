@@ -1,7 +1,6 @@
 import 'package:atest/shopping_list_item.dart';
 import 'package:flutter/material.dart';
 
-import 'login/login2.dart';
 import 'login/login_page.dart';
 
 class CartDrawer extends StatelessWidget {
