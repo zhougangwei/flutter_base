@@ -20,9 +20,10 @@ class CartDrawer extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return LoginPopup();
-                },
-              );
+                  return LoginPopup(onPressed: () {
+                    Navigator.of(context).pop();
+                  });
+                });
             },
           ),
           ShoppingListItem(

@@ -14,6 +14,7 @@ import 'login_locale.dart';
 
 class LoginPopup extends StatefulWidget {
   final VoidCallback? onPressed;
+
   LoginPopup({this.onPressed});
 
   @override
@@ -28,14 +29,16 @@ class _LoginPopupState extends State<LoginPopup> {
   String codeTips = 'Get Code';
   String codeImage = '';
   int loginStatus = 1;
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController(text: '892537848@qq.com');
   TextEditingController codeController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController(text: 'z4014067');
   TextEditingController againPwdController = TextEditingController();
   TextEditingController captchaController = TextEditingController();
   String email = '892537848@qq.com';
   String code = '';
-  String password = '';
+  String password = 'z4014067';
   String againPwd = '';
   String captcha = '';
 
@@ -98,7 +101,7 @@ class _LoginPopupState extends State<LoginPopup> {
     });
   }
 
-  void submit(BuildContext context) {
+  void submit() {
     var data = {
       "code": code,
       "email": email,
@@ -126,24 +129,26 @@ class _LoginPopupState extends State<LoginPopup> {
         return errorToShow('Inconsistent input, please confirm');
       }
       ApiClient().login(data).then((res) {
-        widget.onPressed!();
-        SPUtils.setString('token', res.data);
-        successToShow('Login succeeded');
-        // await ApiClient().userInfo();
-        loginType = 1;
-        showLogin = false;
-        Navigator.of(context).pop();
+        if (res['status']) {
+          SPUtils.setString('token', res['data']);
+          widget.onPressed!();
+          successToShow('Login succeeded');
+          // await ApiClient().userInfo();
+          loginType = 1;
+          showLogin = false;
+        }
       });
     } else if (loginType == 1) {
       // 密码登录
       ApiClient().passwordlogin(data).then((res) {
-        SPUtils.setString('token', res.data);
-        widget.onPressed!();
-        successToShow('Sign succeeded');
-        // await ApiClient().userInfo();
-        loginType = 1;
-        showLogin = false;
-        Navigator.of(context).pop();
+        if (res['status']) {
+          SPUtils.setString('token', res['data']);
+          widget.onPressed!();
+          successToShow('Sign succeeded');
+          // await ApiClient().userInfo();
+          loginType = 1;
+          showLogin = false;
+        }
       });
     } else if (loginType == 3) {
       // 找回密码
@@ -151,10 +156,13 @@ class _LoginPopupState extends State<LoginPopup> {
         return errorToShow('Inconsistent input, please confirm');
       }
       ApiClient().forgetpwd(data).then((res) {
-        successToShow('Plase sign');
-        loginType = 1;
-        showLogin = false;
-        Navigator.of(context).pop();
+        if (res['status']) {
+          SPUtils.setString('token', res['data']);
+          successToShow('Plase sign');
+          loginType = 1;
+          showLogin = false;
+          Navigator.of(context).pop();
+        }
       });
     }
   }
@@ -398,10 +406,9 @@ class _LoginPopupState extends State<LoginPopup> {
               height: 75.h,
               margin: EdgeInsets.only(left: 32.w, right: 32.w, bottom: 70.h),
               alignment: Alignment.center,
-
               child: GestureDetector(
                 onTap: () {
-                  submit(context);
+                  submit();
                 },
                 child: Container(
                   width: double.infinity,
@@ -430,7 +437,7 @@ class _LoginPopupState extends State<LoginPopup> {
   }
 
   void successToShow(String s) {
-    print("successToShow" +s);
+    print("successToShow" + s);
   }
 
   Widget getSignInHeaderContainer(title, content) {

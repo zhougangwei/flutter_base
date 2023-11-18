@@ -24,42 +24,43 @@ class AppDrawer extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              Container(height: 115.h, color: Color(0xff0E39A4)),
+              Container(height: 116.h, color: Color(0xff0E39A4)),
               if(!loginstatus.hasLogin())
                 Container(
-                child: GestureDetector(
-                  onTap: () {
-                    if(!loginProvider.hasLogin()){
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return LoginPopup(onPressed:(){
-                            loginProvider.setLoginStatus("1");
-                          },);
-                        },
-                      );
-                    }
-                  },
-                  child: Container(
-                    height: 100.h,
-                    color: Color(0xff0E39A4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(width: 30.w),
-                        Image.asset('assets/images/image/icon-3.png', width: 30.w),
-                        SizedBox(width: 8.w),
-                        Text(localizations.loginSigup,
-                            style: TextStyle(fontSize: 28.sp, color: Colors.white)),
-                        Expanded(child: Container()),
-                        Icon(Icons.keyboard_arrow_right,
-                            size: 20, color: Colors.white)
-                      ],
+                  child: GestureDetector(
+                    onTap: () {
+                      if(!loginProvider.hasLogin()){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return LoginPopup(onPressed:(){
+                              loginProvider.setLoginStatus("1");
+                              Navigator.of(context).pop();
+                            },);
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 100.h,
+                      color: Color(0xff0E39A4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(width: 30.w),
+                          Image.asset('assets/images/image/icon-3.png', width: 30.w),
+                          SizedBox(width: 8.w),
+                          Text(localizations.loginSigup,
+                              style: TextStyle(fontSize: 28.sp, color: Colors.white)),
+                          Expanded(child: Container()),
+                          Icon(Icons.keyboard_arrow_right,
+                              size: 20, color: Colors.white)
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
               Container(
                 height: 100.h,
                 child: Row(

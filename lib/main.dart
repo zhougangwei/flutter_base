@@ -1,5 +1,6 @@
 import 'package:atest/cart/cart.dart';
 import 'package:atest/login/login_locale.dart';
+import 'package:atest/sp/sp_utils.dart';
 import 'package:atest/widget/app_drawer.dart';
 import 'package:atest/widget/custom_app_bar.dart';
 import 'package:atest/widget/custom_scaffoldr.dart';
@@ -17,6 +18,7 @@ import 'my_chart.dart';
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
+  SPUtils.init();
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (context) => CurrentLocale()),
       ChangeNotifierProvider(create: (context) => LoginStatus()),
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
     // 添加您的页面组件
     ShopPage(),
     WishListPage(),
-    Cart(),
+    CartPage(),
     MinePage(),
   ];
 
