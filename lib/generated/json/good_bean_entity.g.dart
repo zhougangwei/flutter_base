@@ -68,7 +68,7 @@ GoodBeanEntity $GoodBeanEntityFromJson(Map<String, dynamic> json) {
   if (intro != null) {
     goodBeanEntity.intro = intro;
   }
-  final String? params = jsonConvert.convert<String>(json['spes_desc']);
+  final String? params = jsonConvert.convert<String>(json['params']);
   if (params != null) {
     goodBeanEntity.params = params;
   }
@@ -108,10 +108,6 @@ GoodBeanEntity $GoodBeanEntityFromJson(Map<String, dynamic> json) {
           (e) => e).toList();
   if (labelIds != null) {
     goodBeanEntity.labelIds = labelIds;
-  }
-  final String? newSpec = jsonConvert.convert<String>(json['new_spec']);
-  if (newSpec != null) {
-    goodBeanEntity.newSpec = newSpec;
   }
   final dynamic ctime = json['ctime'];
   if (ctime != null) {
@@ -203,7 +199,7 @@ Map<String, dynamic> $GoodBeanEntityToJson(GoodBeanEntity entity) {
   data['weight'] = entity.weight;
   data['unit'] = entity.unit;
   data['intro'] = entity.intro;
-  data['spes_desc'] = entity.params;
+  data['params'] = entity.params;
   data['comments_count'] = entity.commentsCount;
   data['view_count'] = entity.viewCount;
   data['buy_count'] = entity.buyCount;
@@ -213,7 +209,6 @@ Map<String, dynamic> $GoodBeanEntityToJson(GoodBeanEntity entity) {
   data['is_recommend'] = entity.isRecommend;
   data['is_hot'] = entity.isHot;
   data['label_ids'] = entity.labelIds;
-  data['new_spec'] = entity.newSpec;
   data['ctime'] = entity.ctime;
   data['utime'] = entity.utime;
   data['isdel'] = entity.isdel;
@@ -261,7 +256,6 @@ extension GoodBeanEntityExtension on GoodBeanEntity {
     int? isRecommend,
     int? isHot,
     List<dynamic>? labelIds,
-    String? newSpec,
     dynamic ctime,
     int? utime,
     dynamic isdel,
@@ -306,7 +300,6 @@ extension GoodBeanEntityExtension on GoodBeanEntity {
       ..isRecommend = isRecommend ?? this.isRecommend
       ..isHot = isHot ?? this.isHot
       ..labelIds = labelIds ?? this.labelIds
-      ..newSpec = newSpec ?? this.newSpec
       ..ctime = ctime ?? this.ctime
       ..utime = utime ?? this.utime
       ..isdel = isdel ?? this.isdel
@@ -403,16 +396,10 @@ GoodBeanProduct $GoodBeanProductFromJson(Map<String, dynamic> json) {
   if (gradePrice != null) {
     goodBeanProduct.gradePrice = gradePrice;
   }
-  final List<dynamic>? gradeInfo = (json['grade_info'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final GoodBeanProductGradeInfo? gradeInfo = jsonConvert.convert<
+      GoodBeanProductGradeInfo>(json['grade_info']);
   if (gradeInfo != null) {
     goodBeanProduct.gradeInfo = gradeInfo;
-  }
-  final Map<String, dynamic>? defaultSpesDesc =
-  (json['default_spes_desc'] as Map<String, dynamic>).map(
-          (k, e) => MapEntry(k, e));
-  if (defaultSpesDesc != null) {
-    goodBeanProduct.defaultSpesDesc = defaultSpesDesc;
   }
   final String? amount = jsonConvert.convert<String>(json['amount']);
   if (amount != null) {
@@ -452,8 +439,7 @@ Map<String, dynamic> $GoodBeanProductToJson(GoodBeanProduct entity) {
   data['total_stock'] = entity.totalStock;
   data['is_combo'] = entity.isCombo;
   data['grade_price'] = entity.gradePrice;
-  data['grade_info'] = entity.gradeInfo;
-  data['default_spes_desc'] = entity.defaultSpesDesc;
+  data['grade_info'] = entity.gradeInfo.toJson();
   data['amount'] = entity.amount;
   data['promotion_list'] = entity.promotionList;
   data['promotion_amount'] = entity.promotionAmount;
@@ -480,8 +466,7 @@ extension GoodBeanProductExtension on GoodBeanProduct {
     int? totalStock,
     int? isCombo,
     List<dynamic>? gradePrice,
-    List<dynamic>? gradeInfo,
-    Map<String, dynamic>? defaultSpesDesc,
+    GoodBeanProductGradeInfo? gradeInfo,
     String? amount,
     List<dynamic>? promotionList,
     int? promotionAmount,
@@ -506,10 +491,35 @@ extension GoodBeanProductExtension on GoodBeanProduct {
       ..isCombo = isCombo ?? this.isCombo
       ..gradePrice = gradePrice ?? this.gradePrice
       ..gradeInfo = gradeInfo ?? this.gradeInfo
-      ..defaultSpesDesc = defaultSpesDesc ?? this.defaultSpesDesc
       ..amount = amount ?? this.amount
       ..promotionList = promotionList ?? this.promotionList
       ..promotionAmount = promotionAmount ?? this.promotionAmount;
+  }
+}
+
+GoodBeanProductGradeInfo $GoodBeanProductGradeInfoFromJson(
+    Map<String, dynamic> json) {
+  final GoodBeanProductGradeInfo goodBeanProductGradeInfo = GoodBeanProductGradeInfo();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    goodBeanProductGradeInfo.id = id;
+  }
+  return goodBeanProductGradeInfo;
+}
+
+Map<String, dynamic> $GoodBeanProductGradeInfoToJson(
+    GoodBeanProductGradeInfo entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  return data;
+}
+
+extension GoodBeanProductGradeInfoExtension on GoodBeanProductGradeInfo {
+  GoodBeanProductGradeInfo copyWith({
+    int? id,
+  }) {
+    return GoodBeanProductGradeInfo()
+      ..id = id ?? this.id;
   }
 }
 

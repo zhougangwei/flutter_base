@@ -46,7 +46,7 @@ class _NumberBoxState extends State<NumberBox> {
     return Row(
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.remove),
+          icon: Icon(Icons.remove_circle_outline, color: Color(0xff333333)),
           onPressed: _decrement,
         ),
         // 如果你想禁止用户输入，可以将 TextField 替换为 Text
@@ -58,7 +58,7 @@ class _NumberBoxState extends State<NumberBox> {
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(borderSide:BorderSide(color: Color(0xff333333), width: 1.0)),
                     contentPadding: EdgeInsets.all(8.0),
                   ),
                   onChanged: (value) {
@@ -67,7 +67,7 @@ class _NumberBoxState extends State<NumberBox> {
                 ),
               ),
         IconButton(
-          icon: Icon(Icons.add),
+          icon: Icon(Icons.add_circle_outline, color: Color(0xff333333)),
           onPressed: _increment,
         ),
       ],

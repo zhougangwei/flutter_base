@@ -146,6 +146,14 @@ CartBeanList $CartBeanListFromJson(Map<String, dynamic> json) {
   if (nums != null) {
     cartBeanList.nums = nums;
   }
+  final int? itemnums = jsonConvert.convert<int>(json['itemnums']);
+  if (itemnums != null) {
+    cartBeanList.itemnums = itemnums;
+  }
+  final String? total = jsonConvert.convert<String>(json['total']);
+  if (total != null) {
+    cartBeanList.total = total;
+  }
   final int? type = jsonConvert.convert<int>(json['type']);
   if (type != null) {
     cartBeanList.type = type;
@@ -185,6 +193,8 @@ Map<String, dynamic> $CartBeanListToJson(CartBeanList entity) {
   data['user_id'] = entity.userId;
   data['product_id'] = entity.productId;
   data['nums'] = entity.nums;
+  data['itemnums'] = entity.itemnums;
+  data['total'] = entity.total;
   data['type'] = entity.type;
   data['address'] = entity.address.toJson();
   data['weight'] = entity.weight;
@@ -201,6 +211,8 @@ extension CartBeanListExtension on CartBeanList {
     int? userId,
     int? productId,
     int? nums,
+    int? itemnums,
+    String? total,
     int? type,
     CartBeanListAddress? address,
     String? weight,
@@ -214,6 +226,8 @@ extension CartBeanListExtension on CartBeanList {
       ..userId = userId ?? this.userId
       ..productId = productId ?? this.productId
       ..nums = nums ?? this.nums
+      ..itemnums = itemnums ?? this.itemnums
+      ..total = total ?? this.total
       ..type = type ?? this.type
       ..address = address ?? this.address
       ..weight = weight ?? this.weight

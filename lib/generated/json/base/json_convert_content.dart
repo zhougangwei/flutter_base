@@ -188,6 +188,10 @@ class JsonConvert {
       return data.map<GoodBeanProduct>((Map<String, dynamic> e) =>
           GoodBeanProduct.fromJson(e)).toList() as M;
     }
+    if (<GoodBeanProductGradeInfo>[] is M) {
+      return data.map<GoodBeanProductGradeInfo>((Map<String, dynamic> e) =>
+          GoodBeanProductGradeInfo.fromJson(e)).toList() as M;
+    }
     if (<GoodBeanCanshu>[] is M) {
       return data.map<GoodBeanCanshu>((Map<String, dynamic> e) =>
           GoodBeanCanshu.fromJson(e)).toList() as M;
@@ -263,6 +267,7 @@ class JsonConvertClassCollection {
     (FeatureCanshu).toString(): FeatureCanshu.fromJson,
     (GoodBeanEntity).toString(): GoodBeanEntity.fromJson,
     (GoodBeanProduct).toString(): GoodBeanProduct.fromJson,
+    (GoodBeanProductGradeInfo).toString(): GoodBeanProductGradeInfo.fromJson,
     (GoodBeanCanshu).toString(): GoodBeanCanshu.fromJson,
     (GoodCatBeanEntity).toString(): GoodCatBeanEntity.fromJson,
     (GoodCatBeanChild).toString(): GoodCatBeanChild.fromJson,

@@ -26,7 +26,6 @@ class GoodBeanEntity {
 	late String weight = '';
 	late String unit = '';
 	late String intro = '';
-	@JSONField(name: "spes_desc")
 	late String params = '';
 	@JSONField(name: "comments_count")
 	late int commentsCount = 0;
@@ -43,8 +42,6 @@ class GoodBeanEntity {
 	late int isHot = 0;
 	@JSONField(name: "label_ids")
 	late List<dynamic> labelIds = [];
-	@JSONField(name: "new_spec")
-	late String newSpec = '';
 	dynamic ctime;
 	late int utime = 0;
 	dynamic isdel;
@@ -80,9 +77,6 @@ class GoodBeanEntity {
 	}
 }
 
-
-
-
 @JsonSerializable()
 class GoodBeanProduct {
 	late int id = 0;
@@ -112,9 +106,7 @@ class GoodBeanProduct {
 	@JSONField(name: "grade_price")
 	late List<dynamic> gradePrice = [];
 	@JSONField(name: "grade_info")
-	late List<dynamic> gradeInfo = [];
-	@JSONField(name: "default_spes_desc")
-	late Map<String, dynamic> defaultSpesDesc;
+	late GoodBeanProductGradeInfo gradeInfo;
 	late String amount = '';
 	@JSONField(name: "promotion_list")
 	late List<dynamic> promotionList = [];
@@ -133,11 +125,21 @@ class GoodBeanProduct {
 	}
 }
 
+@JsonSerializable()
+class GoodBeanProductGradeInfo {
+	late int id = 0;
 
+	GoodBeanProductGradeInfo();
 
+	factory GoodBeanProductGradeInfo.fromJson(Map<String, dynamic> json) => $GoodBeanProductGradeInfoFromJson(json);
 
+	Map<String, dynamic> toJson() => $GoodBeanProductGradeInfoToJson(this);
 
-
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
 
 @JsonSerializable()
 class GoodBeanCanshu {

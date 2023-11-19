@@ -26,7 +26,6 @@ class _GoodPageState extends State<GoodPage> {
 
   GoodBeanEntity? goods_data;
 
-  int? product_id;
   List<String>? goodsparams;
   bool _isExpanded = false;
   Map<String, dynamic>? Size;
@@ -67,7 +66,6 @@ class _GoodPageState extends State<GoodPage> {
                 res['data']['product']['default_spes_desc']['Size'];
             //{\"50ml\":{\"name\":\"50ml\",\"is_default\":true},\"100ml\":{\"name\":\"100ml\",\"product_id\":1618},\"30ml\":{\"name\":\"30ml\",\"product_id\":1619}}
             this.goods_data = jsonConvert.convert<GoodBeanEntity>(res['data']);
-            this.product_id = this.goods_data?.product.id;
           });
           getRelatedList(goods_data?.goodsCatId);
         }

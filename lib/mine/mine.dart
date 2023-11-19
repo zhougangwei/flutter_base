@@ -219,11 +219,18 @@ class _MinePageState extends State<MinePage> {
     });
   }
 
-  obtainCoupon() {}
+  obtainCoupon() {
+    return Container();
 
-  obtainRecharge() {}
+  }
 
-  obtainOrder() {}
+  obtainRecharge() {
+    return Container();
+  }
+
+  obtainOrder() {
+    return Container();
+  }
 
   void getcouponlist() {
     ApiClient().usercoupon(datapost).then((res) {
