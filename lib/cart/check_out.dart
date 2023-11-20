@@ -8,6 +8,7 @@ import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
+import 'add_address.dart';
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -23,29 +24,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     var data = this.datapost;
-    ApiClient().CatoPeration(data).then((res) {
-      if (res['status']) {
-        setState(() {
-          CartBeanEntity? carBean =
-              jsonConvert.convert<CartBeanEntity>(res['data']);
-
-          cartlist = carBean?.list;
-          cartlist?.forEach((item) {
-            if (item != null) {
-              item.itemnums = item.nums;
-              item.total =
-                  (item.nums.toDouble() * double.parse(item.products.price))
-                      .toStringAsFixed(2);
-              totalnumberDouble +=
-                  item.nums * double.parse(item.products.price);
-            }
-          });
-          //totalnumber = totalnumberDouble.toStringAsFixed(2);
-        });
-      }
-    }).catchError((err) {
-      err.toString();
-    });
   }
 
   @override
@@ -55,126 +33,98 @@ class _CheckoutPageState extends State<CheckoutPage> {
         body: CustomScrollView(
             physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
             slivers: [
-          SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
-          buildGoodCastList(localizations)
-        ]));
+              SliverToBoxAdapter(
+                  child: obtainWishTilte(context, localizations)),
+              SliverToBoxAdapter(
+                  child: obtainAddressTilte(context, localizations)),
+            ]));
   }
 
-  SliverList buildGoodCastList(S localizations) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          var item = cartlist?[index];
-          if (item == null) {
-            return Container();
-          }
-          return Container(
-            height: 237.h,
-            alignment: Alignment.centerLeft,
-              width: double.infinity,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: Row(
+  Container obtainAddressTilte(BuildContext context, S localizations) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(height: 1.0, color: Color(0xff072D8C)),
+            GestureDetector(
+              onTap: () {
+                showAddressDialog(context);
+              },
+              child: Container(
+                alignment: Alignment.centerLeft,
+                height: 90.h,
+                color: Color(0xfff8f8f8),
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: item.products.imagePath,
-                      width: 162.w,
-                      height: 182.h,
-                    ),
-                    Container(width: 10.w),
-                    Expanded(
-                      child: Container(
-                        color: Color(0xffF5F5F5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  item.products.name,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Color(0xff333333),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 27.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(localizations.price),
-                                Text(
-                                  "\$" +
-                                      item.products.price +
-                                      "-" +
-                                      "\$" +
-                                      item.products.mktprice,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    color: Color(0xff333333),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(localizations.quantity),
-                                NumberBox()
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(localizations.subtotal),
-                                Text(
-                                  "\$" +
-                                      item.products.price +
-                                      "-" +
-                                      "\$" +
-                                      item.products.mktprice,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    color: Color(0xff333333),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ]));
-        },
-        childCount: cartlist?.length ?? 0,
-      ),
+                    Image.asset('assets/images/image/icon-30.png', width: 26.w),
+                    Text(localizations.addAddressPS,
+                        style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                    Icon(Icons.navigate_next,
+                        color: Color(0xff333333), size: 24.w),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                showMultiDialog(context);
+              },
+              child: Container(
+                alignment: Alignment.centerLeft,
+                height: 90.h,
+                color: Color(0xfff8f8f8),
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/image/icon-31.png', width: 26.w),
+                    Text(localizations.multipleAddress,
+                        style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                    Icon(Icons.navigate_next,
+                        color: Color(0xff333333), size: 24.w),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            Text(localizations.yourOrder,
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 36.sp, color: Colors.black)),
+            SizedBox(height: 20.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(localizations.product,
+                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                Text(localizations.subttotal,
+                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+              ],
+            ),
+          ]),
     );
   }
 
   Column obtainWishTilte(BuildContext context, S localizations) {
     return Column(children: [
       Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         color: Color(0xfff5f5f5),
         height: ScreenUtil().setHeight(305),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(localizations.cart,
+              Text(localizations.checkout,
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(62), color: Colors.black)),
             ]),
@@ -183,4 +133,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   goodsinfo(id) {}
+
+  void showAddressDialog(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Add_Address();
+        });
+  }
+
+  void showMultiDialog(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '请选择',
+                  style: TextStyle(fontSize: 36.sp, color: Colors.black),
+                )
+              ]);
+        });
+  }
 }

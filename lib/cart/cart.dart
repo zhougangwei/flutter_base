@@ -8,6 +8,7 @@ import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
+import 'check_out.dart';
 import 'mycustom_header_delegate.dart';
 
 class CartPage extends StatefulWidget {
@@ -68,15 +69,21 @@ class _CartPageState extends State<CartPage> {
               right: 0,
               left: 0,
               bottom: 1.h,
-              child: Container(
-                height: 100.h,
-                color: Color(0xffFB641B), // 自定义头部的背景颜色
-                child: Center(
-                  child: Text(
-                    localizations.proceedCheckout,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => CheckoutPage()));
+                },
+                child: Container(
+                  height: 100.h,
+                  color: Color(0xffFB641B), // 自定义头部的背景颜色
+                  child: Center(
+                    child: Text(
+                      localizations.proceedCheckout,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

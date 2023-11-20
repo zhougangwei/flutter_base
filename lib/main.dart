@@ -82,12 +82,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return CustomScafflold(
-      /*
       body:  IndexedStack(
         index: _currentIndex,
         children: _pages,
-      ),*/
-      body: _pages[_currentIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onTabTapped,
         currentIndex: _currentIndex,

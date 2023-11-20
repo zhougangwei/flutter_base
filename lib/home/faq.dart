@@ -1,4 +1,7 @@
+import 'package:atest/good/good_foot.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../network/user.dart';
 
 class FaqPage extends StatefulWidget {
   @override
@@ -8,8 +11,12 @@ class FaqPage extends StatefulWidget {
 class _FaqPageState extends State<FaqPage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Column(
+      children: [
+        Container(),
+        GoodFoot()
+      ],
+    );
   }
 
 
@@ -19,6 +26,16 @@ class _FaqPageState extends State<FaqPage> {
     super.initState();
   }
 
-  void getfaqlist() {}
+  void getfaqlist() {
+    ApiClient().getfaqlist({}).then((res) {
+      if (res['status']) {
+        setState(() {
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
+
+  }
 
 }
