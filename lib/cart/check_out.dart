@@ -370,7 +370,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(fontSize: 24.sp, color: Colors.black)),
                 GestureDetector(
                   onTap: () {
-                    showBottomDialog(context);
+                    showBottomDialog(localizations.str2,localizations.useCoupon, context);
                   },
                   child: Text(localizations.clickCode,
                       style: TextStyle(
@@ -380,7 +380,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ],
             ),
           ),
-          Text(localizations.orderNote),
+          Text(localizations.orderNote,
+              style: TextStyle(fontSize: 24.sp, color: Colors.black)),
           TextField(
             style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
             onChanged: (value) {},
@@ -390,27 +391,69 @@ class _CheckoutPageState extends State<CheckoutPage> {
               hintText:
                   "Notes about your order, e.g.special notes for delivery",
             ),
-          )
+          ),
+          Divider(
+            color: Theme.of(context).primaryColor,
+            height: 1.h,
+          ),
+          Column(children: [
+            Text(localizations.paymentMethod,
+                style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/image/icon-32.png',
+                  height: 52.h,
+                ),
+                Text(localizations.balancePayment,
+                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+              ],
+            ),
+            Text(localizations.str1,
+                style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+            SizedBox(height: 80.h)
+          ])
         ]);
   }
 
-  void showBottomDialog(BuildContext context) {
+  void showBottomDialog(String title,String sub, BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text('优惠券'),
-          content: const Text(
-            '优惠券',
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 24.sp, color: Colors.black),
+              ),
+              Container(
+                child: TextField(
+                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff333333), width: 1.0)),
+                    hintText: "Coupon code",
+                  ),
+                ),
+              ),
+              SizedBox(height: 50.h),
+              Container(
+                height: 80.h,
+                alignment: Alignment.center,
+                color: Theme.of(context).primaryColor,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:  Text(sub, style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('关闭'),
-            ),
-          ],
         );
       },
     );
