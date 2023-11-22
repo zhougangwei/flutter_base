@@ -1,3 +1,4 @@
+import 'package:atest/login/login_locale.dart';
 import 'package:atest/widget/number_box.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,14 +10,15 @@ import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import 'check_out.dart';
-import 'mycustom_header_delegate.dart';
 
 class CartPage extends StatefulWidget {
+  const CartPage({super.key});
+
   @override
   _CartPageState createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin {
   List<CartBeanList>? cartlist;
   var datapost = {"display": 'all', "ids": ''};
 
@@ -24,7 +26,16 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void initState() {
+    print('AACCDD执行了1initState');
     var data = this.datapost;
+    if(LoginStatus.hasLogin()){
+      print('AACCDD还没登陆');
+      getCatoPeration(data);
+    }
+    super.initState();
+  }
+
+  void getCatoPeration(Map<String, String> data) {
     ApiClient().CatoPeration(data).then((res) {
       if (res['status']) {
         setState(() {
@@ -33,14 +44,12 @@ class _CartPageState extends State<CartPage> {
 
           cartlist = carBean?.list;
           cartlist?.forEach((item) {
-            if (item != null) {
-              item.itemnums = item.nums;
-              item.total =
-                  (item.nums.toDouble() * double.parse(item.products.price))
-                      .toStringAsFixed(2);
-              totalnumberDouble +=
-                  item.nums * double.parse(item.products.price);
-            }
+            item.itemnums = item.nums;
+            item.total =
+                (item.nums.toDouble() * double.parse(item.products.price))
+                    .toStringAsFixed(2);
+            totalnumberDouble +=
+                item.nums * double.parse(item.products.price);
           });
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
         });
@@ -52,6 +61,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var localizations = S.of(context);
     return Scaffold(
         body: Container(
@@ -63,7 +73,7 @@ class _CartPageState extends State<CartPage> {
                 SliverToBoxAdapter(child: obtainWishTilte(localizations)),
                 buildGoodCastList(localizations),
                 SliverToBoxAdapter(child: obtainWishBottom(localizations)),
-                SliverToBoxAdapter(child: Container(height:150.h)),
+                SliverToBoxAdapter(child: Container(height: 150.h)),
               ]),
           Positioned(
               right: 0,
@@ -71,8 +81,13 @@ class _CartPageState extends State<CartPage> {
               bottom: 1.h,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => CheckoutPage()));
+                  String ids = '';
+                  cartlist?.forEach((item) {
+                    ids +=  ',';
+                    ids +=item.id.toString();
+                  });
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CheckoutPage( ids: ids)));
                 },
                 child: Container(
                   height: 100.h,
@@ -264,4 +279,8 @@ class _CartPageState extends State<CartPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive =>false;
 }

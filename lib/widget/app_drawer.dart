@@ -21,11 +21,11 @@ class AppDrawer extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Container(height: 116.h, color: Color(0xff0E39A4)),
-            if (!loginstatus.hasLogin())
+            if (!LoginStatus.hasLogin())
               Container(
                 child: GestureDetector(
                   onTap: () {
-                    if (!loginProvider.hasLogin()) {
+                    if (!LoginStatus.hasLogin()) {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {

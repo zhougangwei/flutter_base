@@ -16,7 +16,7 @@ CartBeanEntity $CartBeanEntityFromJson(Map<String, dynamic> json) {
   if (list != null) {
     cartBeanEntity.list = list;
   }
-  final int? goodsAmount = jsonConvert.convert<int>(json['goods_amount']);
+  final double? goodsAmount = jsonConvert.convert<double>(json['goods_amount']);
   if (goodsAmount != null) {
     cartBeanEntity.goodsAmount = goodsAmount;
   }
@@ -24,15 +24,15 @@ CartBeanEntity $CartBeanEntityFromJson(Map<String, dynamic> json) {
   if (amount != null) {
     cartBeanEntity.amount = amount;
   }
-  final int? orderPmt = jsonConvert.convert<int>(json['order_pmt']);
+  final double? orderPmt = jsonConvert.convert<double>(json['order_pmt']);
   if (orderPmt != null) {
     cartBeanEntity.orderPmt = orderPmt;
   }
-  final int? goodsPmt = jsonConvert.convert<int>(json['goods_pmt']);
+  final double? goodsPmt = jsonConvert.convert<double>(json['goods_pmt']);
   if (goodsPmt != null) {
     cartBeanEntity.goodsPmt = goodsPmt;
   }
-  final int? couponPmt = jsonConvert.convert<int>(json['coupon_pmt']);
+  final double? couponPmt = jsonConvert.convert<double>(json['coupon_pmt']);
   if (couponPmt != null) {
     cartBeanEntity.couponPmt = couponPmt;
   }
@@ -96,11 +96,11 @@ extension CartBeanEntityExtension on CartBeanEntity {
     int? userId,
     int? type,
     List<CartBeanList>? list,
-    int? goodsAmount,
+    double? goodsAmount,
     String? amount,
-    int? orderPmt,
-    int? goodsPmt,
-    int? couponPmt,
+    double? orderPmt,
+    double? goodsPmt,
+    double? couponPmt,
     List<dynamic>? promotionList,
     String? costFreight,
     int? weight,
@@ -196,7 +196,7 @@ Map<String, dynamic> $CartBeanListToJson(CartBeanList entity) {
   data['itemnums'] = entity.itemnums;
   data['total'] = entity.total;
   data['type'] = entity.type;
-  data['address'] = entity.address.toJson();
+  data['address'] = entity.address?.toJson();
   data['weight'] = entity.weight;
   data['products'] = entity.products.toJson();
   data['is_select'] = entity.isSelect;

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
 import '../language/current_locale.dart';
-class Cart extends StatelessWidget {
+class ChangeLanguage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -13,13 +13,13 @@ class Cart extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations?.blog ?? ''),
+        title: Text(localizations.blog),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(localizations?.blog ?? ''),
+            Text(localizations.blog),
             ElevatedButton(
               onPressed: () {
                 languageProvider.setLocale(Locale('it'));

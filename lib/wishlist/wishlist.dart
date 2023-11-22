@@ -1,3 +1,4 @@
+import 'package:atest/login/login_locale.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,32 +10,37 @@ import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
 
 class WishListPage extends StatefulWidget {
+  const WishListPage({super.key});
+
   @override
   _WishListPageState createState() => _WishListPageState();
 }
 
-class _WishListPageState extends State<WishListPage> {
+class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClientMixin {
   List<CollectItemEntity> wishlishlist = [];
   var datapost = {"page": "1", "limit": "10"};
 
   @override
   void initState() {
     var data = this.datapost;
-    ApiClient().goodscollectionlist(data).then((res) {
-      if (res['status']) {
-        setState(() {
-          wishlishlist = jsonConvert
-                  .convertListNotNull<CollectItemEntity>(res['data']['list']) ??
-              [];
-        });
-      }
-    }).catchError((err) {
-      err.toString();
-    });
+    if (LoginStatus.hasLogin()) {
+      ApiClient().goodscollectionlist(data).then((res) {
+        if (res['status']) {
+          setState(() {
+            wishlishlist = jsonConvert.convertListNotNull<CollectItemEntity>(
+                    res['data']['list']) ??
+                [];
+          });
+        }
+      }).catchError((err) {
+        err.toString();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var localizations = S.of(context);
     return Scaffold(
         body: CustomScrollView(
@@ -86,7 +92,11 @@ class _WishListPageState extends State<WishListPage> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "\$" + item.goods.price + "-" + "\$" + item.goods.mktprice,
+                            "\$" +
+                                item.goods.price +
+                                "-" +
+                                "\$" +
+                                item.goods.mktprice,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -132,4 +142,8 @@ class _WishListPageState extends State<WishListPage> {
   }
 
   goodsinfo(id) {}
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

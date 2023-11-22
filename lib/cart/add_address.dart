@@ -93,37 +93,94 @@ class _Add_AddressState extends State<Add_Address> {
           ),
           Expanded(
             child: ListView(children: <Widget>[
-              ObtainList(localizations.firstName, 'first_name', ""),
-              ObtainList(localizations.lastName, 'last_name', ""),
-              ObtainList(localizations.country, 'country', "United States (Us)"),
-              ObtainList(localizations.street, 'house_num', "House number and street name"),
-              ObtainList("", 'etc', "Apartment, suite, unit, etc. (optional)"),
-              ObtainList(localizations.city, 'city', ""),
-              ObtainList(localizations.firstName, 'state', ""),
-              ObtainList(localizations.phone, 'code', ""),
-              ObtainList(localizations.phone, 'mobile', ""),
-              ObtainList(localizations.zipCode, 'zip_code', ""),
+              ObtainList(localizations.firstName, 'first_name', "",true),
+              ObtainList(localizations.lastName, 'last_name', "",true),
+              ObtainList(
+                  localizations.country, 'country', "United States (Us)",true),
+              ObtainList(localizations.street, 'house_num',
+                  "House number and street name",true),
+              ObtainList("", 'etc', "Apartment, suite, unit, etc. (optional)",false),
+              ObtainList(localizations.city, 'city', "",false),
+              ObtainList(localizations.state, 'state', "",false),
+              ObtainPhone(localizations, 'code', "mobile"),
+              ObtainList(localizations.zipCode, 'zip_code', "",true),
             ]),
           )
         ]));
   }
 
-  ObtainList(String firstName, String key, String hint) {
-
+  ObtainList(String firstName, String key, String hint,bool isRequired) {
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 35.w),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if(firstName!="")
+            if (firstName != "")
               Container(
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 25.w),
+                      child: Text(
+                        firstName,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    if(isRequired)
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Text(
+                          '*',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            SizedBox(height: 10.h),
+            Container(
+                height: 78.h,
+                child: TextField(
+                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                  controller: TextEditingController(),
+                  onChanged: (value) {
+                    setState(() {
+                      datapost[key] = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff333333), width: 1.0)),
+                    hintText: hint,
+                  ),
+                ))
+          ]),
+    );
+  }
+
+  ObtainPhone(S localizations, String code, String mobile) {
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 35.w),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
               child: Stack(
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 25.w),
                     child: Text(
-                      firstName,
+                      localizations.phone,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
@@ -145,23 +202,49 @@ class _Add_AddressState extends State<Add_Address> {
               ),
             ),
             SizedBox(height: 10.h),
-            Container(
-                height: 78.h,
-                child: TextField(
-                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-                  controller: TextEditingController(),
-                  onChanged: (value) {
-                    setState(() {
-                      datapost[key] = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xff333333), width: 1.0)),
-                    hintText: hint,
+            Row(
+              children: [
+                Container(
+                    height: 78.h,
+                    width: 128.w,
+                    child: TextField(
+                      style:
+                          TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                      controller: TextEditingController(),
+                      onChanged: (value) {
+                        setState(() {
+                          datapost[code] = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(0xff333333), width: 1.0)),
+                        hintText: "code",
+                      ),
+                    )),
+                SizedBox(width: 20.w),
+                Expanded(
+                    child: Container(
+                  height: 78.h,
+                  child: TextField(
+                    style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                    controller: TextEditingController(),
+                    onChanged: (value) {
+                      setState(() {
+                        datapost[code] = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff333333), width: 1.0)),
+                      hintText: "Please enter your Mob.phone no.",
+                    ),
                   ),
                 ))
+              ],
+            )
           ]),
     );
   }

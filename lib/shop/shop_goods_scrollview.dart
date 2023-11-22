@@ -15,12 +15,14 @@ import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
 import 'home_banner.dart';
 
-class ShopGoodsScrollView extends StatefulWidget {
+class ShopGoodsScrollView extends StatefulWidget  {
+  const ShopGoodsScrollView({super.key});
+
   @override
   _ShopGoodsScrollViewState createState() => _ShopGoodsScrollViewState();
 }
 
-class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
+class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with AutomaticKeepAliveClientMixin {
   List<GoodCatBeanEntity> getGoodsCatlist = [];
   List<TypeItemEntity> typeList = [];
   List<FeatureEntity> featurednlist = [];
@@ -29,6 +31,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
   @override
   void initState() {
     super.initState();
+    print('加载initState');
     getTypeList();
     relatedList();
     getGoodsCat();
@@ -36,6 +39,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
@@ -308,7 +312,18 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
     ));
   }
 
-  void relatedList() {
+  void relatedList() async {
+    JsonCacheManager().getJson("featurednlist").then((res) {
+      if (res != null) {
+        var cacheTypeList =
+            jsonConvert.convertListNotNull<FeatureEntity>(json.decode(res)) ??
+                [];
+        setState(() {
+          print("先加载缓存relatedList" );
+          featurednlist = cacheTypeList;
+        });
+      }
+    });
     var data = datapost;
     var type = {
       'recommend': 1,
@@ -316,11 +331,14 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
     data['where'] = jsonEncode(type);
     ApiClient().relatedlist(data).then((res) {
       if (res['status']) {
-        setState(() {
-          featurednlist = jsonConvert
+          print("再加载网络relatedList" );
+          List<FeatureEntity> networkList = jsonConvert
                   .convertListNotNull<FeatureEntity>(res['data']['list']) ??
               [];
-        });
+          JsonCacheManager().cacheJson("featurednlist", res['data']['list']);
+          setState(() {
+            featurednlist= networkList;
+          });
       }
     }).catchError((err) {
       err.toString();
@@ -328,12 +346,25 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
   }
 
   void getGoodsCat() {
+    JsonCacheManager().getJson("getGoodsCatlist").then((res) {
+      if (res != null) {
+        var cacheTypeList = jsonConvert
+                .convertListNotNull<GoodCatBeanEntity>(json.decode(res)) ??
+            [];
+        setState(() {
+          print("先加载缓存getGoodsCatlist");
+          getGoodsCatlist = cacheTypeList;
+        });
+      }
+    });
     ApiClient().getGoodsCat({}).then((res) {
       if (res['status']) {
         setState(() {
+          print("再加载网络getGoodsCatlist" );
           getGoodsCatlist =
               jsonConvert.convertListNotNull<GoodCatBeanEntity>(res['data']) ??
                   [];
+          JsonCacheManager().cacheJson("getGoodsCatlist", res['data']);
         });
       }
     }).catchError((err) {
@@ -349,12 +380,17 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
   }
 
   void getTypeList() {
-    setState(() {
-     /* var cacheTypeList = jsonConvert.convertListNotNull<TypeItemEntity>(
-              JsonCacheManager().getJson("typeList")) ??
-          [];
-      typeList = cacheTypeList;*/
+    JsonCacheManager().getJson("typeList").then((res) {
+      if (res != null) {
+        var cacheTypeList =
+            jsonConvert.convertListNotNull<TypeItemEntity>(json.decode(res)) ??
+                [];
+        setState(() {
+          typeList = cacheTypeList;
+        });
+      }
     });
+
     ApiClient().getTypeList({}).then((res) {
       if (res['status']) {
         JsonCacheManager().cacheJson("typeList", res['data']);
@@ -376,4 +412,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> {
       MaterialPageRoute(builder: (context) => ClassifyPage(id: id, name: name)),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

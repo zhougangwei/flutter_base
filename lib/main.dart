@@ -1,5 +1,6 @@
 import 'package:atest/cart/cart.dart';
 import 'package:atest/login/login_locale.dart';
+import 'package:atest/shop/shop_goods_scrollview.dart';
 import 'package:atest/sp/sp_utils.dart';
 import 'package:atest/widget/app_drawer.dart';
 import 'package:atest/widget/custom_app_bar.dart';
@@ -20,7 +21,8 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
   SPUtils.init();
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => CurrentLocale()),
+    providers: [
+      ChangeNotifierProvider(create: (context) => CurrentLocale()),
       ChangeNotifierProvider(create: (context) => LoginStatus()),
     ],
     child: ShoppingApp(),
@@ -63,11 +65,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   int _currentIndex = 0;
   final List<Widget> _pages = [
     // 添加您的页面组件
-    ShopPage(),
+    ShopGoodsScrollView(),
     WishListPage(),
     CartPage(),
     MinePage(),
@@ -79,9 +80,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    return CustomScafflold(
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+      drawer: AppDrawer(),
+      endDrawer: CartDrawer(),
       body:  IndexedStack(
         index: _currentIndex,
         children: _pages,
@@ -93,26 +100,26 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Image.asset('assets/images/img/indexicon_w.png', width: 55.w),
             activeIcon:
-            Image.asset('assets/images/img/indexicon.png', width: 55.w),
+                Image.asset('assets/images/img/indexicon.png', width: 55.w),
             label: 'Shop',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(
-                'assets/images/img/shoucangicon_w.png', width: 55.w),
+            icon: Image.asset('assets/images/img/shoucangicon_w.png',
+                width: 55.w),
             activeIcon:
-            Image.asset('assets/images/img/shoucangicon.png', width: 55.w),
+                Image.asset('assets/images/img/shoucangicon.png', width: 55.w),
             label: 'Wishlist',
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/images/img/caricon_w.png', width: 55.w),
             activeIcon:
-            Image.asset('assets/images/img/caricon.png', width: 55.w),
+                Image.asset('assets/images/img/caricon.png', width: 55.w),
             label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/images/img/usericon_w.png', width: 55.w),
             activeIcon:
-            Image.asset('assets/images/img/usericon.png', width: 55.w),
+                Image.asset('assets/images/img/usericon.png', width: 55.w),
             label: 'Mine',
           ),
         ],
@@ -121,6 +128,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
 }

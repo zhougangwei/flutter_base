@@ -9,21 +9,27 @@ import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import 'add_address.dart';
+import 'multi_address.dart';
 
 class CheckoutPage extends StatefulWidget {
+  final String ids;
+
+  CheckoutPage({required this.ids});
+
   @override
   _CheckoutPageState createState() => _CheckoutPageState();
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
   List<CartBeanList>? cartlist;
-  var datapost = {"display": 'all', "ids": ''};
+  CartBeanEntity? carBean;
+  var datapost = {"display": 'all', "ids": 1};
 
   double totalnumberDouble = 0.0;
 
   @override
   void initState() {
-    var data = this.datapost;
+    getCatoPeration();
   }
 
   @override
@@ -33,11 +39,126 @@ class _CheckoutPageState extends State<CheckoutPage> {
         body: CustomScrollView(
             physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
             slivers: [
-              SliverToBoxAdapter(
-                  child: obtainWishTilte(context, localizations)),
-              SliverToBoxAdapter(
-                  child: obtainAddressTilte(context, localizations)),
-            ]));
+          SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
+          SliverToBoxAdapter(child: obtainAddressTilte(context, localizations)),
+          buildGoodCastList(localizations),
+          SliverToBoxAdapter(child: obtainTotalMessage(context, localizations)),
+          SliverToBoxAdapter(child: obtainBottom(context, localizations)),
+        ]));
+  }
+
+  SliverList buildGoodCastList(S localizations) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          var item = cartlist?[index];
+          if (item == null) {
+            return Container();
+          }
+          return Container(
+              alignment: Alignment.centerLeft,
+              width: double.infinity,
+              margin: EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: item.products.imagePath,
+                          width: 162.w,
+                          height: 182.h,
+                        ),
+                        Container(width: 15.w),
+                        Expanded(
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 200.w,
+                                  child: Text(
+                                    item.products.name,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Color(0xff333333),
+                                      fontSize: 24.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                //{{item.nums}}x${{item.products.price}}
+                                Text(
+                                  item.nums.toString(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Color(0xff333333),
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "*\$" + item.products.price.toString(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Color(0xff333333),
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                  Divider(
+                    color: Colors.blueGrey,
+                    height: 1.h,
+                  ),
+                  obtainAddressItem(item)
+                ],
+              ));
+        },
+        childCount: cartlist?.length ?? 0,
+      ),
+    );
+  }
+
+  Widget obtainAddressItem(CartBeanList item) {
+    return Row(
+      children: [
+        Image.asset('assets/images/image/icon-30.png', width: 26.w),
+        Column(children: [
+          Text(
+            '${item.address?.firstName}|${item.address?.lastName}'
+            '|${item.address?.country}|${item.address?.zipCode}|'
+            '${item.address?.code}|${item.address?.mobile}',
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Color(0xff333333),
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(width: 20.h),
+          Text(
+            '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Color(0xff333333),
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ]),
+      ],
+    );
   }
 
   Container obtainAddressTilte(BuildContext context, S localizations) {
@@ -114,10 +235,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Column obtainWishTilte(BuildContext context, S localizations) {
     return Column(children: [
       Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         color: Color(0xfff5f5f5),
         height: ScreenUtil().setHeight(305),
         child: Column(
@@ -142,19 +260,159 @@ class _CheckoutPageState extends State<CheckoutPage> {
         });
   }
 
+  void delShip(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('删除吗'),
+          content: const Text(
+            '删除吗',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                var data = {"is_def": 2};
+                ApiClient().delShip(data).then((res) {
+                  if (res['status']) {
+                    getCatoPeration();
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('删除'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void showMultiDialog(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  '请选择',
-                  style: TextStyle(fontSize: 36.sp, color: Colors.black),
-                )
-              ]);
+          return MultiAddress(cartlist: cartlist ?? []);
         });
+  }
+
+  void getCatoPeration() {
+    var data = this.datapost;
+    data['receipt_type'] = 1;
+    data['type'] = 1;
+    data['ids'] = widget.ids;
+    ApiClient().CatoPeration(data).then((res) {
+      if (res['status']) {
+        setState(() {
+          carBean = jsonConvert.convert<CartBeanEntity>(res['data']);
+          cartlist = carBean?.list;
+          cartlist?.forEach((item) {
+            if (item != null) {
+              item.itemnums = item.nums;
+              item.total =
+                  (item.nums.toDouble() * double.parse(item.products.price))
+                      .toStringAsFixed(2);
+              totalnumberDouble +=
+                  item.nums * double.parse(item.products.price);
+            }
+          });
+          //totalnumber = totalnumberDouble.toStringAsFixed(2);
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
+  }
+
+  obtainTotalMessage(BuildContext context, S localizations) {
+    return Column(children: [
+      getItem(localizations.subtotal, "",
+          (carBean?.goodsAmount ?? "0.00").toString()),
+      getItem(localizations.goodsDiscount, localizations?.discount,
+          (carBean?.goodsPmt ?? "0.00").toString()),
+      getItem(localizations.orderDiscount, localizations?.discount,
+          (carBean?.orderPmt ?? "0.00").toString()),
+      getItem(localizations.shipping, "",
+          (carBean?.costFreight ?? "0.00").toString()),
+      getItem(localizations.total, "", (carBean?.amount ?? "0.00").toString()),
+    ]);
+  }
+
+  Row getItem(String startText, String? middleText, String endText) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(startText),
+        Row(
+          children: [
+            Text(middleText ?? "" + ":"),
+            Text("\$" + endText,
+                style: TextStyle(
+                    fontSize: 24.sp, color: Theme.of(context).primaryColor)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  obtainBottom(BuildContext context, S localizations) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(localizations.haveCoupon,
+                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                GestureDetector(
+                  onTap: () {
+                    showBottomDialog(context);
+                  },
+                  child: Text(localizations.clickCode,
+                      style: TextStyle(
+                          fontSize: 24.sp,
+                          color: Theme.of(context).primaryColor)),
+                ),
+              ],
+            ),
+          ),
+          Text(localizations.orderNote),
+          TextField(
+            style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+            onChanged: (value) {},
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xff333333), width: 1.0)),
+              hintText:
+                  "Notes about your order, e.g.special notes for delivery",
+            ),
+          )
+        ]);
+  }
+
+  void showBottomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('优惠券'),
+          content: const Text(
+            '优惠券',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('关闭'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

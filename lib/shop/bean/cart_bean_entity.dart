@@ -10,14 +10,14 @@ class CartBeanEntity {
 	late int type = 0;
 	late List<CartBeanList> list = [];
 	@JSONField(name: "goods_amount")
-	late int goodsAmount = 0;
+	late double goodsAmount = 0;
 	late String amount = '';
 	@JSONField(name: "order_pmt")
-	late int orderPmt = 0;
+	late double orderPmt = 0;
 	@JSONField(name: "goods_pmt")
-	late int goodsPmt = 0;
+	late double goodsPmt = 0;
 	@JSONField(name: "coupon_pmt")
-	late int couponPmt = 0;
+	late double couponPmt = 0;
 	@JSONField(name: "promotion_list")
 	late List<dynamic> promotionList = [];
 	@JSONField(name: "cost_freight")
@@ -54,7 +54,7 @@ class CartBeanList {
 	late int itemnums = 0;
 	late String total = '0';
 	late int type = 0;
-	late CartBeanListAddress address;
+	 CartBeanListAddress? address;
 	late String weight = '';
 	late CartBeanListProducts products;
 	@JSONField(name: "is_select")

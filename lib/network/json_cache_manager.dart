@@ -14,15 +14,13 @@ class JsonCacheManager {
   JsonCacheManager._internal()
       : cacheManager = DefaultCacheManager(); // 创建默认的 BaseCacheManager 实例
 
-  Future<String> getJson(String url) async {
+  Future<String?> getJson(String url) async {
     final file = await cacheManager.getSingleFile(url);
 
     if (file != null && await file.exists()) {
-      // 从缓存中读取数据
-      final jsonString = await file.readAsString();
-      return jsonString;
+        return await file.readAsString();
     }
-    return "";
+    return null;
   }
 
   Future<void> cacheJson(String url, dynamic jsonData) async {

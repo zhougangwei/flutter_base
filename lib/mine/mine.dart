@@ -11,11 +11,13 @@ import '../network/user.dart';
 import '../shop/bean/user_info_entity.dart';
 
 class MinePage extends StatefulWidget {
+  const MinePage({super.key});
+
   @override
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> {
+class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin {
   UserInfoEntity? userinfo;
   List<dynamic>? couponlist;
   List<dynamic>? balancelist;
@@ -24,18 +26,21 @@ class _MinePageState extends State<MinePage> {
 
   @override
   void initState() {
-    getbalancelist();
-    getcouponlist();
-    getorderlist();
+    if(LoginStatus.hasLogin()){
+      getbalancelist();
+      getcouponlist();
+      getorderlist();
+      getuserinfo();
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginStatus>(context);
+    super.build(context);
     final localizations = S.of(context);
     return Consumer<LoginStatus>(builder: (context, loginstatus, _) {
-      getuserinfo();
       return DefaultTabController(
           length: 3, // 选项卡的数量
           child: Scaffold(
@@ -268,4 +273,7 @@ class _MinePageState extends State<MinePage> {
       err.toString();
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

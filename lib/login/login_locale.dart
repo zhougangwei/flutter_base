@@ -18,7 +18,9 @@ class LoginStatus with ChangeNotifier {
     return oldLoginStatus!= loginStatus;
   }
 
-  bool hasLogin(){
-    return SPUtils.getString("token")!="";
+  static bool hasLogin(){
+    var bool = SPUtils.getString("token")!="";
+    print('AACCDDbool'+bool.toString());
+    return bool;
   }
 }
