@@ -26,16 +26,17 @@ class _LoginPopupState extends State<LoginPopup> {
   String codeTips = 'Get Code';
   String codeImage = '';
   int loginStatus = 1;
+  String email = '214979627@qq.com';
+  String code = '';
+  String password = '123456';
   TextEditingController emailController =
-      TextEditingController(text: '892537848@qq.com');
+      TextEditingController(text: '214979627@qq.com');
   TextEditingController codeController = TextEditingController();
   TextEditingController passwordController =
-      TextEditingController(text: 'z4014067');
+      TextEditingController(text: '123456');
   TextEditingController againPwdController = TextEditingController();
   TextEditingController captchaController = TextEditingController();
-  String email = '892537848@qq.com';
-  String code = '';
-  String password = 'z4014067';
+
   String againPwd = '';
   String captcha = '';
 
@@ -88,6 +89,7 @@ class _LoginPopupState extends State<LoginPopup> {
 
   void getcodeimage() {
     ApiClient().sendCaptcha({}).then((res) {
+      print('执行到这了' + res['status'].toString()+res['msg']);
       if (res['status']) {
         setState(() {
           this.codeImage = res['data']['captcha_image'];

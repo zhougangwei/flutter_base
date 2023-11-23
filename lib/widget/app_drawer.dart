@@ -44,8 +44,8 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                       builder: (BuildContext context) {
                         return LoginPopup(
                           onPressed: () {
-                            bus.emit('Login', "hello PageA from PageB");
                             Navigator.of(context).pop();
+                            bus.emit('Login', "hello PageA from PageB");
                           },
                         );
                       },

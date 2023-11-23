@@ -310,18 +310,22 @@ class _MinePageState extends State<MinePage>
                             SizedBox(height: 15),
                             Column(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    it.name,
-                                    maxLines: 2,
-                                    textAlign: TextAlign.left,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Color(0xff333333),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        it.name,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Color(0xff333333),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                                 Text(
                                   it.addon,

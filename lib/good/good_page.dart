@@ -209,7 +209,8 @@ class _GoodPageState extends State<GoodPage> {
 
   getHtml() {
     try {
-      return Html(data: goods_data?.intro);
+      //return Html(data: goods_data?.intro);
+      return Container();
     } catch (e) {
       return Container();
     }

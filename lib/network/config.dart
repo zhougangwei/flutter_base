@@ -51,7 +51,7 @@ class Config {
     final systemInfo = SystemInfo.fromJson(HashMap());
 
     final dev = ApiUrl(
-      url: 'http://45.77.80.191/',
+      url: 'http://45.77.80.191/api.html',
       avatarUrl: '',
       loginUrl: '',
       nginxFdfsUrl: '',
@@ -78,4 +78,4 @@ class Config {
   }
 }
 
-final config = Config.fromEnvironment('development');
+final config = Config.fromEnvironment('dev');
