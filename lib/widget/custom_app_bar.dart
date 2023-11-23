@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../language/current_locale.dart';
+import '../login/page_controller_provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey ;
@@ -23,21 +24,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(width: 28.w),
               GestureDetector(
                   onTap: () {
-                    scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
                   },
                   child: Image.asset('assets/images/image/icon-1.png',
                       width: 37.w)),
               SizedBox(width: 28.w),
               GestureDetector(
                   onTap: () {
-                    scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Provider.of<PageControllerProvider>(context, listen: false).goToPage(2);
                   },
                   child: Image.asset('assets/images/image/icon-2.png',
                       width: 37.w)),
               SizedBox(width: 28.w),
               GestureDetector(
                   onTap: () {
-                    scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Provider.of<PageControllerProvider>(context, listen: false).goToPage(1);
                   },
                   child: Image.asset('assets/images/image/icon-3.png',
                       width: 37.w)),

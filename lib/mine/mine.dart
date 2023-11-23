@@ -29,7 +29,7 @@ class _MinePageState extends State<MinePage>
   @override
   void initState() {
     afterLogin();
-    bus.on("Login", (arg){
+    bus.on("Login", (arg) {
       afterLogin();
     });
     super.initState();
@@ -237,9 +237,17 @@ class _MinePageState extends State<MinePage>
   }
 
   obtainOrder() {
-    return Container();
+    return CustomScrollView(
+        physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+        slivers: [
+          buildGoodCastList(),
+        ]);
   }
 
+
+
+
+  
   void getcouponlist() {
     ApiClient().usercoupon(datapost).then((res) {
       if (res['status']) {

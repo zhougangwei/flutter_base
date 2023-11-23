@@ -44,24 +44,47 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     var localizations = S.of(context);
     return Scaffold(
-        body: CustomScrollView(
-            physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-            slivers: [
-              SliverToBoxAdapter(
-                  child: obtainWishTilte(context, localizations)),
-              SliverToBoxAdapter(
-                  child: obtainAddressTilte(context, localizations)),
-              buildGoodCastList(localizations),
-              SliverToBoxAdapter(
-                  child: obtainTotalMessage(context, localizations)),
-              SliverToBoxAdapter(child: obtainBottom(context, localizations)),
-            ]));
+        body: Stack(children: [
+      CustomScrollView(
+          physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+          slivers: [
+            SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
+            SliverToBoxAdapter(
+                child: obtainAddressTilte(context, localizations)),
+            buildGoodCastList(localizations),
+            SliverToBoxAdapter(
+                child: obtainTotalMessage(context, localizations)),
+            SliverToBoxAdapter(child: obtainBottom(context, localizations)),
+          ]),
+      Positioned(
+          right: 0,
+          left: 0,
+          bottom: 1.h,
+          child: GestureDetector(
+            onTap: () {
+                submit();
+            },
+            child: Container(
+              height: 100.h,
+              color: Color(0xffFB641B), // 自定义头部的背景颜色
+              child: Center(
+                child: Text(
+                  localizations.proceedCheckout,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ))
+    ]));
   }
 
   SliverList buildGoodCastList(S localizations) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           var item = orderlist?[index];
           if (item == null) {
             return Container();
@@ -146,8 +169,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Column(children: [
           Text(
             '${item.address?.firstName}|${item.address?.lastName}'
-                '|${item.address?.country}|${item.address?.zipCode}|'
-                '${item.address?.code}|${item.address?.mobile}',
+            '|${item.address?.country}|${item.address?.zipCode}|'
+            '${item.address?.code}|${item.address?.mobile}',
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -158,8 +181,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
           Container(width: 20.h),
           Text(
-            '${item.address?.etc},${item.address?.houseNum},${item.address
-                ?.city},${item.address?.state}',
+            '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -247,10 +269,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Column obtainWishTilte(BuildContext context, S localizations) {
     return Column(children: [
       Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         color: Color(0xfff5f5f5),
         height: ScreenUtil().setHeight(305),
         child: Column(
@@ -363,9 +382,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Text(middleText ?? "" + ":"),
             Text("\$" + endText,
                 style: TextStyle(
-                    fontSize: 24.sp, color: Theme
-                    .of(context)
-                    .primaryColor)),
+                    fontSize: 24.sp, color: Theme.of(context).primaryColor)),
           ],
         ),
       ],
@@ -393,9 +410,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Text(localizations.clickCode,
                       style: TextStyle(
                           fontSize: 24.sp,
-                          color: Theme
-                              .of(context)
-                              .primaryColor)),
+                          color: Theme.of(context).primaryColor)),
                 ),
               ],
             ),
@@ -411,13 +426,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
               border: OutlineInputBorder(
                   borderSide: BorderSide(color: Color(0xff333333), width: 1.0)),
               hintText:
-              "Notes about your order, e.g.special notes for delivery",
+                  "Notes about your order, e.g.special notes for delivery",
             ),
           ),
           Divider(
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
             height: 1.h,
           ),
           Column(children: [
@@ -487,12 +500,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
       }
     }).catchError((err) {
       err.toString();
-    });;
+    });
+    ;
   }
 
   void payorder(order_id) {
     var data = {
-      "ids": widget.ids,
+      "ids": order_id,
       "payment_code": 'balancepay',
       "payment_type": 1, //1=>订单支付，2=>充值
     };
@@ -500,64 +514,60 @@ class _CheckoutPageState extends State<CheckoutPage> {
     ApiClient().payorder(data).then((res) {
       if (res["status"]) {
         successToShow(res['msg']);
-        Timer timer = new Timer(Duration(milliseconds: 1000), (){
-          Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
-        });
       }
+      new Timer(Duration(milliseconds: 1000), () {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Provider.of<PageControllerProvider>(context, listen: false)
+            .goToPage(3);
+      });
     }).catchError((err) {
       err.toString();
-      if (err.status == false) {
-        successToShow(err.msg);
-      }
-      Timer timer = new Timer(Duration(milliseconds: 1000), (){
-            Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
+      new Timer(Duration(milliseconds: 1000), () {
+        Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
       });
     });
-
   }
 
-
-void showBottomDialog(String title, String sub, BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (_) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 24.sp, color: Colors.black),
-            ),
-            Container(
-              child: TextField(
-                style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(color: Color(0xff333333), width: 1.0)),
-                  hintText: "Coupon code",
+  void showBottomDialog(String title, String sub, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 24.sp, color: Colors.black),
+              ),
+              Container(
+                child: TextField(
+                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff333333), width: 1.0)),
+                    hintText: "Coupon code",
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 50.h),
-            Container(
-              height: 80.h,
-              alignment: Alignment.center,
-              color: Theme
-                  .of(context)
-                  .primaryColor,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(sub, style: TextStyle(color: Colors.white)),
+              SizedBox(height: 50.h),
+              Container(
+                height: 80.h,
+                alignment: Alignment.center,
+                color: Theme.of(context).primaryColor,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(sub, style: TextStyle(color: Colors.white)),
+                ),
               ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}}
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

@@ -98,7 +98,9 @@ class _CartPageState extends State<CartPage>
                   onTap: () {
                     String ids = '';
                     cartlist?.forEach((item) {
-                      ids += ',';
+                      if(ids!=''){
+                        ids += ',';
+                      }
                       ids += item.id.toString();
                     });
                     Navigator.of(context).push(MaterialPageRoute(

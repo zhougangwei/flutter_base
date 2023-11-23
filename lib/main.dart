@@ -64,7 +64,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -82,10 +81,9 @@ class _HomePageState extends State<HomePage> {
 
   void _onTabTapped(int index) {
     setState(() {
-      this._currentIndex = index;
       Provider.of<PageControllerProvider>(context, listen: false)
           .pageController
-          .jumpToPage(this._currentIndex);
+          .jumpToPage(index);
     });
   }
 
@@ -93,7 +91,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('AACCDD执行了MainPage build');
     return Consumer<PageControllerProvider>(builder: (context, provider, _) {
       return Scaffold(
         key: _scaffoldKey,
@@ -110,7 +107,7 @@ class _HomePageState extends State<HomePage> {
           onTap: (index) {
             _onTabTapped(index);
           },
-          currentIndex: _currentIndex,
+          currentIndex: provider.currentPageIndex,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon:
