@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 import '../sp/sp_utils.dart';
+import '../utils/common_utils.dart';
 import 'config.dart';
 final String url = config.apiUrl.url;
 final String loginUrl = config.apiUrl.loginUrl;
@@ -182,7 +182,4 @@ Future<Map<String, dynamic>> upload({
   return jsonDecode(responseData);
 }
 
-void errorToShow(String message) {
-    print("errorToShow" +message);
-}
 

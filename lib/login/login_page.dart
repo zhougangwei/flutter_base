@@ -1,16 +1,13 @@
-import 'dart:async';
-
 import 'package:atest/login/uverification_code.dart';
 import 'package:atest/sp/sp_utils.dart';
 import 'package:atest/utils/common_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+
+import '../eventbus/eventbus.dart';
 import '../generated/l10n.dart';
-import '../network/api.dart';
 import '../network/user.dart';
-import 'login_locale.dart';
 
 class LoginPopup extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -76,7 +73,7 @@ class _LoginPopupState extends State<LoginPopup> {
     if (verificationCodeKey?.currentState?.canGetCode == true) {
       ApiClient().userSms({"email": email, "type": type}).then((res) {
         print('执行到这了');
-        CommonUtils.toast(res['msg']);
+        toast(res['msg']);
         verificationCodeKey.currentState?.start();
         print('执行到这了33');
       }).catchError((err) {
@@ -85,7 +82,7 @@ class _LoginPopupState extends State<LoginPopup> {
         err.toString();
       });
     } else {
-      CommonUtils.toast('The countdown ends before sending');
+      toast('The countdown ends before sending');
     }
   }
 
@@ -114,19 +111,23 @@ class _LoginPopupState extends State<LoginPopup> {
       return;
     }
     if (password.isEmpty) {
-      return errorToShow('Please enter your password');
+      errorToShow('Please enter your password');
+      return;
     }
     if (captcha.isEmpty) {
-      return errorToShow('Please enter the captcha');
+      errorToShow('Please enter the captcha');
+      return;
     }
 
     if (loginType == 2) {
       // 注册
       if (againPwd.isEmpty) {
-        return errorToShow('Please confirm your login password');
+        errorToShow('Please confirm your login password');
+        return;
       }
       if (againPwd != password) {
-        return errorToShow('Inconsistent input, please confirm');
+         errorToShow('Inconsistent input, please confirm');
+        return;
       }
       ApiClient().login(data).then((res) {
         if (res['status']) {
@@ -153,7 +154,8 @@ class _LoginPopupState extends State<LoginPopup> {
     } else if (loginType == 3) {
       // 找回密码
       if (againPwd != password) {
-        return errorToShow('Inconsistent input, please confirm');
+        errorToShow('Inconsistent input, please confirm');
+        return;
       }
       ApiClient().forgetpwd(data).then((res) {
         if (res['status']) {

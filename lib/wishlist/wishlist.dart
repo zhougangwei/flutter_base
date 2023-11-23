@@ -22,6 +22,7 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
 
   @override
   void initState() {
+    print('AACCDD执行了WishListPage 1initState');
     var data = this.datapost;
     if (LoginStatus.hasLogin()) {
       ApiClient().goodscollectionlist(data).then((res) {

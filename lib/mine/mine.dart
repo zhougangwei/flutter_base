@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../login/login_locale.dart';
@@ -17,7 +18,8 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin {
+class _MinePageState extends State<MinePage>
+    with AutomaticKeepAliveClientMixin {
   UserInfoEntity? userinfo;
   List<dynamic>? couponlist;
   List<dynamic>? balancelist;
@@ -26,162 +28,166 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
 
   @override
   void initState() {
-    if(LoginStatus.hasLogin()){
+    afterLogin();
+    bus.on("Login", (arg){
+      afterLogin();
+    });
+    super.initState();
+  }
+
+  void afterLogin() {
+    if (LoginStatus.hasLogin()) {
       getbalancelist();
       getcouponlist();
       getorderlist();
       getuserinfo();
     }
-
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final localizations = S.of(context);
-    return Consumer<LoginStatus>(builder: (context, loginstatus, _) {
-      return DefaultTabController(
-          length: 3, // 选项卡的数量
-          child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(550.h),
-              child: AppBar(
-                flexibleSpace: Container(
-                    height: 421.h,
-                    alignment: Alignment.center,
-                    color: Color(0xffE8EBFC),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 33.h),
-                        if (userinfo != null)
-                          CachedNetworkImage(
-                            imageUrl: userinfo!.avatar,
-                            width: 188.w,
-                            height: 188.h,
-                            fit: BoxFit.cover,
-                          )
-                        else
-                          Container(
-                            width: 188.w,
-                            height: 188.h,
-                          ),
-                        SizedBox(height: 14.h),
-                        if (userinfo != null)
-                          Text(userinfo!.nickname,
-                              style: TextStyle(
-                                  color: Color(0xff333333), fontSize: 32.sp)),
-                        SizedBox(height: 33.h),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                children: [
-                                  Text("\$" + (userinfo?.balance ?? "0.0"),
-                                      style: TextStyle(
-                                          color: Color(0xffFB641B),
-                                          fontSize: 36.sp)),
-                                  Text(localizations.balance,
-                                      style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 24.sp))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text((userinfo?.wishlist ?? 0).toString(),
-                                      style: TextStyle(
-                                          color: Color(0xffFB641B),
-                                          fontSize: 36.sp)),
-                                  Text(localizations.wishlist,
-                                      style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 24.sp))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text((userinfo?.cart ?? 0).toString(),
-                                      style: TextStyle(
-                                          color: Color(0xffFB641B),
-                                          fontSize: 36.sp)),
-                                  Text(localizations.cart,
-                                      style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 24.sp))
-                                ],
-                              )
-                            ])
-                      ],
-                    )),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(100.h),
-                  child: TabBar(
-                    tabs: [
-                      Tab(
-                          child: Container(
-                        color: Colors.white,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(localizations.my,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                            Text(localizations.coupon,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                          ],
+    return DefaultTabController(
+        length: 3, // 选项卡的数量
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(550.h),
+            child: AppBar(
+              flexibleSpace: Container(
+                  height: 421.h,
+                  alignment: Alignment.center,
+                  color: Color(0xffE8EBFC),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 33.h),
+                      if (userinfo != null)
+                        CachedNetworkImage(
+                          imageUrl: userinfo!.avatar,
+                          width: 188.w,
+                          height: 188.h,
+                          fit: BoxFit.cover,
+                        )
+                      else
+                        Container(
+                          width: 188.w,
+                          height: 188.h,
                         ),
-                      )),
-                      Tab(
-                          child: Container(
-                        color: Colors.white,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      SizedBox(height: 14.h),
+                      if (userinfo != null)
+                        Text(userinfo!.nickname,
+                            style: TextStyle(
+                                color: Color(0xff333333), fontSize: 32.sp)),
+                      SizedBox(height: 33.h),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(localizations.recharge,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                            Text(localizations.record,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                          ],
-                        ),
-                      )),
-                      Tab(
-                          child: Container(
-                        color: Colors.white,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(localizations.order,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                            Text(localizations.record,
-                                style: TextStyle(
-                                    fontSize: 28.sp, color: Color(0xff333333))),
-                          ],
-                        ),
-                      )),
+                            Column(
+                              children: [
+                                Text("\$" + (userinfo?.balance ?? "0.0"),
+                                    style: TextStyle(
+                                        color: Color(0xffFB641B),
+                                        fontSize: 36.sp)),
+                                Text(localizations.balance,
+                                    style: TextStyle(
+                                        color: Color(0xff333333),
+                                        fontSize: 24.sp))
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text((userinfo?.wishlist ?? 0).toString(),
+                                    style: TextStyle(
+                                        color: Color(0xffFB641B),
+                                        fontSize: 36.sp)),
+                                Text(localizations.wishlist,
+                                    style: TextStyle(
+                                        color: Color(0xff333333),
+                                        fontSize: 24.sp))
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text((userinfo?.cart ?? 0).toString(),
+                                    style: TextStyle(
+                                        color: Color(0xffFB641B),
+                                        fontSize: 36.sp)),
+                                Text(localizations.cart,
+                                    style: TextStyle(
+                                        color: Color(0xff333333),
+                                        fontSize: 24.sp))
+                              ],
+                            )
+                          ])
                     ],
-                  ),
+                  )),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(100.h),
+                child: TabBar(
+                  tabs: [
+                    Tab(
+                        child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.my,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.coupon,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
+                    Tab(
+                        child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.recharge,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.record,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
+                    Tab(
+                        child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.order,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.record,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
+                  ],
                 ),
               ),
             ),
-            body: TabBarView(
-              children: [
-                obtainCoupon(),
-                obtainRecharge(),
-                obtainOrder(),
-              ],
-            ),
-          ));
-    });
+          ),
+          body: TabBarView(
+            children: [
+              obtainCoupon(),
+              obtainRecharge(),
+              obtainOrder(),
+            ],
+          ),
+        ));
   }
 
   editavatar(data) {
@@ -210,8 +216,6 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
     });
   }
 
-
-
   getuserinfo() {
     ApiClient().getuserinfo({}).then((res) {
       if (res['status']) {
@@ -226,7 +230,6 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
 
   obtainCoupon() {
     return Container();
-
   }
 
   obtainRecharge() {
@@ -241,7 +244,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
     ApiClient().usercoupon(datapost).then((res) {
       if (res['status']) {
         setState(() {
-          couponlist = jsonConvert.convertList<List<dynamic>>(res['data'])??[];
+          couponlist =
+              jsonConvert.convertList<List<dynamic>>(res['data']) ?? [];
         });
       }
     }).catchError((err) {
@@ -253,7 +257,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
     ApiClient().getorderlist(datapost).then((res) {
       if (res['status']) {
         setState(() {
-          orderlist = jsonConvert.convertList<List<dynamic>>(res['data'])??[];
+          orderlist = jsonConvert.convertList<List<dynamic>>(res['data']) ?? [];
         });
       }
     }).catchError((err) {
@@ -266,7 +270,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
     ApiClient().getbalancelist(datapost).then((res) {
       if (res['status']) {
         setState(() {
-          balancelist = jsonConvert.convertList<List<dynamic>>(res['data'])??[];
+          balancelist =
+              jsonConvert.convertList<List<dynamic>>(res['data']) ?? [];
         });
       }
     }).catchError((err) {

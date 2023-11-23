@@ -9,9 +9,9 @@ import '../generated/l10n.dart';
 import 'add_address.dart';
 
 class MultiAddress extends StatefulWidget {
-  final List<CartBeanList> cartlist;
+  final List<CartBeanList> orderlist;
 
-  const MultiAddress({super.key, required this.cartlist});
+  const MultiAddress({super.key, required this.orderlist});
 
   @override
   State<MultiAddress> createState() => _MultiAddressState();
@@ -49,7 +49,7 @@ class _MultiAddressState extends State<MultiAddress> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          var item = widget.cartlist[index];
+          var item = widget.orderlist[index];
           if (item == null) {
             return Container();
           }
@@ -136,7 +136,7 @@ class _MultiAddressState extends State<MultiAddress> {
                 ],
               ));
         },
-        childCount: widget.cartlist?.length ?? 0,
+        childCount: widget.orderlist?.length ?? 0,
       ),
     );
   }

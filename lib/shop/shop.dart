@@ -47,7 +47,7 @@ class _ShopPageState extends State<ShopPage> {
 
     ApiClient().goodscollection(data).then((res) {
       if (res.status) {
-        CommonUtils.successToShow(res.msg);
+        successToShow(res.msg);
         setState(() {
           featurednlist[index]['isfav'] = !featurednlist[index]['isfav'];
         });

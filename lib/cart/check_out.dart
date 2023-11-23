@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:atest/widget/number_box.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/page_controller_provider.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
+import '../utils/common_utils.dart';
 import 'add_address.dart';
 import 'multi_address.dart';
 
@@ -21,14 +26,17 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  List<CartBeanList>? cartlist;
+  List<CartBeanList>? orderlist;
   CartBeanEntity? carBean;
+  String couponcode = '';
   var datapost = {"display": 'all', "ids": 1};
-
   double totalnumberDouble = 0.0;
+  String memo = '';
+  var defaultship = {};
 
   @override
   void initState() {
+    getuserdefaultship();
     getCatoPeration();
   }
 
@@ -39,19 +47,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
         body: CustomScrollView(
             physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
             slivers: [
-          SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
-          SliverToBoxAdapter(child: obtainAddressTilte(context, localizations)),
-          buildGoodCastList(localizations),
-          SliverToBoxAdapter(child: obtainTotalMessage(context, localizations)),
-          SliverToBoxAdapter(child: obtainBottom(context, localizations)),
-        ]));
+              SliverToBoxAdapter(
+                  child: obtainWishTilte(context, localizations)),
+              SliverToBoxAdapter(
+                  child: obtainAddressTilte(context, localizations)),
+              buildGoodCastList(localizations),
+              SliverToBoxAdapter(
+                  child: obtainTotalMessage(context, localizations)),
+              SliverToBoxAdapter(child: obtainBottom(context, localizations)),
+            ]));
   }
 
   SliverList buildGoodCastList(S localizations) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          var item = cartlist?[index];
+            (context, index) {
+          var item = orderlist?[index];
           if (item == null) {
             return Container();
           }
@@ -123,7 +134,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ));
         },
-        childCount: cartlist?.length ?? 0,
+        childCount: orderlist?.length ?? 0,
       ),
     );
   }
@@ -135,8 +146,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Column(children: [
           Text(
             '${item.address?.firstName}|${item.address?.lastName}'
-            '|${item.address?.country}|${item.address?.zipCode}|'
-            '${item.address?.code}|${item.address?.mobile}',
+                '|${item.address?.country}|${item.address?.zipCode}|'
+                '${item.address?.code}|${item.address?.mobile}',
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -147,7 +158,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
           Container(width: 20.h),
           Text(
-            '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
+            '${item.address?.etc},${item.address?.houseNum},${item.address
+                ?.city},${item.address?.state}',
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -235,7 +247,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Column obtainWishTilte(BuildContext context, S localizations) {
     return Column(children: [
       Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         color: Color(0xfff5f5f5),
         height: ScreenUtil().setHeight(305),
         child: Column(
@@ -292,7 +307,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return MultiAddress(cartlist: cartlist ?? []);
+          return MultiAddress(orderlist: orderlist ?? []);
         });
   }
 
@@ -305,8 +320,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (res['status']) {
         setState(() {
           carBean = jsonConvert.convert<CartBeanEntity>(res['data']);
-          cartlist = carBean?.list;
-          cartlist?.forEach((item) {
+          orderlist = carBean?.list;
+          orderlist?.forEach((item) {
             if (item != null) {
               item.itemnums = item.nums;
               item.total =
@@ -348,7 +363,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Text(middleText ?? "" + ":"),
             Text("\$" + endText,
                 style: TextStyle(
-                    fontSize: 24.sp, color: Theme.of(context).primaryColor)),
+                    fontSize: 24.sp, color: Theme
+                    .of(context)
+                    .primaryColor)),
           ],
         ),
       ],
@@ -370,12 +387,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(fontSize: 24.sp, color: Colors.black)),
                 GestureDetector(
                   onTap: () {
-                    showBottomDialog(localizations.str2,localizations.useCoupon, context);
+                    showBottomDialog(
+                        localizations.str2, localizations.useCoupon, context);
                   },
                   child: Text(localizations.clickCode,
                       style: TextStyle(
                           fontSize: 24.sp,
-                          color: Theme.of(context).primaryColor)),
+                          color: Theme
+                              .of(context)
+                              .primaryColor)),
                 ),
               ],
             ),
@@ -384,16 +404,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(fontSize: 24.sp, color: Colors.black)),
           TextField(
             style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-            onChanged: (value) {},
+            onChanged: (value) {
+              memo = value;
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(
                   borderSide: BorderSide(color: Color(0xff333333), width: 1.0)),
               hintText:
-                  "Notes about your order, e.g.special notes for delivery",
+              "Notes about your order, e.g.special notes for delivery",
             ),
           ),
           Divider(
-            color: Theme.of(context).primaryColor,
+            color: Theme
+                .of(context)
+                .primaryColor,
             height: 1.h,
           ),
           Column(children: [
@@ -416,46 +440,124 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ]);
   }
 
-  void showBottomDialog(String title,String sub, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontSize: 24.sp, color: Colors.black),
-              ),
-              Container(
-                child: TextField(
-                  style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-                  onChanged: (value) {},
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xff333333), width: 1.0)),
-                    hintText: "Coupon code",
-                  ),
-                ),
-              ),
-              SizedBox(height: 50.h),
-              Container(
-                height: 80.h,
-                alignment: Alignment.center,
-                color: Theme.of(context).primaryColor,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child:  Text(sub, style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+  getuserdefaultship() {
+    //获取默认地址
+    ApiClient().getuserdefaultship(datapost).then((res) {
+      if (res['status']) {
+        defaultship = res['data'];
+      }
+    }).catchError((err) {});
   }
-}
+
+  void submit() {
+    var data = {
+      'area_id': 0,
+      'cart_ids': widget.ids,
+      'coupon_code': couponcode,
+      'memo': this.memo,
+      'receipt_type': 1,
+      'point': 0,
+      'source': 2,
+    };
+
+    if (orderlist == null) {
+      return;
+    }
+    bool hasAddress = true;
+    for (int i = 0; i < orderlist!.length; i++) {
+      CartBeanList item = orderlist![i];
+      if (item != null) {
+        if (defaultship.isEmpty &&
+            (item.address == null || item.address?.id == 0)) {
+          hasAddress = false;
+          break;
+        }
+      }
+    }
+    if (hasAddress == false) {
+      errorToShow('Please fill in the address first');
+      return;
+    }
+
+    ApiClient().createorder(data).then((res) {
+      if (res['status']) {
+        this.payorder(res['data']["order_id"]);
+      } else {
+        errorToShow(res['msg']);
+      }
+    }).catchError((err) {
+      err.toString();
+    });;
+  }
+
+  void payorder(order_id) {
+    var data = {
+      "ids": widget.ids,
+      "payment_code": 'balancepay',
+      "payment_type": 1, //1=>订单支付，2=>充值
+    };
+
+    ApiClient().payorder(data).then((res) {
+      if (res["status"]) {
+        successToShow(res['msg']);
+        Timer timer = new Timer(Duration(milliseconds: 1000), (){
+          Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+      if (err.status == false) {
+        successToShow(err.msg);
+      }
+      Timer timer = new Timer(Duration(milliseconds: 1000), (){
+            Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
+      });
+    });
+
+  }
+
+
+void showBottomDialog(String title, String sub, BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 24.sp, color: Colors.black),
+            ),
+            Container(
+              child: TextField(
+                style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+                onChanged: (value) {},
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(color: Color(0xff333333), width: 1.0)),
+                  hintText: "Coupon code",
+                ),
+              ),
+            ),
+            SizedBox(height: 50.h),
+            Container(
+              height: 80.h,
+              alignment: Alignment.center,
+              color: Theme
+                  .of(context)
+                  .primaryColor,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(sub, style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}}

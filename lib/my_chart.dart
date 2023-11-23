@@ -1,6 +1,7 @@
 import 'package:atest/shopping_list_item.dart';
 import 'package:flutter/material.dart';
 
+import 'eventbus/eventbus.dart';
 import 'login/login_page.dart';
 
 class CartDrawer extends StatelessWidget {
@@ -22,6 +23,7 @@ class CartDrawer extends StatelessWidget {
                 builder: (BuildContext context) {
                   return LoginPopup(onPressed: () {
                     Navigator.of(context).pop();
+                    bus.emit('Login', "hello PageA from PageB");
                   });
                 });
             },

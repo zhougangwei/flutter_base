@@ -4,7 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
+import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../network/user.dart';
@@ -18,7 +20,8 @@ class CartPage extends StatefulWidget {
   _CartPageState createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin {
+class _CartPageState extends State<CartPage>
+    with AutomaticKeepAliveClientMixin {
   List<CartBeanList>? cartlist;
   var datapost = {"display": 'all', "ids": ''};
 
@@ -26,14 +29,27 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
 
   @override
   void initState() {
-    print('AACCDD执行了1initState');
-    var data = this.datapost;
-    if(LoginStatus.hasLogin()){
+    print('AACCDD执行了CartPage 1initState');
+    gotoLogin();
+    bus.on("Login", (arg){
+      gotoLogin();
+    });
+    super.initState();
+  }
+
+  void gotoLogin() {
+    if (LoginStatus.hasLogin()) {
+      var data = this.datapost;
       print('AACCDD还没登陆');
       getCatoPeration(data);
     }
-    super.initState();
   }
+  dispose() {
+    print('AACCDD执行了CartPage 2dispose');
+    super.dispose();
+    bus.off('Login');
+  }
+
 
   void getCatoPeration(Map<String, String> data) {
     ApiClient().CatoPeration(data).then((res) {
@@ -48,8 +64,7 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
             item.total =
                 (item.nums.toDouble() * double.parse(item.products.price))
                     .toStringAsFixed(2);
-            totalnumberDouble +=
-                item.nums * double.parse(item.products.price);
+            totalnumberDouble += item.nums * double.parse(item.products.price);
           });
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
         });
@@ -63,49 +78,49 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
   Widget build(BuildContext context) {
     super.build(context);
     var localizations = S.of(context);
-    return Scaffold(
-        body: Container(
-      child: Stack(
-        children: [
-          CustomScrollView(
-              physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-              slivers: [
-                SliverToBoxAdapter(child: obtainWishTilte(localizations)),
-                buildGoodCastList(localizations),
-                SliverToBoxAdapter(child: obtainWishBottom(localizations)),
-                SliverToBoxAdapter(child: Container(height: 150.h)),
-              ]),
-          Positioned(
-              right: 0,
-              left: 0,
-              bottom: 1.h,
-              child: GestureDetector(
-                onTap: () {
-                  String ids = '';
-                  cartlist?.forEach((item) {
-                    ids +=  ',';
-                    ids +=item.id.toString();
-                  });
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CheckoutPage( ids: ids)));
-                },
-                child: Container(
-                  height: 100.h,
-                  color: Color(0xffFB641B), // 自定义头部的背景颜色
-                  child: Center(
-                    child: Text(
-                      localizations.proceedCheckout,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
+    return  Scaffold(
+          body: Container(
+        child: Stack(
+          children: [
+            CustomScrollView(
+                physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+                slivers: [
+                  SliverToBoxAdapter(child: obtainWishTilte(localizations)),
+                  buildGoodCastList(localizations),
+                  SliverToBoxAdapter(child: obtainWishBottom(localizations)),
+                  SliverToBoxAdapter(child: Container(height: 150.h)),
+                ]),
+            Positioned(
+                right: 0,
+                left: 0,
+                bottom: 1.h,
+                child: GestureDetector(
+                  onTap: () {
+                    String ids = '';
+                    cartlist?.forEach((item) {
+                      ids += ',';
+                      ids += item.id.toString();
+                    });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CheckoutPage(ids: ids)));
+                  },
+                  child: Container(
+                    height: 100.h,
+                    color: Color(0xffFB641B), // 自定义头部的背景颜色
+                    child: Center(
+                      child: Text(
+                        localizations.proceedCheckout,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )),
-        ],
-      ),
-    ));
+                )),
+          ],
+        ),
+      ));
   }
 
   SliverList buildGoodCastList(S localizations) {
@@ -282,5 +297,5 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
 
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive =>false;
+  bool get wantKeepAlive => false;
 }

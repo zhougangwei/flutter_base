@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../eventbus/eventbus.dart';
 import '../generated/l10n.dart';
 import '../home/faq.dart';
 import '../login/login_locale.dart';
@@ -12,9 +13,7 @@ import '../login/login_page.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginStatus>(context);
     final localizations = S.of(context);
-    return Consumer<LoginStatus>(builder: (context, loginstatus, _) {
       return Drawer(
         backgroundColor: Colors.white,
         child: ListView(
@@ -31,7 +30,8 @@ class AppDrawer extends StatelessWidget {
                         builder: (BuildContext context) {
                           return LoginPopup(
                             onPressed: () {
-                              loginProvider.setLoginStatus("1");
+                              bus.emit('Login', "hello PageA from PageB");
+
                               Navigator.of(context).pop();
                             },
                           );
@@ -102,7 +102,7 @@ class AppDrawer extends StatelessWidget {
           ],
         ),
       );
-    });
+
   }
 
   Container buildGestureDetector(String home, bool hasAdd,
