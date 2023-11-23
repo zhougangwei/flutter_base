@@ -137,6 +137,8 @@ class _LoginPopupState extends State<LoginPopup> {
           // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
+        }else{
+          errorToShow(res['msg']);
         }
       });
     } else if (loginType == 1) {
@@ -149,6 +151,8 @@ class _LoginPopupState extends State<LoginPopup> {
           // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
+        }else{
+          errorToShow(res['msg']);
         }
       });
     } else if (loginType == 3) {
@@ -164,6 +168,8 @@ class _LoginPopupState extends State<LoginPopup> {
           loginType = 1;
           showLogin = false;
           Navigator.of(context).pop();
+        }else{
+          errorToShow(res['msg']);
         }
       });
     }

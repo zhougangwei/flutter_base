@@ -10,6 +10,7 @@ import 'package:atest/shop/bean/collect_item_entity.dart';
 import 'package:atest/shop/bean/feature_entity.dart';
 import 'package:atest/shop/bean/good_bean_entity.dart';
 import 'package:atest/shop/bean/good_cat_bean_entity.dart';
+import 'package:atest/shop/bean/order_bean_entity.dart';
 import 'package:atest/shop/bean/setting_bean_entity.dart';
 import 'package:atest/shop/bean/type_item_entity.dart';
 import 'package:atest/shop/bean/user_info_entity.dart';
@@ -220,6 +221,18 @@ class JsonConvert {
       return data.map<GoodCatBeanGoodsBrand>((Map<String, dynamic> e) =>
           GoodCatBeanGoodsBrand.fromJson(e)).toList() as M;
     }
+    if (<OrderBeanEntity>[] is M) {
+      return data.map<OrderBeanEntity>((Map<String, dynamic> e) =>
+          OrderBeanEntity.fromJson(e)).toList() as M;
+    }
+    if (<OrderBeanList>[] is M) {
+      return data.map<OrderBeanList>((Map<String, dynamic> e) =>
+          OrderBeanList.fromJson(e)).toList() as M;
+    }
+    if (<OrderBeanListItems>[] is M) {
+      return data.map<OrderBeanListItems>((Map<String, dynamic> e) =>
+          OrderBeanListItems.fromJson(e)).toList() as M;
+    }
     if (<SettingBeanEntity>[] is M) {
       return data.map<SettingBeanEntity>((Map<String, dynamic> e) =>
           SettingBeanEntity.fromJson(e)).toList() as M;
@@ -275,6 +288,9 @@ class JsonConvertClassCollection {
     (GoodCatBeanGoodsProduct).toString(): GoodCatBeanGoodsProduct.fromJson,
     (GoodCatBeanGoodsCanshu).toString(): GoodCatBeanGoodsCanshu.fromJson,
     (GoodCatBeanGoodsBrand).toString(): GoodCatBeanGoodsBrand.fromJson,
+    (OrderBeanEntity).toString(): OrderBeanEntity.fromJson,
+    (OrderBeanList).toString(): OrderBeanList.fromJson,
+    (OrderBeanListItems).toString(): OrderBeanListItems.fromJson,
     (SettingBeanEntity).toString(): SettingBeanEntity.fromJson,
     (TypeItemEntity).toString(): TypeItemEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,

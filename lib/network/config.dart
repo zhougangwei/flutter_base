@@ -51,7 +51,7 @@ class Config {
     final systemInfo = SystemInfo.fromJson(HashMap());
 
     final dev = ApiUrl(
-      url: 'http://twoshop.cn/api.html',
+      url: 'http://45.77.80.191/',
       avatarUrl: '',
       loginUrl: '',
       nginxFdfsUrl: '',
@@ -64,7 +64,7 @@ class Config {
       nginxFdfsUrl: '',
     );
 
-    ApiUrl apiUrl = production;
+    ApiUrl apiUrl = dev;
     if (environment == 'production') {
       apiUrl = production;
     }

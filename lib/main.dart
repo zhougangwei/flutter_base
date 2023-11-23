@@ -48,7 +48,6 @@ class ShoppingApp extends StatelessWidget {
           S.delegate
         ],
         locale: currentLocale.value,
-        title: "nihao",
         theme: ThemeData(
           primaryColor: Color(0xff072D8C),
         ),
