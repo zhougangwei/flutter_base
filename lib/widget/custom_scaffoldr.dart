@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-import '../language/current_locale.dart';
 import '../my_chart.dart';
 import 'app_drawer.dart';
 import 'custom_app_bar.dart';
@@ -23,7 +20,7 @@ class CustomScafflold extends StatelessWidget implements PreferredSizeWidget {
     return Scaffold(
         key: _scaffoldKey,
         appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
-        drawer: AppDrawer(),
+        drawer: AppDrawerWidget(),
         endDrawer: CartDrawer(),
         body: this.body ,
         bottomNavigationBar: this.bottomNavigationBar);
