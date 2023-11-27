@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
@@ -20,6 +24,7 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage>
     with AutomaticKeepAliveClientMixin {
   UserInfoEntity? userinfo;
+  String? username;
   List<dynamic>? couponlist;
   List<dynamic>? balancelist;
   List<OrderBeanList>? orderlist;
@@ -66,11 +71,19 @@ class _MinePageState extends State<MinePage>
                     children: [
                       SizedBox(height: 33.h),
                       if (userinfo != null)
-                        CachedNetworkImage(
-                          imageUrl: userinfo!.avatar,
-                          width: 188.w,
-                          height: 188.h,
-                          fit: BoxFit.cover,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(188.h),
+                          child: GestureDetector(
+                            onTap: () {
+                                chooseImg();
+                              },
+                            child: CachedNetworkImage(
+                              imageUrl: userinfo!.avatar,
+                              width: 188.w,
+                              height: 188.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         )
                       else
                         Container(
@@ -200,7 +213,9 @@ class _MinePageState extends State<MinePage>
 
   editavatar(data) {
     //修改头像
-    ApiClient().changeavatar({}).then((res) {
+    Map<String, dynamic> datapost = jsonDecode(data);
+    String avatar = datapost['data']['url'];
+    ApiClient().changeavatar({"avatar":avatar}).then((res) {
       if (res['status']) {
         setState(() {
           userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
@@ -213,7 +228,7 @@ class _MinePageState extends State<MinePage>
 
   editinfo() {
     //修改个人信息
-    ApiClient().editinfo({}).then((res) {
+    ApiClient().editinfo({"nickname": this.username}).then((res) {
       if (res['status']) {
         setState(() {
           userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
@@ -409,4 +424,53 @@ class _MinePageState extends State<MinePage>
   @override
   bool get wantKeepAlive => true;
 
+
+
+  Future<void> chooseImg() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      submitImage(image.path);
+    } else {
+
+    }
+  }
+
+
+  void submitImage(String image) async {
+    String url = 'https://abcadm.cc/api.html';
+    String filePath = image;
+    String fileType = 'image';
+    String name = 'file';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers['Accept'] = 'application/json';
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    var file = await http.MultipartFile.fromPath(name, filePath,
+        contentType: MediaType.parse(fileType));
+
+    request.files.add(file);
+    request.fields['method'] = 'images.upload';
+    request.fields['upfile'] = filePath;
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var uploadFileRes = json.decode(responseBody);
+        editavatar(uploadFileRes['data']);
+        print(uploadFileRes);
+      } else {
+        // Handle request failure
+      }
+    } catch (error) {
+      // Handle error
+    } finally {
+      // Hide loading after a delay
+      Future.delayed(Duration(milliseconds: 250), () {
+        // Hide loading
+      });
+    }
+  }
 }

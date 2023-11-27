@@ -11,6 +11,7 @@ import 'package:atest/shop/bean/feature_entity.dart';
 import 'package:atest/shop/bean/good_bean_entity.dart';
 import 'package:atest/shop/bean/good_cat_bean_entity.dart';
 import 'package:atest/shop/bean/order_bean_entity.dart';
+import 'package:atest/shop/bean/page_bean_entity.dart';
 import 'package:atest/shop/bean/setting_bean_entity.dart';
 import 'package:atest/shop/bean/type_item_entity.dart';
 import 'package:atest/shop/bean/user_info_entity.dart';
@@ -233,6 +234,22 @@ class JsonConvert {
       return data.map<OrderBeanListItems>((Map<String, dynamic> e) =>
           OrderBeanListItems.fromJson(e)).toList() as M;
     }
+    if (<PageBeanEntity>[] is M) {
+      return data.map<PageBeanEntity>((Map<String, dynamic> e) =>
+          PageBeanEntity.fromJson(e)).toList() as M;
+    }
+    if (<PageBeanChild>[] is M) {
+      return data.map<PageBeanChild>((Map<String, dynamic> e) =>
+          PageBeanChild.fromJson(e)).toList() as M;
+    }
+    if (<PageBeanChildProduct>[] is M) {
+      return data.map<PageBeanChildProduct>((Map<String, dynamic> e) =>
+          PageBeanChildProduct.fromJson(e)).toList() as M;
+    }
+    if (<PageBeanChildCanshu>[] is M) {
+      return data.map<PageBeanChildCanshu>((Map<String, dynamic> e) =>
+          PageBeanChildCanshu.fromJson(e)).toList() as M;
+    }
     if (<SettingBeanEntity>[] is M) {
       return data.map<SettingBeanEntity>((Map<String, dynamic> e) =>
           SettingBeanEntity.fromJson(e)).toList() as M;
@@ -291,6 +308,10 @@ class JsonConvertClassCollection {
     (OrderBeanEntity).toString(): OrderBeanEntity.fromJson,
     (OrderBeanList).toString(): OrderBeanList.fromJson,
     (OrderBeanListItems).toString(): OrderBeanListItems.fromJson,
+    (PageBeanEntity).toString(): PageBeanEntity.fromJson,
+    (PageBeanChild).toString(): PageBeanChild.fromJson,
+    (PageBeanChildProduct).toString(): PageBeanChildProduct.fromJson,
+    (PageBeanChildCanshu).toString(): PageBeanChildCanshu.fromJson,
     (SettingBeanEntity).toString(): SettingBeanEntity.fromJson,
     (TypeItemEntity).toString(): TypeItemEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,

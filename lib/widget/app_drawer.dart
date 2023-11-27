@@ -100,7 +100,9 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
             ),
           ),
           buildGestureDetector(localizations.home, true,
-              ontap: () => {Navigator.of(context).pop()}),
+              ontap: () => {Navigator.of(context).pop()})
+
+      ,
           buildGestureDetector(localizations.activities, false,
               ontap: () => {Navigator.of(context).pop()}),
           buildGestureDetector(localizations.voucheer, true,

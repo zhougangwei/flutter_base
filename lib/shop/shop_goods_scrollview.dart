@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:atest/good/good_page.dart';
+import 'package:atest/shop/bean/page_bean_entity.dart';
 import 'package:atest/top/rounded_searchbar.dart';
+import 'package:atest/utils/common_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,18 +17,21 @@ import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
 import 'home_banner.dart';
 
-class ShopGoodsScrollView extends StatefulWidget  {
+class ShopGoodsScrollView extends StatefulWidget {
   const ShopGoodsScrollView({super.key});
 
   @override
   _ShopGoodsScrollViewState createState() => _ShopGoodsScrollViewState();
 }
 
-class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with AutomaticKeepAliveClientMixin {
+class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
+    with AutomaticKeepAliveClientMixin {
   List<GoodCatBeanEntity> getGoodsCatlist = [];
   List<TypeItemEntity> typeList = [];
   List<FeatureEntity> featurednlist = [];
   var datapost = {"page": "1", "limit": "4"};
+
+  List<PageBeanEntity> pageList=[];
 
   @override
   void initState() {
@@ -35,6 +40,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with Automati
     getTypeList();
     relatedList();
     getGoodsCat();
+    getPageList();
   }
 
   @override
@@ -319,7 +325,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with Automati
             jsonConvert.convertListNotNull<FeatureEntity>(json.decode(res)) ??
                 [];
         setState(() {
-          print("先加载缓存relatedList" );
+          print("先加载缓存relatedList");
           featurednlist = cacheTypeList;
         });
       }
@@ -331,14 +337,14 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with Automati
     data['where'] = jsonEncode(type);
     ApiClient().relatedlist(data).then((res) {
       if (res['status']) {
-          print("再加载网络relatedList" );
-          List<FeatureEntity> networkList = jsonConvert
-                  .convertListNotNull<FeatureEntity>(res['data']['list']) ??
-              [];
-          JsonCacheManager().cacheJson("featurednlist", res['data']['list']);
-          setState(() {
-            featurednlist= networkList;
-          });
+        print("再加载网络relatedList");
+        List<FeatureEntity> networkList = jsonConvert
+                .convertListNotNull<FeatureEntity>(res['data']['list']) ??
+            [];
+        JsonCacheManager().cacheJson("featurednlist", res['data']['list']);
+        setState(() {
+          featurednlist = networkList;
+        });
       }
     }).catchError((err) {
       err.toString();
@@ -360,7 +366,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with Automati
     ApiClient().getGoodsCat({}).then((res) {
       if (res['status']) {
         setState(() {
-          print("再加载网络getGoodsCatlist" );
+          print("再加载网络getGoodsCatlist");
           getGoodsCatlist =
               jsonConvert.convertListNotNull<GoodCatBeanEntity>(res['data']) ??
                   [];
@@ -415,4 +421,16 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView> with Automati
 
   @override
   bool get wantKeepAlive => true;
+
+  void getPageList() {
+    ApiClient().getPageList({}).then((res) {
+      if (res['status']) {
+        successToShow('Successfully added');
+        setState(() {
+          pageList =
+              jsonConvert.convertListNotNull<PageBeanEntity>(res['data']['list']) ?? [];
+        });
+      }
+    }).catchError((err) {});
+  }
 }
