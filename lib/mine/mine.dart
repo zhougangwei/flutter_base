@@ -61,6 +61,7 @@ class _MinePageState extends State<MinePage>
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(550.h),
             child: AppBar(
+              backgroundColor: Colors.white,
               flexibleSpace: Container(
                   height: 421.h,
                   alignment: Alignment.center,
@@ -87,12 +88,12 @@ class _MinePageState extends State<MinePage>
                         )
                       else
                         Container(
+                          color: Colors.red,
                           width: 188.w,
                           height: 188.h,
                         ),
                       SizedBox(height: 14.h),
-                      if (userinfo != null)
-                        Text(userinfo!.nickname,
+                      Text(userinfo?.nickname??"",
                             style: TextStyle(
                                 color: Color(0xff333333), fontSize: 32.sp)),
                       SizedBox(height: 33.h),
@@ -141,10 +142,12 @@ class _MinePageState extends State<MinePage>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(100.h),
                 child: TabBar(
+                  indicatorColor: Colors.white ,
+                  padding: EdgeInsets.all(0),
                   tabs: [
                     Tab(
                         child: Container(
-                          color: Colors.white,
+                          width: double.infinity,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +165,7 @@ class _MinePageState extends State<MinePage>
                         )),
                     Tab(
                         child: Container(
-                          color: Colors.white,
+                          width: double.infinity,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +183,7 @@ class _MinePageState extends State<MinePage>
                         )),
                     Tab(
                         child: Container(
-                          color: Colors.white,
+                          width: double.infinity,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,

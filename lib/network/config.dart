@@ -78,4 +78,4 @@ class Config {
   }
 }
 
-final config = Config.fromEnvironment('dev');
+final config = Config.fromEnvironment('production');

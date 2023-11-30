@@ -37,7 +37,7 @@ extension PageBeanEntityExtension on PageBeanEntity {
 
 PageBeanChild $PageBeanChildFromJson(Map<String, dynamic> json) {
   final PageBeanChild pageBeanChild = PageBeanChild();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     pageBeanChild.id = id;
   }
@@ -277,7 +277,7 @@ Map<String, dynamic> $PageBeanChildToJson(PageBeanChild entity) {
 
 extension PageBeanChildExtension on PageBeanChild {
   PageBeanChild copyWith({
-    double? id,
+    int? id,
     String? bn,
     String? name,
     String? brief,
@@ -372,7 +372,7 @@ extension PageBeanChildExtension on PageBeanChild {
 
 PageBeanChildProduct $PageBeanChildProductFromJson(Map<String, dynamic> json) {
   final PageBeanChildProduct pageBeanChildProduct = PageBeanChildProduct();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     pageBeanChildProduct.id = id;
   }
@@ -499,7 +499,7 @@ Map<String, dynamic> $PageBeanChildProductToJson(PageBeanChildProduct entity) {
 
 extension PageBeanChildProductExtension on PageBeanChildProduct {
   PageBeanChildProduct copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     dynamic barcode,
     String? sn,
@@ -550,7 +550,7 @@ extension PageBeanChildProductExtension on PageBeanChildProduct {
 
 PageBeanChildCanshu $PageBeanChildCanshuFromJson(Map<String, dynamic> json) {
   final PageBeanChildCanshu pageBeanChildCanshu = PageBeanChildCanshu();
-  final double? id = jsonConvert.convert<double>(json['id']);
+  final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     pageBeanChildCanshu.id = id;
   }
@@ -580,7 +580,7 @@ Map<String, dynamic> $PageBeanChildCanshuToJson(PageBeanChildCanshu entity) {
 
 extension PageBeanChildCanshuExtension on PageBeanChildCanshu {
   PageBeanChildCanshu copyWith({
-    double? id,
+    int? id,
     double? goodsId,
     String? value,
     dynamic sort,

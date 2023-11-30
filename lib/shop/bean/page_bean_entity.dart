@@ -22,7 +22,7 @@ class PageBeanEntity {
 
 @JsonSerializable()
 class PageBeanChild {
-	late double id;
+	late int id;
 	late String bn = '';
 	late String name = '';
 	late String brief = '';
@@ -100,7 +100,7 @@ class PageBeanChild {
 
 @JsonSerializable()
 class PageBeanChildProduct {
-	late double id;
+	late int id;
 	@JSONField(name: "goods_id")
 	late double goodsId;
 	dynamic barcode;
@@ -148,7 +148,7 @@ class PageBeanChildProduct {
 
 @JsonSerializable()
 class PageBeanChildCanshu {
-	late double id;
+	late int id;
 	@JSONField(name: "goods_id")
 	late double goodsId;
 	late String value = '';

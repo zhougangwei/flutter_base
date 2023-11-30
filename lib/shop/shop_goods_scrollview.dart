@@ -12,6 +12,8 @@ import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../network/json_cache_manager.dart';
 import '../network/user.dart';
+import '../widget/dynamic_width_divider.dart';
+import '../widget/rating_widget.dart';
 import 'bean/feature_entity.dart';
 import 'bean/good_cat_bean_entity.dart';
 import 'bean/type_item_entity.dart';
@@ -31,7 +33,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   List<FeatureEntity> featurednlist = [];
   var datapost = {"page": "1", "limit": "4"};
 
-  List<PageBeanEntity> pageList=[];
+  List<PageBeanEntity> pageList = [];
 
   @override
   void initState() {
@@ -55,7 +57,94 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
         buildTypeList(),
         buildFeatured(),
         buildGoodCastList(),
+        buildPageList()
       ],
+    ));
+  }
+
+  SliverList buildPageList() {
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+      (context, index) {
+        var item = pageList[index];
+        return Container(
+            margin: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDivider(text: item.name),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: item.child.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var it = item.child[index];
+                      return GestureDetector(
+                        onTap: () {
+                          goodsinfo(it.id);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                  imageUrl: it.imageUrl, width: 150.w),
+                              SizedBox(width: 20.w),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 450.w,
+                                        child: Text(
+                                          it.name,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Color(0xff333333),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Row(
+                                    children: [
+                                      RatingWidget(
+                                          size: 30.w, initialRating: 5),
+                                      Text('(${it?.scoreSum ?? ''})',
+                                          style: TextStyle(fontSize: 10)),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    "\$" + it.price + "-" + "\$" + it.mktprice,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Color(0xff333333),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ]));
+      },
+      childCount: pageList.length,
     ));
   }
 
@@ -82,7 +171,6 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     ),
                   ),
                   SizedBox(height: 10),
-                  Divider(color: Colors.grey, thickness: 1),
                   Row(
                     children: item.child.map<Widget>((ite) {
                       return Expanded(
@@ -116,39 +204,41 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                       var it = item.goods[index];
                       return GestureDetector(
                         onTap: () => goodsinfo(it.id),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              CachedNetworkImage(imageUrl: it.imageUrl),
-                              SizedBox(height: 15),
-                              Text(
-                                it.name,
-                                maxLines: 1,
-                                textAlign: TextAlign.left,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Color(0xff333333),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "\$" + it.price + "-" + "\$" + it.mktprice,
+                        child: Card(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                CachedNetworkImage(imageUrl: it.imageUrl),
+                                SizedBox(height: 15),
+                                Text(
+                                  it.name,
+                                  maxLines: 1,
                                   textAlign: TextAlign.left,
                                   overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
                                   style: TextStyle(
                                     color: Color(0xff333333),
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 10),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "\$" + it.price + "-" + "\$" + it.mktprice,
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: Color(0xff333333),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -427,8 +517,9 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
       if (res['status']) {
         successToShow('Successfully added');
         setState(() {
-          pageList =
-              jsonConvert.convertListNotNull<PageBeanEntity>(res['data']['list']) ?? [];
+          pageList = jsonConvert
+                  .convertListNotNull<PageBeanEntity>(res['data']['list']) ??
+              [];
         });
       }
     }).catchError((err) {});

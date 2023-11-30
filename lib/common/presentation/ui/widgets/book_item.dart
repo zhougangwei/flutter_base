@@ -45,11 +45,11 @@ class BookItem extends ConsumerWidget {
         },
         child: Column(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-              child: Hero(
+              ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                child: Hero(
                 tag: imgTag,
                 child: CachedNetworkImage(
                   imageUrl: img,
