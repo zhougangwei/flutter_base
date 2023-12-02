@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
+
+typedef MyCallback = void Function(int param);
+
 class NumberBox extends StatefulWidget {
   final int min;
   final bool disabledInput;
+  final MyCallback onChange;
+
 
   const NumberBox({
     Key? key,
+    required this.onChange,
     this.min = 1,
     this.disabledInput = true,
   }) : super(key: key);
@@ -25,17 +31,22 @@ class _NumberBoxState extends State<NumberBox> {
 
   void _increment() {
     int currentValue = int.parse(_controller.text);
+
     setState(() {
+
       currentValue++;
+      widget.onChange(currentValue);
       _controller.text = currentValue.toString(); // 更新文本字段的值
     });
   }
 
   void _decrement() {
     int currentValue = int.parse(_controller.text);
+
     if (currentValue > widget.min) {
       setState(() {
         currentValue--;
+        widget.onChange(currentValue);
         _controller.text = currentValue.toString(); // 更新文本字段的值
       });
     }

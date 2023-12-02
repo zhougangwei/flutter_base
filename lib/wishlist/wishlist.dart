@@ -8,6 +8,7 @@ import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
+import '../widget/good_item.dart';
 
 class WishListPage extends StatefulWidget {
   const WishListPage({super.key});
@@ -57,6 +58,7 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           var item = wishlishlist[index];
+          var it = item.goods;
           return Container(
             margin: EdgeInsets.only(left: 20, right: 20),
             child: GridView.builder(
@@ -65,51 +67,20 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
               itemCount: wishlishlist.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // 一行显示
-                childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                childAspectRatio: 335 / 495, // 调整子项的宽高比例
                 crossAxisSpacing: 10, // 子项之间的横向间距
                 mainAxisSpacing: 10, // 两个子项
               ),
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: () => goodsinfo(item.goodsId),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CachedNetworkImage(imageUrl: item.goods.imageUrl),
-                        SizedBox(height: 15),
-                        Text(
-                          item.goods.name,
-                          maxLines: 1,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Color(0xff333333),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "\$" +
-                                item.goods.price +
-                                "-" +
-                                "\$" +
-                                item.goods.mktprice,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  onTap: () => goodsinfo(it.id),
+                  child: GoodItem(
+                    image_url: it.imageUrl,
+                    cat_name: "",
+                    name: it.name,
+                    scoreSum: it.scoreSum,
+                    price: it.price,
+                    mktprice: it.mktprice,
                   ),
                 );
               },
@@ -146,5 +117,5 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
 
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

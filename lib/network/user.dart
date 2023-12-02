@@ -47,7 +47,6 @@ class ApiClient {
     params['method'] = 'user.changeavatar';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
   Future getPageList(Map<String, dynamic> params) async {
     params['method'] = 'goods.getPageList';
     return await post(url: url, params: params, auth: false, showToast: false);
@@ -72,7 +71,7 @@ class ApiClient {
     params['method'] = 'user.forgetpwd';
     return await post(url: url, params: params, auth: false);
   }
-  //todo
+  // no use
   Future getbrief(Map<String, dynamic> params) async {
     params['method'] = 'articles.getArticleDetail';
     return await post(url: url, params: params, auth: false, showToast: false);
@@ -129,13 +128,11 @@ class ApiClient {
     params?['method'] = 'cart.del';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
 // 修改购物车数量
   Future<dynamic> setnums(Map<String, dynamic> params) async {
     params?['method'] = 'cart.setnums';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
 // 添加购物车
   Future<dynamic> cartadd(Map<String, dynamic> params) async {
     params?['method'] = 'cart.add';
@@ -177,7 +174,6 @@ class ApiClient {
     params?['method'] = 'user.goodscollectionlist';
     return await post(url: url, params: params, showToast: false);
   }
-  //todo
 // 切换商品规格
   Future<dynamic> getProductInfo(Map<String, dynamic> params) async {
     params?['method'] = 'goods.getproductinfo';

@@ -20,8 +20,19 @@ Future<void> errorToShow( msg, {int duration = 1500}) async {
 }
 
 Future<void> successToShow(String msg, {int duration = 1500}) async {
-  try {} catch (e) {
-// Handle error
+  try {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+
+  } catch (e) {
+
   }
 }
 

@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../eventbus/eventbus.dart';
 import '../generated/l10n.dart';
+import '../home/activity.dart';
 import '../home/faq.dart';
+import '../home/voucher.dart';
 import '../login/login_locale.dart';
 import '../login/login_page.dart';
 
@@ -65,7 +67,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                       SizedBox(width: 8.w),
                       Text(localizations.loginSigup,
                           style:
-                              TextStyle(fontSize: 28.sp, color: Colors.white)),
+                          TextStyle(fontSize: 28.sp, color: Colors.white)),
                       Expanded(child: Container()),
                       Icon(Icons.keyboard_arrow_right,
                           size: 20, color: Colors.white)
@@ -83,30 +85,41 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
               children: [
                 Expanded(
                     child: Container(
-                  child: Text(localizations.mend,
-                      textAlign: TextAlign.center,
-                      style:
+                      child: Text(localizations.mend,
+                          textAlign: TextAlign.center,
+                          style:
                           TextStyle(fontSize: 28.sp, color: Color(0xff072D8C))),
-                )),
+                    )),
                 Expanded(
                     child: Container(
-                  color: Color(0xfff8f8f8),
-                  child: Text(localizations.categories,
-                      textAlign: TextAlign.center,
-                      style:
+                      color: Color(0xfff8f8f8),
+                      child: Text(localizations.categories,
+                          textAlign: TextAlign.center,
+                          style:
                           TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
-                ))
+                    ))
               ],
             ),
           ),
           buildGestureDetector(localizations.home, true,
               ontap: () => {Navigator.of(context).pop()})
 
-      ,
+          ,
           buildGestureDetector(localizations.activities, false,
-              ontap: () => {Navigator.of(context).pop()}),
+              ontap: () {
+                Navigator.of(context).pop();
+                Navigator
+                    .of(context)
+                    .push(MaterialPageRoute(builder: (context) => ActivityPage()));
+              }),
           buildGestureDetector(localizations.voucheer, true,
-              ontap: () => {Navigator.of(context).pop()}),
+              ontap: () {
+                Navigator.of(context).pop();
+                Navigator
+                    .of(context)
+                    .push(MaterialPageRoute(builder: (context) => VoucherPage()));
+                }
+          ),
           buildGestureDetector(localizations.faq, false, ontap: () {
             Navigator.of(context).pop();
             Navigator.of(context)

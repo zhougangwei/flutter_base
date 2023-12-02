@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
 import '../utils/common_utils.dart';
@@ -35,6 +37,8 @@ class _GoodPageState extends State<GoodPage> {
   int currentIndex = 0;
 
   late S localizations;
+
+  int num = 1;
 
   @override
   void initState() {
@@ -148,21 +152,8 @@ class _GoodPageState extends State<GoodPage> {
                           fontSize: 26.sp,
                           color: Theme.of(context).primaryColor)),
                   SizedBox(height: 15.h),
-                  if (default_spes_desc != null &&
-                      default_spes_desc?.keys?.first != null &&
-                      default_spes_desc?.values != null)
-                    Text(default_spes_desc?.keys?.first ?? '',
-                        style: TextStyle(fontSize: 26.sp)),
-                  SizedBox(height: 15.h),
-                  Wrap(children: [
-                    for (var i = 0;
-                        i <
-                            default_spes_desc![default_spes_desc?.keys?.first]
-                                .length;
-                        i++)
-                      obtainSIzeContainer(i),
-                  ]),
-                  SizedBox(height: 10.0), // 设置间距
+                  obtainDefaultContainer(),
+                  SizedBox(height: 20.h), // 设置间距
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -176,7 +167,14 @@ class _GoodPageState extends State<GoodPage> {
                               style: TextStyle(fontSize: 28.sp)),
                         )
                       ]),
-                  NumberBox(),
+                  SizedBox(height: 40.h),
+                  Divider(height: 1.h, color: Color(0x33333333)),
+                  SizedBox(height: 30.h),
+                  NumberBox(onChange: (int param) {
+                    if (param > 0) {
+                      num = param;
+                    }
+                  },),
                   if (goods_data?.isfav == true)
                     obtainIsfav(localizations.CancelWishlist)
                   else
@@ -189,25 +187,30 @@ class _GoodPageState extends State<GoodPage> {
                         Text(goods_data?.category?.toString() ?? ''),
                       ],
                     ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 40.h),
                   Row(
                     children: [
                       Image.asset('assets/images/image/icon-7.png',
                           width: 26.w),
                       SizedBox(width: 15.w),
-                      Text(goods_data?.tags ?? ''),
+                      Expanded(child: Text(goods_data?.tags ?? '')),
                     ],
                   ),
-                  SizedBox(height: 40.h),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:Theme.of(context).primaryColor),
-                        onPressed: () {
-                          cartadd();
-                        },
-                        child: Text("072D8CFF")),
+                  SizedBox(height: 50.h),
+                  GestureDetector(
+                    child: Container(
+                        height: 100.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor),
+                          onPressed: () {
+                            cartadd();
+                          },
+                          child: Text(localizations.addToCart,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 35.sp)),
+                        )),
                   ),
                   ObtainHtmlPanelList("DESCRIPTION", getHtml()),
                   ObtainHtmlPanelList("REVIEWS", Container()),
@@ -222,15 +225,16 @@ class _GoodPageState extends State<GoodPage> {
       return Container(
         margin: EdgeInsets.only(right: 25.w),
         child: Container(
+
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
               color: Theme.of(context).primaryColor,
             ),
-            borderRadius: BorderRadius.circular(35.w),
+            borderRadius: BorderRadius.circular(30.w),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5),
             child: Text(
               default_spes_desc![default_spes_desc?.keys?.first]
                   .values
@@ -246,14 +250,15 @@ class _GoodPageState extends State<GoodPage> {
             currentIndex = i;
             changeSpes(default_spes_desc![default_spes_desc?.keys?.first]
                 .values
-                .toList()[i]['product_id']);
+                .toList()[i]['product_id']
+                .toString());
           });
         },
         child: Container(
           margin: EdgeInsets.only(right: 25.w),
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: Text(
                 default_spes_desc![default_spes_desc?.keys?.first]
                     .values
@@ -266,27 +271,37 @@ class _GoodPageState extends State<GoodPage> {
   }
 
   Widget obtainNotFav(String text) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/image/icon-33.png', width: 26.w),
-          SizedBox(width:15.w),
-          Text(text,
-              style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
-        ]);
+    return GestureDetector(
+      onTap: () {
+        collection(goods_data?.id);
+      },
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/image/icon-33.png', width: 26.w),
+            SizedBox(width: 15.w),
+            Text(text,
+                style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
+          ]),
+    );
   }
 
   Widget obtainIsfav(String text) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/image/icon-6.png', width: 26.w),
-          SizedBox(width:15.w),
-          Text(text,
-              style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
-        ]);
+    return GestureDetector(
+      onTap: () {
+        collection(goods_data?.id);
+      },
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/image/icon-6.png', width: 26.w),
+            SizedBox(width: 15.w),
+            Text(text,
+                style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
+          ]),
+    );
   }
 
   ExpansionPanelList ObtainHtmlPanelList(String title, Widget body) {
@@ -332,16 +347,91 @@ class _GoodPageState extends State<GoodPage> {
     }
   }
 
-  void cartadd() {}
+  void cartadd() {
+    var data = {
+      'type': '1',
+      'nums': this.num,
+      'product_id': this.goods_data?.product?.id
+    };
+    ApiClient().cartadd(data).then((res) {
+      if (res['status']) {
+        this.num = 1;
+        successToShow('Successfully added');
+      } else {
+        errorToShow(res['msg']);
+        if (res['data'] == 14006 || res['data'] == 14007) {
+          showLoginDialog();
+        }
+      }
+    }).catchError((err) {
+      if (err.status == false && err.data == 14006) {
+        showLoginDialog();
+      }
+    });
+  }
 
   void changeSpes(String productId) {
     ApiClient().getProductInfo({'id': productId}).then((res) {
-      if (res.status) {
-        successToShow(res.msg);
+      if (res['status']) {
         setState(() {
           this.goods_data?.price = res['data']['price'];
+          this.goods_data?.id = res['data']['id'];
+          this.default_spes_desc = res['data']['default_spes_desc'];
         });
       }
     }).catchError((err) {});
+  }
+
+  void showLoginDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return LoginPopup(onPressed: () {
+            Navigator.of(context).pop();
+            bus.emit('Login', "hello PageA from PageB");
+          });
+        });
+  }
+
+  Widget obtainDefaultContainer() {
+    if (default_spes_desc != null &&
+        default_spes_desc?.keys?.first != null &&
+        default_spes_desc?.values != null) {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(default_spes_desc?.keys?.first ?? '' + ":",
+                style: TextStyle(fontSize: 26.sp)),
+            SizedBox(height: 15.h),
+            Wrap(children: [
+              for (var i = 0;
+                  i <
+                      default_spes_desc?[default_spes_desc?.keys?.first]
+                          ?.length;
+                  i++)
+                obtainSIzeContainer(i),
+            ])
+          ]);
+    } else {
+      return Container();
+    }
+  }
+
+  void collection(int? i) {
+    if (i == null) return;
+    ApiClient().goodscollection({'goods_id': i}).then((res) {
+      if (res['status']) {
+        setState(() {
+          this.goods_data?.isfav = !(this.goods_data?.isfav ?? false);
+        });
+        successToShow(res['msg']);
+      } else {
+        if (res['data'] == 14006||res['data'] == 14007) {
+          showLoginDialog();
+        }
+      }
+    }).catchError((err) {
+    });
   }
 }

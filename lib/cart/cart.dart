@@ -1,4 +1,5 @@
 import 'package:atest/login/login_locale.dart';
+import 'package:atest/utils/common_utils.dart';
 import 'package:atest/widget/number_box.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -134,7 +135,6 @@ class _CartPageState extends State<CartPage>
             return Container();
           }
           return Container(
-              height: 237.h,
               alignment: Alignment.centerLeft,
               width: double.infinity,
               margin: EdgeInsets.only(left: 20, right: 20),
@@ -158,15 +158,17 @@ class _CartPageState extends State<CartPage>
                               children: [
                                 Row(
                                   children: [
-                                    Text(
-                                      item.products.name,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.left,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                    Expanded(
+                                      child: Text(
+                                        item.products.name,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Color(0xff333333),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -199,7 +201,9 @@ class _CartPageState extends State<CartPage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(localizations.quantity),
-                                    NumberBox()
+                                    NumberBox(onChange: (int nums) {
+                                      unmchange(item.id,nums);
+                                    },)
                                   ],
                                 ),
                                 Row(
@@ -300,4 +304,21 @@ class _CartPageState extends State<CartPage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => false;
+
+  void unmchange(int id, int nums) {
+    Map<String,dynamic> data = {
+      "nums":nums,
+      "id":id
+    };
+    ApiClient().setnums(data).then((value) {
+      if (value['status']) {
+          gotoLogin();
+      }else{
+        errorToShow(value['msg']);
+      }
+    }).catchError((e) {
+      print(e);
+    });
+
+  }
 }
