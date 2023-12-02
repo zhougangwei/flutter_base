@@ -33,9 +33,9 @@ class _MinePageState extends State<MinePage>
 
   @override
   void initState() {
-    orderlist= [];
-    couponlist= [];
-    balancelist= [];
+    orderlist = [];
+    couponlist = [];
+    balancelist = [];
     afterLogin();
     bus.on("Login", (arg) {
       afterLogin();
@@ -73,41 +73,40 @@ class _MinePageState extends State<MinePage>
                     children: [
                       SizedBox(height: 33.h),
                       if (userinfo != null)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(188.h),
-                          child: GestureDetector(
-                            onTap: () {
-                                chooseImg();
-                              },
-                            child: CachedNetworkImage(
-                              imageUrl: userinfo!.avatar,
-                              width: 188.w,
-                              height: 188.h,
-                              fit: BoxFit.cover,
-                            ),
+                        ClipOval(
+                          child: CachedNetworkImage(
+                            width: 188.w,
+                            imageUrl: userinfo!.avatar,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(color: Colors.white),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.account_circle,size: 188.w,color: Colors.grey),
                           ),
                         )
                       else
-                        Container(
-                          color: Colors.red,
-                          width: 188.w,
-                          height: 188.h,
+                        ClipOval(
+                          child: Container(
+                            color: Colors.white,
+                            width: 188.w,
+                            height: 188.h,
+                          ),
                         ),
                       SizedBox(height: 14.h),
-                      Text(userinfo?.nickname??"",
-                            style: TextStyle(
-                                color: Color(0xff333333), fontSize: 32.sp)),
+                      Text(userinfo?.nickname ?? "",
+                          style: TextStyle(
+                              color: Color(0xff333333), fontSize: 32.sp)),
                       SizedBox(height: 33.h),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(
-                              onTap:(){
+                              onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => BalancePage()),
+                                  MaterialPageRoute(
+                                      builder: (context) => BalancePage()),
                                 );
-                            },
+                              },
                               child: Column(
                                 children: [
                                   Text("\$" + (userinfo?.balance ?? "0.0"),
@@ -151,63 +150,57 @@ class _MinePageState extends State<MinePage>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(100.h),
                 child: TabBar(
-                  indicatorColor: Colors.white ,
+                  indicatorColor: Colors.white,
                   padding: EdgeInsets.all(0),
                   tabs: [
                     Tab(
                         child: Container(
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(localizations.my,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                              Text(localizations.coupon,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                            ],
-                          ),
-                        )),
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.my,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.coupon,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
                     Tab(
                         child: Container(
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(localizations.recharge,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                              Text(localizations.record,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                            ],
-                          ),
-                        )),
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.recharge,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.record,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
                     Tab(
                         child: Container(
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(localizations.order,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                              Text(localizations.record,
-                                  style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Color(0xff333333))),
-                            ],
-                          ),
-                        )),
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(localizations.order,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                          Text(localizations.record,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Color(0xff333333))),
+                        ],
+                      ),
+                    )),
                   ],
                 ),
               ),
@@ -227,7 +220,7 @@ class _MinePageState extends State<MinePage>
     //修改头像
     Map<String, dynamic> datapost = jsonDecode(data);
     String avatar = datapost['data']['url'];
-    ApiClient().changeavatar({"avatar":avatar}).then((res) {
+    ApiClient().changeavatar({"avatar": avatar}).then((res) {
       if (res['status']) {
         setState(() {
           userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
@@ -264,13 +257,12 @@ class _MinePageState extends State<MinePage>
   }
 
   obtainCoupon(S localizations) {
-    return Container(child:Center(child: Text(localizations.coupon)));
+    return Container(child: Center(child: Text(localizations.coupon)));
   }
 
   obtainRecharge(S localizations) {
-    return Container(child:Center(child: Text(localizations.recharge)));
+    return Container(child: Center(child: Text(localizations.recharge)));
   }
-
 
   obtainOrder(S localizations) {
     return CustomScrollView(
@@ -280,11 +272,10 @@ class _MinePageState extends State<MinePage>
         ]);
   }
 
-
   buildOrderList(S localizations) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           var item = orderlist?[index];
           if (item == null) {
             return Container();
@@ -294,35 +285,33 @@ class _MinePageState extends State<MinePage>
               width: double.infinity,
               child: Column(
                 children: [
-                  Row(
-                      children: [
-                        Text(
-                          localizations.total,
-                          style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 28.sp,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          item.orderAmount,
-                          style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 28.sp,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        GestureDetector(child: Container(
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
-                            child: Text(localizations.viewDetails)),onTap: () {}),
-                        Expanded(child: Container()),
-                        GestureDetector(child: Container(
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
-                            child: Text(localizations.payNow)),onTap: () {}),
-                      ]
-                  ),
+                  Row(children: [
+                    Text(
+                      localizations.total,
+                      style: TextStyle(
+                          color: Color(0xff333333),
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      item.orderAmount,
+                      style: TextStyle(
+                          color: Color(0xff333333),
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    GestureDetector(
+                        child: Container(
+                            color: Theme.of(context).primaryColor,
+                            child: Text(localizations.viewDetails)),
+                        onTap: () {}),
+                    Expanded(child: Container()),
+                    GestureDetector(
+                        child: Container(
+                            color: Theme.of(context).primaryColor,
+                            child: Text(localizations.payNow)),
+                        onTap: () {}),
+                  ]),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -333,7 +322,8 @@ class _MinePageState extends State<MinePage>
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            CachedNetworkImage(imageUrl: it.imageUrl,width: 150.w),
+                            CachedNetworkImage(
+                                imageUrl: it.imageUrl, width: 150.w),
                             SizedBox(height: 15),
                             Column(
                               children: [
@@ -391,7 +381,6 @@ class _MinePageState extends State<MinePage>
     );
   }
 
-
   void getcouponlist() {
     ApiClient().usercoupon(datapost).then((res) {
       if (res['status']) {
@@ -408,8 +397,8 @@ class _MinePageState extends State<MinePage>
   void getorderlist() {
     ApiClient().getorderlist(datapost).then((res) {
       if (res['status']) {
-        OrderBeanEntity? order = jsonConvert.convert<OrderBeanEntity>(
-            res['data']);
+        OrderBeanEntity? order =
+            jsonConvert.convert<OrderBeanEntity>(res['data']);
         setState(() {
           orderlist?.addAll(order?.list ?? []);
         });
@@ -436,18 +425,13 @@ class _MinePageState extends State<MinePage>
   @override
   bool get wantKeepAlive => true;
 
-
-
   Future<void> chooseImg() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       submitImage(image.path);
-    } else {
-
-    }
+    } else {}
   }
-
 
   void submitImage(String image) async {
     String url = 'https://abcadm.cc/api.html';

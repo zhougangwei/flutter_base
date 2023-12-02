@@ -238,10 +238,14 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: CachedNetworkImageProvider(
-                      item.image,
+                  ClipOval(
+                    child: CachedNetworkImage(
+                      width: 141.w,
+                      imageUrl: item.image,
+                      placeholder: (context, url) => CircularProgressIndicator(
+                        color:Colors.white
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.downloading, size:141.w,color: Colors.grey,),
                     ),
                   ),
                   SizedBox(height: 8),

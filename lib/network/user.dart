@@ -150,7 +150,6 @@ class ApiClient {
     params?['method'] = 'user.pay';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
 // 获取支付的二维码
   Future<dynamic> createcode(Map<String, dynamic> params) async {
     params?['method'] = 'user.create';

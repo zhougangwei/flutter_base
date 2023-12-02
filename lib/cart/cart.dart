@@ -319,6 +319,5 @@ class _CartPageState extends State<CartPage>
     }).catchError((e) {
       print(e);
     });
-
   }
 }

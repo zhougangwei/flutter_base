@@ -55,6 +55,7 @@ class _ChargeInfoState extends State<ChargeInfo> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 10.h),
               obtainText(local.str13),
               SizedBox(height: 30.h),
               Row(
