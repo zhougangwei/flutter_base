@@ -162,12 +162,7 @@ class ApiClient {
     params?['method'] = 'order.details';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
-// 取消订单
-  Future<dynamic> cancelorder(Map<String, dynamic> params) async {
-    params?['method'] = 'order.cancel';
-    return await post(url: url, params: params, auth: true, showToast: false);
-  }
+
 
 // 获取用户收藏列表
   Future<dynamic> goodscollectionlist(Map<String, dynamic> params) async {
@@ -185,12 +180,7 @@ class ApiClient {
     params?['method'] = 'user.getSettingList';
     return await post(url: url, params: params, auth: false, showToast: false);
   }
-  //todo
-// 折扣列表
-  Future<dynamic> getPromotionList(Map<String, dynamic> params) async {
-    params?['method'] = 'promotion.getPromotionList';
-    return await post(url: url, params: params, auth: false, showToast: false);
-  }
+
 
 // 优惠券列表
   Future<dynamic> couponlist(Map<String, dynamic> params) async {
@@ -203,13 +193,7 @@ class ApiClient {
     params['method'] = 'coupon.getcoupon';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
-  //todo
-// 品牌中心
-  Future<dynamic> brandList(Map<String, dynamic> params) async {
-    params['method'] = 'brand.brandList';
-    return await post(url: url, params: params, auth: false, showToast: false);
-  }
-  //todo
+
 // 专题活动
   Future<dynamic> getPromotionType(Map<String, dynamic> params) async {
     params['method'] = 'promotion.getPromotionType';
@@ -245,24 +229,8 @@ class ApiClient {
     params['method'] = 'cart.getAmount';
     return await post(url: url, params: params, auth: false, showToast: false);
   }
-  //todo
-// pc分类
-  Future<dynamic> getallcat(Map<String, dynamic> params) async {
-    params['method'] = 'categories.getallcat';
-    return await post(url: url, params: params, auth: false, showToast: false);
-  }
-  //todo
-// 获取一级分类下的分类
-  Future<dynamic> getCatById(Map<String, dynamic> params) async {
-    params['method'] = 'categories.getCatById';
-    return await post(url: url, params: params, auth: false, showToast: false);
-  }
-  //todo
-// 获取颜色分类
-  Future<dynamic> getColor(Map<String, dynamic> params) async {
-    params['method'] = 'goods.getColor';
-    return await post(url: url, params: params, auth: false, showToast: false);
-  }
+
+
 
 // 获取图片验证码
   Future<dynamic> sendCaptcha(Map<String, dynamic> params) async {
