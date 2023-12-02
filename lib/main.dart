@@ -95,7 +95,6 @@ class _HomePageState extends State<HomePage> {
         key: _scaffoldKey,
         appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
         drawer: AppDrawerWidget(),
-        endDrawer: CartDrawer(),
         body: PageView(
             controller: provider.pageController, //初始化的PageController
             children: _pages,

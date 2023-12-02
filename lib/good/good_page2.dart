@@ -15,23 +15,26 @@ import '../widget/number_box.dart';
 import '../widget/rating_widget.dart';
 import 'good_foot.dart';
 import 'goods_banner.dart';
+import 'html_widget.dart';
 
-class GoodPage extends StatefulWidget {
-  const GoodPage({super.key, required this.goods_id});
+class GoodPage2 extends StatefulWidget {
+  const GoodPage2({super.key, required this.goods_id});
 
   @override
-  _GoodPageState createState() => _GoodPageState();
+  _GoodPage2State createState() => _GoodPage2State();
 
   final int goods_id;
 }
 
-class _GoodPageState extends State<GoodPage> {
+class _GoodPage2State extends State<GoodPage2> {
   List<FeatureEntity> featurednlist = [];
+  final GlobalKey<HtmlWidgetState> _html_key = GlobalKey<HtmlWidgetState>();
 
   GoodBeanEntity? goods_data;
 
   List<String>? goodsparams;
   bool _isExpanded = false;
+  bool _isReviewExpanded = false;
   Map<String, dynamic>? Size;
   Map<String, dynamic>? default_spes_desc;
   int currentIndex = 0;
@@ -178,6 +181,7 @@ class _GoodPageState extends State<GoodPage> {
                       }
                     },
                   ),
+                  SizedBox(height: 20.h),
                   if (goods_data?.isfav == true)
                     obtainIsfav(localizations.CancelWishlist)
                   else
@@ -215,8 +219,11 @@ class _GoodPageState extends State<GoodPage> {
                                   color: Colors.white, fontSize: 35.sp)),
                         )),
                   ),
-                  ObtainHtmlPanelList("DESCRIPTION", getHtml()),
-                  ObtainHtmlPanelList("REVIEWS", Container()),
+                  obtainHtml(
+                    "DESCRIPTION",
+                  ),
+                  Divider(color: Color(0xffebebeb)),
+                  obtainHtml2("REVIEWS")
                 ])),
         GoodFoot()
       ],
@@ -299,51 +306,74 @@ class _GoodPageState extends State<GoodPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset('assets/images/image/icon-6.png', width: 26.w),
-            SizedBox(width: 15.w),
             Text(text,
                 style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
           ]),
     );
   }
 
-  ExpansionPanelList ObtainHtmlPanelList(String title, Widget body) {
-    return ExpansionPanelList(
-        elevation: 0,
-        dividerColor: Colors.transparent,
-        expandedHeaderPadding: EdgeInsets.zero,
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            _isExpanded = !isExpanded;
-          });
-        },
-        children: [
-          ExpansionPanel(
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return Container(
-                  width: double.infinity,
-                  child: GestureDetector(
-                    onTap: () => {
-                      setState(() {
-                        _isExpanded = !isExpanded;
-                      })
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      child: Align(
-                          alignment: Alignment.centerLeft, child: Text(title)),
-                    ),
-                  ));
-            },
-            body: body,
-            isExpanded: _isExpanded,
+  Widget obtainHtml(String title) {
+    return Column(
+      children: [
+        Divider(color: Color(0xffebebeb)),
+        GestureDetector(
+          onTap: () {
+            _isExpanded = !this._isExpanded;
+            _html_key?.currentState?.showWidget(_isExpanded, goods_data?.intro);
+          },
+          child: Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10.h),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                              fontSize: 36.sp,
+                              color: Theme.of(context).primaryColor),
+                        )),
+                  ),
+                  Icon(Icons.arrow_drop_down_outlined,
+                      color: Color(0xff333333), size: 50.w)
+                ]),
           ),
-        ]);
+        ),
+        HtmlWidget(key: _html_key)
+      ],
+    );
+  }
+
+  Widget obtainHtml2(String title) {
+    return Column(
+      children: [
+        Container(
+            child: GestureDetector(
+          onTap: () => {
+            setState(() {
+              _isReviewExpanded = !this._isReviewExpanded;
+            })
+          },
+          child: Container(
+            width: double.infinity,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 36.sp, color: Theme.of(context).primaryColor),
+                )),
+          ),
+        )),
+      ],
+    );
   }
 
   getHtml() {
     try {
-      //return Html(data: goods_data?.intro);
-      return Container();
+      return Html(data: goods_data?.intro);
     } catch (e) {
       return Container();
     }
@@ -443,7 +473,7 @@ class _GoodPageState extends State<GoodPage> {
     ApiClient().getgoodscomment(data).then((res) {
       if (res['status']) {
         setState(() {
-           'REVIEWS（'+res['data']['list'].length+'）';
+          'REVIEWS（' + res['data']['list'].length + '）';
         });
         successToShow(res['msg']);
       } else {

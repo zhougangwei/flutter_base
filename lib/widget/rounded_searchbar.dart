@@ -4,17 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/l10n.dart';
 
-
 typedef MyCallback = void Function(String word);
 
 class RoundedSearchBar extends StatelessWidget {
-
-
   final MyCallback onKeyword;
+
+  String keyText = "";
 
   final TextEditingController searchController = TextEditingController();
 
-   RoundedSearchBar({super.key, required this.onKeyword});
+  RoundedSearchBar({super.key, required this.onKeyword});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +39,9 @@ class RoundedSearchBar extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
+                          onChanged: (value) {
+                            keyText = value;
+                          },
                           textAlign: TextAlign.start,
                           style: TextStyle(fontSize: 24.sp),
                           controller: searchController,
@@ -57,8 +59,27 @@ class RoundedSearchBar extends StatelessWidget {
                           },
                         ),
                       ),
-                      Image.asset('assets/images/image/icon-4.png',width: 30.w,),
-                      SizedBox(width: 20.w)
+                      GestureDetector(
+                        onTap: () {
+                          if (keyText.isNotEmpty) {
+                            onKeyword(keyText);
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 1.w,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(width: 30.w),
+                            Image.asset(
+                              'assets/images/image/icon-4.png',
+                              width: 30.w,
+                            ),
+                            SizedBox(width: 50.w)
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

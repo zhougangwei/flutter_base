@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
-import '../good/good_page.dart';
+import '../good/good_page2.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
 import '../widget/good_item.dart';
@@ -127,7 +127,7 @@ class _WishListPageState extends State<WishListPage>
   goodsinfo(id) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => GoodPage(goods_id: id)),
+      MaterialPageRoute(builder: (context) => GoodPage2(goods_id: id)),
     );
   }
 
