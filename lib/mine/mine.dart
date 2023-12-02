@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:atest/shop/bean/balance_bean_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,7 @@ class _MinePageState extends State<MinePage>
   UserInfoEntity? userinfo;
   String? username;
   List<dynamic>? couponlist;
-  List<dynamic>? balancelist;
+  List<BalanceBeanEntity> balancelist = [];
   List<OrderBeanList>? orderlist;
   var datapost = {"page": 1, "limit": "10"};
 
@@ -79,8 +80,10 @@ class _MinePageState extends State<MinePage>
                             imageUrl: userinfo!.avatar,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(color: Colors.white),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.account_circle,size: 188.w,color: Colors.grey),
+                            errorWidget: (context, url, error) => Icon(
+                                Icons.account_circle,
+                                size: 188.w,
+                                color: Colors.grey),
                           ),
                         )
                       else
@@ -261,7 +264,11 @@ class _MinePageState extends State<MinePage>
   }
 
   obtainRecharge(S localizations) {
-    return Container(child: Center(child: Text(localizations.recharge)));
+    return CustomScrollView(
+        physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+        slivers: [
+          buildRecharge(),
+        ]);
   }
 
   obtainOrder(S localizations) {
@@ -414,7 +421,8 @@ class _MinePageState extends State<MinePage>
       if (res['status']) {
         setState(() {
           balancelist =
-              jsonConvert.convertList<List<dynamic>>(res['data']) ?? [];
+              jsonConvert.convertListNotNull<BalanceBeanEntity>(res['data']) ??
+                  [];
         });
       }
     }).catchError((err) {
@@ -468,5 +476,53 @@ class _MinePageState extends State<MinePage>
         // Hide loading
       });
     }
+  }
+
+  buildRecharge() {
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(childCount: balancelist.length,
+            (context, index) {
+      var item = balancelist[index];
+      if (item == null) {
+        return Container();
+      }
+      return Column(
+        children: [
+          Divider(color: Colors.grey, thickness: 1.h),
+          Container(
+              padding: EdgeInsets.only(
+                  left: 35.w, top: 20.h, right: 45.w, bottom: 20.w),
+              alignment: Alignment.centerLeft,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(item.memo,
+                          style: TextStyle(
+                              fontSize: 24.sp,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(item.ctime,
+                          style: TextStyle(
+                              fontSize: 22.sp, color: Color(0xff999999))),
+                    ],
+                  ),
+                  Text('\$${item.money}',
+                      style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold)),
+                ],
+              )),
+        ],
+      );
+    }));
   }
 }
