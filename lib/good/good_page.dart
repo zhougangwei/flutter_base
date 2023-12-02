@@ -44,6 +44,7 @@ class _GoodPageState extends State<GoodPage> {
   void initState() {
     super.initState();
     getGoodsInfo();
+    getgoodscomment();
   }
 
   @override
@@ -170,11 +171,13 @@ class _GoodPageState extends State<GoodPage> {
                   SizedBox(height: 40.h),
                   Divider(height: 1.h, color: Color(0x33333333)),
                   SizedBox(height: 30.h),
-                  NumberBox(onChange: (int param) {
-                    if (param > 0) {
-                      num = param;
-                    }
-                  },),
+                  NumberBox(
+                    onChange: (int param) {
+                      if (param > 0) {
+                        num = param;
+                      }
+                    },
+                  ),
                   if (goods_data?.isfav == true)
                     obtainIsfav(localizations.CancelWishlist)
                   else
@@ -225,7 +228,6 @@ class _GoodPageState extends State<GoodPage> {
       return Container(
         margin: EdgeInsets.only(right: 25.w),
         child: Container(
-
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
@@ -427,11 +429,28 @@ class _GoodPageState extends State<GoodPage> {
         });
         successToShow(res['msg']);
       } else {
-        if (res['data'] == 14006||res['data'] == 14007) {
+        if (res['data'] == 14006 || res['data'] == 14007) {
           showLoginDialog();
         }
       }
-    }).catchError((err) {
-    });
+    }).catchError((err) {});
+  }
+
+  void getgoodscomment() {
+    Map<String, dynamic> data = {"page": "1", "limit": "5"};
+    data['goods_id'] = widget.goods_id;
+
+    ApiClient().getgoodscomment(data).then((res) {
+      if (res['status']) {
+        setState(() {
+           'REVIEWS（'+res['data']['list'].length+'）';
+        });
+        successToShow(res['msg']);
+      } else {
+        if (res['data'] == 14006 || res['data'] == 14007) {
+          showLoginDialog();
+        }
+      }
+    }).catchError((err) {});
   }
 }

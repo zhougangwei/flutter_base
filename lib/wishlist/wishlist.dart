@@ -1,4 +1,5 @@
 import 'package:atest/login/login_locale.dart';
+import 'package:atest/network/json_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
 import '../widget/good_item.dart';
@@ -17,7 +19,8 @@ class WishListPage extends StatefulWidget {
   _WishListPageState createState() => _WishListPageState();
 }
 
-class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClientMixin {
+class _WishListPageState extends State<WishListPage>
+    with AutomaticKeepAliveClientMixin {
   List<CollectItemEntity> wishlishlist = [];
   var datapost = {"page": "1", "limit": "10"};
 
@@ -25,6 +28,13 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
   void initState() {
     print('AACCDD执行了WishListPage 1initState');
     var data = this.datapost;
+    JsonCacheManager().getJson("wishList").then((value) {
+      setState(() {
+        wishlishlist =
+            jsonConvert.convertListNotNull<CollectItemEntity>(value) ?? [];
+      });
+    });
+
     if (LoginStatus.hasLogin()) {
       ApiClient().goodscollectionlist(data).then((res) {
         if (res['status']) {
@@ -32,6 +42,7 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
             wishlishlist = jsonConvert.convertListNotNull<CollectItemEntity>(
                     res['data']['list']) ??
                 [];
+            JsonCacheManager().cacheJson("wishList", res['data']['list']);
           });
         }
       }).catchError((err) {
@@ -113,7 +124,12 @@ class _WishListPageState extends State<WishListPage> with AutomaticKeepAliveClie
     ]);
   }
 
-  goodsinfo(id) {}
+  goodsinfo(id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: id)),
+    );
+  }
 
   @override
   // TODO: implement wantKeepAlive

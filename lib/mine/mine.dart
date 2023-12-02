@@ -76,6 +76,7 @@ class _MinePageState extends State<MinePage>
                       if (userinfo != null)
                         ClipOval(
                           child: CachedNetworkImage(
+                            height: 188.w,
                             width: 188.w,
                             imageUrl: userinfo!.avatar,
                             placeholder: (context, url) =>
@@ -260,7 +261,7 @@ class _MinePageState extends State<MinePage>
   }
 
   obtainCoupon(S localizations) {
-    return Container(child: Center(child: Text(localizations.coupon)));
+    return Container(child: Center(child: Text("")));
   }
 
   obtainRecharge(S localizations) {
@@ -288,41 +289,55 @@ class _MinePageState extends State<MinePage>
             return Container();
           }
           return Container(
+              padding: EdgeInsets.all(20.w),
               alignment: Alignment.centerLeft,
               width: double.infinity,
               child: Column(
                 children: [
                   Row(children: [
                     Text(
-                      localizations.total,
+                      localizations.total + ":",
                       style: TextStyle(
-                          color: Color(0xff333333),
-                          fontSize: 28.sp,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.w600),
                     ),
+                    SizedBox(width: 25.w),
                     Text(
-                      item.orderAmount,
+                      '\$${item.orderAmount}',
                       style: TextStyle(
                           color: Color(0xff333333),
                           fontSize: 28.sp,
                           fontWeight: FontWeight.w600),
                     ),
+                    SizedBox(width: 15.w),
                     GestureDetector(
                         child: Container(
+                            padding: EdgeInsets.all(10.w),
                             color: Theme.of(context).primaryColor,
-                            child: Text(localizations.viewDetails)),
+                            child: Text(
+                              localizations.viewDetails,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            )),
                         onTap: () {}),
                     Expanded(child: Container()),
                     GestureDetector(
                         child: Container(
-                            color: Theme.of(context).primaryColor,
-                            child: Text(localizations.payNow)),
+                          padding: EdgeInsets.all(10.w),
+                          color: Color(0xffFB641B),
+                          child: Text(localizations.payNow,
+                              style: TextStyle(
+                                color: Colors.white,
+                              )),
+                        ),
                         onTap: () {}),
                   ]),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: item.items.length,
+                    itemCount: item.items?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       var it = item.items[index];
                       return Padding(
@@ -331,49 +346,66 @@ class _MinePageState extends State<MinePage>
                           children: [
                             CachedNetworkImage(
                                 imageUrl: it.imageUrl, width: 150.w),
-                            SizedBox(height: 15),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        it.name,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.left,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          it.name,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Color(0xff333333),
+                                            fontSize: 24.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(5.w),
+                                    color: Color(0x33999999),
+                                    child: Text(
+                                      it.addon,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.left,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Color(0xff333333),
+                                        fontSize: 20.sp,
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                Text(
-                                  it.addon,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Color(0xff333333),
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                Text(
-                                  '${it.nums}×${it.price}',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Color(0xff333333),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    height: 30.h,
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    width: double.infinity,
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '${it.nums}×${it.price}',
+                                      maxLines: 1,
+                                      textAlign: TextAlign.right,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color:Theme.of(context).primaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

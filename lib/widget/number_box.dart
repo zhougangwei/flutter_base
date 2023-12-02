@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 typedef MyCallback = void Function(int param);
 
@@ -7,7 +7,6 @@ class NumberBox extends StatefulWidget {
   final int min;
   final bool disabledInput;
   final MyCallback onChange;
-
 
   const NumberBox({
     Key? key,
@@ -22,6 +21,7 @@ class NumberBox extends StatefulWidget {
 
 class _NumberBoxState extends State<NumberBox> {
   TextEditingController _controller = TextEditingController();
+  int currentValue = 1;
 
   @override
   void initState() {
@@ -30,10 +30,8 @@ class _NumberBoxState extends State<NumberBox> {
   }
 
   void _increment() {
-    int currentValue = int.parse(_controller.text);
-
+    currentValue = int.parse(_controller.text);
     setState(() {
-
       currentValue++;
       widget.onChange(currentValue);
       _controller.text = currentValue.toString(); // 更新文本字段的值
@@ -41,7 +39,7 @@ class _NumberBoxState extends State<NumberBox> {
   }
 
   void _decrement() {
-    int currentValue = int.parse(_controller.text);
+    currentValue = int.parse(_controller.text);
 
     if (currentValue > widget.min) {
       setState(() {
@@ -55,32 +53,53 @@ class _NumberBoxState extends State<NumberBox> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.remove_circle_outline, color: Color(0xff333333)),
-          onPressed: _decrement,
+        GestureDetector(
+          onTap: () {
+            _decrement();
+          },
+          child: Padding(
+            padding:  EdgeInsets.all(10.w),
+            child: Icon(
+              Icons.remove_circle_outline,
+              color: Color(0xff999999),
+              size: 58.w,
+            ),
+          ),
         ),
+
         // 如果你想禁止用户输入，可以将 TextField 替换为 Text
-        widget.disabledInput
-            ? Text(_controller.text)
-            : Expanded(
-                child: TextField(
-                  controller: _controller,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(borderSide:BorderSide(color: Color(0xff333333), width: 1.0)),
-                    contentPadding: EdgeInsets.all(8.0),
-                  ),
-                  onChanged: (value) {
-                    // 可以在这里添加额外的逻辑来处理输入值
-                  },
-                ),
-              ),
-        IconButton(
-          icon: Icon(Icons.add_circle_outline, color: Color(0xff333333)),
-          onPressed: _increment,
+        Container(
+          alignment: Alignment.center,
+          width: 58.h,
+          height: 58.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              width: 1,
+              color: Color.fromRGBO(102, 102, 102, 0.3),
+            ),
+            borderRadius: BorderRadius.circular(5.w),
+          ),
+          child: Text(
+            currentValue.toString(),
+            style: TextStyle(
+              fontSize: 28.sp,
+            ),
+          ),
         ),
+        GestureDetector(
+          onTap: () {
+            _increment();
+          },
+          child: Padding(
+            padding:  EdgeInsets.all(10.w),
+            child: Icon(Icons.add_circle_outline,
+                color: Color(0xff999999), size: 58.w),
+          ),
+        )
       ],
     );
   }
