@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:atest/good/good_page.dart';
 import 'package:atest/shop/bean/page_bean_entity.dart';
-import 'package:atest/top/rounded_searchbar.dart';
+import 'package:atest/widget/rounded_searchbar.dart';
 import 'package:atest/utils/common_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

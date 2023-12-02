@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../sp/sp_utils.dart';
+import '../utils/sp_utils.dart';
 
 class UVerificationCode extends StatefulWidget {
   UVerificationCode({

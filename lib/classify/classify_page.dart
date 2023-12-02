@@ -9,7 +9,7 @@ import '../generated/json/base/json_convert_content.dart';
 import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
-import '../top/rounded_searchbar.dart';
+import '../widget/rounded_searchbar.dart';
 import '../widget/custom_scaffoldr.dart';
 
 class ClassifyPage extends StatefulWidget {

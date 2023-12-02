@@ -1,7 +1,7 @@
 import 'package:atest/cart/cart.dart';
 import 'package:atest/login/login_locale.dart';
 import 'package:atest/shop/shop_goods_scrollview.dart';
-import 'package:atest/sp/sp_utils.dart';
+import 'package:atest/utils/sp_utils.dart';
 import 'package:atest/widget/app_drawer.dart';
 import 'package:atest/widget/custom_app_bar.dart';
 import 'package:atest/wishlist/wishlist.dart';

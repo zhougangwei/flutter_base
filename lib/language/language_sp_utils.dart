@@ -1,4 +1,4 @@
-import '../sp/sp_utils.dart';
+import '../utils/sp_utils.dart';
 
 class CommonSpUtil {
   static const String languageType = "languageType";

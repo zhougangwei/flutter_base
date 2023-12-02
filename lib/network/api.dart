@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../sp/sp_utils.dart';
+import '../utils/sp_utils.dart';
 import '../utils/common_utils.dart';
 import 'config.dart';
 final String url = config.apiUrl.url;
