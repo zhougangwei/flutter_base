@@ -158,7 +158,7 @@ class _MinePageState extends State<MinePage>
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(localizations.my,
                               style: TextStyle(
@@ -174,7 +174,7 @@ class _MinePageState extends State<MinePage>
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(localizations.recharge,
                               style: TextStyle(
@@ -190,7 +190,7 @@ class _MinePageState extends State<MinePage>
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(localizations.order,
                               style: TextStyle(
