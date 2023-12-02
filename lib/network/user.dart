@@ -153,7 +153,7 @@ class ApiClient {
   //todo
 // 获取支付的二维码
   Future<dynamic> createcode(Map<String, dynamic> params) async {
-    params?['method'] = 'user.qrcode';
+    params?['method'] = 'user.create';
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 

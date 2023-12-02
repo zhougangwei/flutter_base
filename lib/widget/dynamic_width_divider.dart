@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomDivider extends StatelessWidget {
+class TextWithDivider extends StatelessWidget {
   final String text;
 
-  CustomDivider({required this.text});
+  TextWithDivider({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class CustomDivider extends StatelessWidget {
           children: [
             Text(
               text,
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 28.sp),
             ),
             SizedBox(
               height: 15.0.h,
@@ -28,8 +28,8 @@ class CustomDivider extends StatelessWidget {
           bottom: 0,
           height: 1.0,
           child: Divider(
-            color: Colors.black,
-            thickness: 1.0,
+            color: Theme.of(context).primaryColor,
+            thickness: 2.h,
           ),
         ),
       ],

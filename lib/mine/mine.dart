@@ -13,6 +13,7 @@ import '../login/login_locale.dart';
 import '../network/user.dart';
 import '../shop/bean/order_bean_entity.dart';
 import '../shop/bean/user_info_entity.dart';
+import 'balance.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -100,17 +101,25 @@ class _MinePageState extends State<MinePage>
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Column(
-                              children: [
-                                Text("\$" + (userinfo?.balance ?? "0.0"),
-                                    style: TextStyle(
-                                        color: Color(0xffFB641B),
-                                        fontSize: 36.sp)),
-                                Text(localizations.balance,
-                                    style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 24.sp))
-                              ],
+                            GestureDetector(
+                              onTap:(){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => BalancePage()),
+                                );
+                            },
+                              child: Column(
+                                children: [
+                                  Text("\$" + (userinfo?.balance ?? "0.0"),
+                                      style: TextStyle(
+                                          color: Color(0xffFB641B),
+                                          fontSize: 36.sp)),
+                                  Text(localizations.balance,
+                                      style: TextStyle(
+                                          color: Color(0xff333333),
+                                          fontSize: 24.sp))
+                                ],
+                              ),
                             ),
                             Column(
                               children: [

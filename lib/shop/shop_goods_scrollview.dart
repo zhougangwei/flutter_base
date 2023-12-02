@@ -81,7 +81,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomDivider(text: item.name),
+                  TextWithDivider(text: item.name),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

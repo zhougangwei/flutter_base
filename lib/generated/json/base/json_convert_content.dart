@@ -13,6 +13,7 @@ import 'package:atest/shop/bean/good_cat_bean_entity.dart';
 import 'package:atest/shop/bean/order_bean_entity.dart';
 import 'package:atest/shop/bean/page_bean_entity.dart';
 import 'package:atest/shop/bean/promotion_bean_entity.dart';
+import 'package:atest/shop/bean/qr_bean_entity.dart';
 import 'package:atest/shop/bean/setting_bean_entity.dart';
 import 'package:atest/shop/bean/type_item_entity.dart';
 import 'package:atest/shop/bean/user_info_entity.dart';
@@ -271,6 +272,10 @@ class JsonConvert {
       return data.map<PromotionBeanListChildCanshu>((Map<String, dynamic> e) =>
           PromotionBeanListChildCanshu.fromJson(e)).toList() as M;
     }
+    if (<QrBeanEntity>[] is M) {
+      return data.map<QrBeanEntity>((Map<String, dynamic> e) =>
+          QrBeanEntity.fromJson(e)).toList() as M;
+    }
     if (<SettingBeanEntity>[] is M) {
       return data.map<SettingBeanEntity>((Map<String, dynamic> e) =>
           SettingBeanEntity.fromJson(e)).toList() as M;
@@ -340,6 +345,7 @@ class JsonConvertClassCollection {
         .fromJson,
     (PromotionBeanListChildCanshu).toString(): PromotionBeanListChildCanshu
         .fromJson,
+    (QrBeanEntity).toString(): QrBeanEntity.fromJson,
     (SettingBeanEntity).toString(): SettingBeanEntity.fromJson,
     (TypeItemEntity).toString(): TypeItemEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
