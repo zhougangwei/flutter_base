@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
+import '../generated/l10n.dart';
 import '../network/json_cache_manager.dart';
 import '../network/user.dart';
 import '../widget/dynamic_width_divider.dart';
@@ -36,6 +37,8 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
 
   List<PageBeanEntity> pageList = [];
 
+  String keyworde="";
+
   @override
   void initState() {
     super.initState();
@@ -49,14 +52,18 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final localizations = S.of(context);
     return Scaffold(
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
-        SliverToBoxAdapter(child: RoundedSearchBar()),
+        SliverToBoxAdapter(child: RoundedSearchBar(onKeyword: (String word) {
+          this.keyworde=word;
+          seachgoods('ALL GOODS');
+        },)),
         SliverToBoxAdapter(child: HomeCarouselBanner(from: 'tpl1_slider')),
         buildTypeList(),
-        buildFeatured(),
+        buildFeatured(localizations),
         buildGoodCastList(),
         buildPageList()
       ],
@@ -257,35 +264,65 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
     );
   }
 
-  buildFeatured() {
+  buildFeatured(S localizations) {
     return SliverToBoxAdapter(
         child: GestureDetector(
       child: Container(
         margin: EdgeInsets.only(left: 10, right: 10),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                child: Container(
-                  width: 132,
-                  child: Column(
-                    children: [
-                      Text(
-                        "Featured",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 365.w,
+                    child: Column(
+                      children: [
+                        Text(
+                          localizations.featurendProdcts,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Divider(color: Colors.grey, thickness: 1)
-                    ],
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Divider(
+                            color: Theme.of(context).primaryColor, thickness: 1)
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                GestureDetector(
+                  onTap: () {
+                    seachgoods('ALL GOODS');
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 70.h,
+                        margin: EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.fromLTRB(28.w, 18.h, 28.w, 18.h),
+                        color: Theme.of(context).primaryColor,
+                        alignment: Alignment.center,
+                        child: Text(localizations.viewAll,
+                            style: TextStyle(
+                                fontSize: 20.sp, color: Colors.white)),
+                      ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
             GridView.builder(
               shrinkWrap: true,
@@ -456,10 +493,25 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
 
   void collection(int id, int index) {}
 
+  void seachgoods(String name){
+    var where = {};
+    if (name == 'SEARCH') {
+      where["search_name"] = this.keyworde;
+    } else {
+      where["recommend"] = 1;
+    }
+    var wheredata = json.encode(where);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ClassifyPage(where: wheredata, name: name, id: -1)),
+    );
+    this.keyworde = '';
+  }
+
   void meninfo(int id, String name) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ClassifyPage(id: id, name: name)),
+      MaterialPageRoute(builder: (context) => ClassifyPage(where: "",id: id, name: name)),
     );
   }
 

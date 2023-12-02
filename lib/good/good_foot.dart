@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
+import '../network/json_cache_manager.dart';
 import '../network/user.dart';
 import '../shop/bean/setting_bean_entity.dart';
 
@@ -22,11 +25,22 @@ class _GoodFootState extends State<GoodFoot> {
   }
 
   void getFootData() {
-    Map<String, dynamic> map = Map<String, dynamic>();
+
+    JsonCacheManager().getJson("foot").then((res) {
+      if (res != null) {
+        var cacheTypeList =
+            jsonConvert.convert<SettingBeanEntity>(json.decode(res));
+        setState(() {
+          footdata = cacheTypeList;
+        });
+      }
+    });
+
     ApiClient().getSettingList({}).then((res) {
       if (res['status']) {
         setState(() {
           footdata = jsonConvert.convert<SettingBeanEntity>(res['data']);
+          JsonCacheManager().cacheJson("foot",res['data']);
         });
       }
     }).catchError((err) {

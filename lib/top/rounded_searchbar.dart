@@ -4,8 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/l10n.dart';
 
+
+typedef MyCallback = void Function(String word);
+
 class RoundedSearchBar extends StatelessWidget {
+
+
+  final MyCallback onKeyword;
+
   final TextEditingController searchController = TextEditingController();
+
+   RoundedSearchBar({super.key, required this.onKeyword});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +51,7 @@ class RoundedSearchBar extends StatelessWidget {
                                 EdgeInsets.symmetric(horizontal: 16.0),
                           ),
                           onSubmitted: (value) {
+                            onKeyword(value);
                             // 在此处处理提交搜索的逻辑
                             // 可以调用适当的函数或回调来处理搜索结果
                           },

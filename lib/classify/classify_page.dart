@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:atest/good/good_foot.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +15,9 @@ import '../widget/custom_scaffoldr.dart';
 class ClassifyPage extends StatefulWidget {
   final int id;
   final String name;
+  final String where;
 
-  ClassifyPage({required this.id, required this.name});
+  ClassifyPage({required this.id, required this.name,required this.where});
 
   @override
   _ClassifyPageState createState() => _ClassifyPageState();
@@ -25,13 +27,16 @@ class _ClassifyPageState extends State<ClassifyPage> {
   List<FeatureEntity> featurednlist = [];
   var datapost = {"page": "1", "limit": "10", "order": "price asc"};
   String classifyName = '';
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    //datapost['where'] = '{"type_id":'+widget.id.toString()+'}';
-    datapost['where'] = '{"type_id":${widget.id}}';
+
+    if(widget.id!=-1){
+      datapost['where'] = '{"type_id":${widget.id}}';
+    }else{
+      datapost['where']= widget.where;
+    }
     relatedList();
     classifyName = widget.name;
   }
@@ -65,7 +70,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
-        SliverToBoxAdapter(child: RoundedSearchBar()),
+
         SliverToBoxAdapter(
             child: Center(
           child: Padding(
@@ -79,6 +84,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
           ),
         )),
         buildFeatured(),
+        SliverToBoxAdapter(child: GoodFoot()),
       ],
     ));
   }
