@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/promotion_bean_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/promotion_bean_entity.dart';
 
 PromotionBeanEntity $PromotionBeanEntityFromJson(Map<String, dynamic> json) {
   final PromotionBeanEntity promotionBeanEntity = PromotionBeanEntity();

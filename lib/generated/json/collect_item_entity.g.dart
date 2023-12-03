@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/collect_item_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/collect_item_entity.dart';
 
 CollectItemEntity $CollectItemEntityFromJson(Map<String, dynamic> json) {
   final CollectItemEntity collectItemEntity = CollectItemEntity();

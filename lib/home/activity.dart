@@ -1,7 +1,7 @@
-import 'package:atest/good/good_foot.dart';
-import 'package:atest/login/login_locale.dart';
-import 'package:atest/shop/home_banner.dart';
-import 'package:atest/widget/custom_scaffoldr.dart';
+import 'package:abce/good/good_foot.dart';
+import 'package:abce/login/login_locale.dart';
+import 'package:abce/shop/home_banner.dart';
+import 'package:abce/widget/custom_scaffoldr.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

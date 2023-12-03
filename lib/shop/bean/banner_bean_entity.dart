@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_field.dart';
-import 'package:atest/generated/json/banner_bean_entity.g.dart';
+import 'package:abce/generated/json/base/json_field.dart';
+import 'package:abce/generated/json/banner_bean_entity.g.dart';
 import 'dart:convert';
 
 @JsonSerializable()

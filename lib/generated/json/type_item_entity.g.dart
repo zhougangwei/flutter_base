@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/type_item_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/type_item_entity.dart';
 
 TypeItemEntity $TypeItemEntityFromJson(Map<String, dynamic> json) {
   final TypeItemEntity typeItemEntity = TypeItemEntity();

@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/feature_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/feature_entity.dart';
 
 FeatureEntity $FeatureEntityFromJson(Map<String, dynamic> json) {
   final FeatureEntity featureEntity = FeatureEntity();

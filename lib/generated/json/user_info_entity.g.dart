@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/user_info_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/user_info_entity.dart';
 
 UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   final UserInfoEntity userInfoEntity = UserInfoEntity();

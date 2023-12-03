@@ -1,5 +1,5 @@
-import 'package:atest/generated/json/base/json_convert_content.dart';
-import 'package:atest/shop/bean/cart_bean_entity.dart';
+import 'package:abce/generated/json/base/json_convert_content.dart';
+import 'package:abce/shop/bean/cart_bean_entity.dart';
 
 CartBeanEntity $CartBeanEntityFromJson(Map<String, dynamic> json) {
   final CartBeanEntity cartBeanEntity = CartBeanEntity();

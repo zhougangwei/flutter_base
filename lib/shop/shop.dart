@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:atest/shop/shop_goods_scrollview.dart';
-import 'package:atest/utils/common_utils.dart';
+import 'package:abce/shop/shop_goods_scrollview.dart';
+import 'package:abce/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import '../network/user.dart';
 

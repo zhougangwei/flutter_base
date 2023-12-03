@@ -1,11 +1,11 @@
-import 'package:atest/cart/cart.dart';
-import 'package:atest/login/login_locale.dart';
-import 'package:atest/shop/shop_goods_scrollview.dart';
-import 'package:atest/utils/sp_utils.dart';
-import 'package:atest/widget/app_drawer.dart';
-import 'package:atest/widget/custom_app_bar.dart';
-import 'package:atest/wishlist/wishlist.dart';
-import 'package:atest/mine/mine.dart';
+import 'package:abce/cart/cart.dart';
+import 'package:abce/login/login_locale.dart';
+import 'package:abce/shop/shop_goods_scrollview.dart';
+import 'package:abce/utils/sp_utils.dart';
+import 'package:abce/widget/app_drawer.dart';
+import 'package:abce/widget/custom_app_bar.dart';
+import 'package:abce/wishlist/wishlist.dart';
+import 'package:abce/mine/mine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +14,12 @@ import 'package:provider/provider.dart';
 import 'generated/l10n.dart';
 import 'language/current_locale.dart';
 import 'login/page_controller_provider.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
+
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await ScreenUtil.ensureScreenSize();
   SPUtils.init();
   runApp(MultiProvider(
@@ -26,6 +30,7 @@ void main() async {
     child: ShoppingApp(),
   ));
 }
+FlutterNativeSplash.remove();
 
 class ShoppingApp extends StatelessWidget {
   @override

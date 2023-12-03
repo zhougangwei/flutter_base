@@ -1,4 +1,4 @@
-import 'package:atest/shop/bean/good_bean_entity.dart';
+import 'package:abce/shop/bean/good_bean_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
