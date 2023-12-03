@@ -22,13 +22,13 @@ class ChangeLanguage extends StatelessWidget {
             Text(localizations.blog),
             ElevatedButton(
               onPressed: () {
-                languageProvider.setLocale(Locale('it'));
+                languageProvider.setLanaugaeCode(Locale('it'));
               },
               child: Text('切换到意大利'),
             ),
             ElevatedButton(
               onPressed: () {
-                languageProvider.setLocale(Locale('en'));
+                languageProvider.setLanaugaeCode(Locale('en'));
               },
               child: Text('切换到英语'),
             ),

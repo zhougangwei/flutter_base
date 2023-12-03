@@ -63,7 +63,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     print('AACCDD执行了MainPage initState');
@@ -90,6 +89,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var local = S.of(context);
     return Consumer<PageControllerProvider>(builder: (context, provider, _) {
       return Scaffold(
         key: _scaffoldKey,
@@ -112,27 +112,27 @@ class _HomePageState extends State<HomePage> {
                   Image.asset('assets/images/img/indexicon_w.png', width: 55.w),
               activeIcon:
                   Image.asset('assets/images/img/indexicon.png', width: 55.w),
-              label: 'Shop',
+              label: local.shop,
             ),
             BottomNavigationBarItem(
               icon: Image.asset('assets/images/img/shoucangicon_w.png',
                   width: 55.w),
               activeIcon: Image.asset('assets/images/img/shoucangicon.png',
                   width: 55.w),
-              label: 'Wishlist',
+              label: local.wishlist,
             ),
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/img/caricon_w.png', width: 55.w),
-              activeIcon:
-                  Image.asset('assets/images/img/caricon.png', width: 55.w),
-              label: 'Cart',
-            ),
+                icon:
+                    Image.asset('assets/images/img/caricon_w.png', width: 55.w),
+                activeIcon:
+                    Image.asset('assets/images/img/caricon.png', width: 55.w),
+                label: local.cart),
             BottomNavigationBarItem(
               icon:
                   Image.asset('assets/images/img/usericon_w.png', width: 55.w),
               activeIcon:
                   Image.asset('assets/images/img/usericon.png', width: 55.w),
-              label: 'Mine',
+              label: local.user,
             ),
           ],
           selectedItemColor: Colors.blue,

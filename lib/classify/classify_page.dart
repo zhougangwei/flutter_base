@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
-import '../good/good_page2.dart';
+import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
 import '../widget/rounded_searchbar.dart';
@@ -60,7 +60,7 @@ class _ClassifyPageState extends State<ClassifyPage> {
   goodsinfo(int id) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => GoodPage2(goods_id: id)),
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: id)),
     );
   }
 

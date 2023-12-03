@@ -17,16 +17,16 @@ import 'good_foot.dart';
 import 'goods_banner.dart';
 import 'html_widget.dart';
 
-class GoodPage2 extends StatefulWidget {
-  const GoodPage2({super.key, required this.goods_id});
+class GoodPage extends StatefulWidget {
+  const GoodPage({super.key, required this.goods_id});
 
   @override
-  _GoodPage2State createState() => _GoodPage2State();
+  _GoodPageState createState() => _GoodPageState();
 
   final int goods_id;
 }
 
-class _GoodPage2State extends State<GoodPage2> {
+class _GoodPageState extends State<GoodPage> {
   List<FeatureEntity> featurednlist = [];
   final GlobalKey<HtmlWidgetState> _html_key = GlobalKey<HtmlWidgetState>();
 

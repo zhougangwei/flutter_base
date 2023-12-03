@@ -1,18 +1,25 @@
+import 'package:atest/language/language_sp_utils.dart';
 import 'package:flutter/material.dart';
 
 class CurrentLocale with ChangeNotifier {
-  Locale _locale = Locale.fromSubtags(languageCode: 'en');
+  Locale get value => Locale.fromSubtags(languageCode: getLanaugaeCode());
 
-  Locale get value => _locale;
-
-  void setLocale(locale) {
-    _locale = locale;
+  void setLanaugaeCode(languageCode) {
+    LanuageSpUtil.saveLanguageType(languageCode);
     notifyListeners();
+  }
+
+  String getLanaugaeCode() {
+    var languageType = LanuageSpUtil.getLanguageType();
+    if (languageType .isNotEmpty) {
+      return languageType;
+    }
+    return "en";
   }
 
   getCurrentCountryCodeImgCode() {
     String imgCode = '2';
-    var e = _locale.languageCode;
+    var e = getLanaugaeCode();
     if (e == 'es') {
       imgCode = '1';
     } else if (e == 'de') {

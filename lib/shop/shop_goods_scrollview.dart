@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../classify/classify_page.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
-import '../good/good_page2.dart';
+import '../good/good_page.dart';
 import '../network/json_cache_manager.dart';
 import '../network/user.dart';
 import '../widget/dynamic_width_divider.dart';
@@ -466,7 +466,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   goodsinfo(it) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => GoodPage2(goods_id: it)),
+      MaterialPageRoute(builder: (context) => GoodPage(goods_id: it)),
     );
   }
 

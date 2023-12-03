@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../language/current_locale.dart';
+import '../language/language_sp_utils.dart';
 import '../login/page_controller_provider.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   List<Map<String, String>> langList = [
     {"label": 'German', "value": 'de'},
@@ -16,6 +17,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
     {"label": 'Japanese', "value": 'ja'},
     {"label": 'Italian', "value": 'it'},
   ];
+
   CustomAppBar({required this.scaffoldKey});
 
   @override
@@ -28,16 +30,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
 class _CustomAppBarState extends State<CustomAppBar> {
   List<String> imageUrls = [];
 
-
   @override
   void initState() {
     super.initState();
   }
 
   String? chooseLanguage;
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,20 +61,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   onTap: () {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                     Provider.of<PageControllerProvider>(context, listen: false)
-                        .goToPage(2);
-                  },
-                  child: Image.asset('assets/images/image/icon-2.png',
-                      width: 37.w)),
-              SizedBox(width: 28.w),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                    Provider.of<PageControllerProvider>(context, listen: false)
                         .goToPage(1);
                   },
                   child: Image.asset('assets/images/image/icon-3.png',
                       width: 37.w)),
               SizedBox(width: 34.w),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Provider.of<PageControllerProvider>(context, listen: false)
+                        .goToPage(2);
+                  },
+                  child: Image.asset('assets/images/image/icon-2.png',
+                      width: 37.w)),
+              SizedBox(width: 28.w),
             ],
           ),
         ],
@@ -105,29 +103,36 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   Widget getCountry(BuildContext context) {
-      return GestureDetector(
-          onTap: () {
-            _showPickerBottomSheet(context);
-          },
-          child: Container(
-            padding: EdgeInsets.all(15.w),
-            child: Image.asset(
-                'assets/images/image/${Provider.of<CurrentLocale>(context).getCurrentCountryCodeImgCode()}.png',
-                width: 37.w),
-          ));
-
+    return GestureDetector(
+        onTap: () {
+          _showPickerBottomSheet(context);
+        },
+        child: Container(
+          padding: EdgeInsets.all(15.w),
+          child: Image.asset(
+              'assets/images/image/${Provider.of<CurrentLocale>(context).getCurrentCountryCodeImgCode()}.png',
+              width: 37.w),
+        ));
   }
 
   void _showPickerBottomSheet(BuildContext scontext) {
+    var languageType = LanuageSpUtil.getLanguageType();
+    int _selectedOptionIndex = 0;
+    for (int i = 0; i < widget.langList!.length; i++) {
+      Map<String, String> language = widget.langList[i];
+      if (language['value'] == languageType) {
+        _selectedOptionIndex = i;
+      }
+    }
     showModalBottomSheet(
       context: scontext,
       builder: (BuildContext dialogcontext) {
         return Container(
-          height: 200,
+          height: 500.h,
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(20.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -148,15 +153,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     GestureDetector(
                       onTap: () {
                         if (chooseLanguage != null) {
-                          Provider.of<CurrentLocale>(context,listen: false)
-                              .setLocale(Locale(chooseLanguage!));
+                          Provider.of<CurrentLocale>(context, listen: false)
+                              .setLanaugaeCode(chooseLanguage);
                         }
                         Navigator.pop(context);
                       },
-                      child: Text(
-                        'confirm',
-                        style: TextStyle(
-                          fontSize: 24.sp,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'confirm',
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                          ),
                         ),
                       ),
                     ),
@@ -167,9 +175,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 height: 1,
                 color: Colors.grey[400],
               ),
-              Expanded(
+              Container(
+                height: 385.h,
                 child: CupertinoPicker(
                   itemExtent: 40,
+                  scrollController: FixedExtentScrollController(
+                      initialItem: _selectedOptionIndex),
                   onSelectedItemChanged: (int index) {
                     chooseLanguage = widget.langList[index]['value'];
                   },
