@@ -6,7 +6,7 @@ export 'package:atest/generated/json/user_info_entity.g.dart';
 @JsonSerializable()
 class UserInfoEntity {
 	late int id = 0;
-	dynamic username;
+	late String username='';
 	dynamic mobile;
 	late int sex = 0;
 	dynamic birthday;

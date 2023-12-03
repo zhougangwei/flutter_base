@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'generated/l10n.dart';
 import 'language/current_locale.dart';
 import 'login/page_controller_provider.dart';
-import 'my_chart.dart';
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
@@ -94,7 +93,7 @@ class _HomePageState extends State<HomePage> {
       return Scaffold(
         key: _scaffoldKey,
         appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
-        drawer: AppDrawerWidget(),
+        drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
         body: PageView(
             controller: provider.pageController, //初始化的PageController
             children: _pages,

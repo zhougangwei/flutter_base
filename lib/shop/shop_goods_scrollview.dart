@@ -37,7 +37,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
 
   List<PageBeanEntity> pageList = [];
 
-  String keyworde="";
+  String keyworde = "";
 
   @override
   void initState() {
@@ -57,15 +57,27 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
         body: CustomScrollView(
       physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
       slivers: [
-        SliverToBoxAdapter(child: RoundedSearchBar(onKeyword: (String word) {
-          this.keyworde=word;
-          seachgoods('ALL GOODS');
-        },)),
+        SliverToBoxAdapter(child: RoundedSearchBar(
+          onKeyword: (String word) {
+            this.keyworde = word;
+            seachgoods('ALL GOODS');
+          },
+        )),
         SliverToBoxAdapter(child: HomeCarouselBanner(from: 'tpl1_slider')),
         buildTypeList(),
         buildFeatured(localizations),
         buildGoodCastList(),
-        buildPageList()
+        buildPageList(),
+
+        SliverToBoxAdapter(child: Column(
+          children: [
+            Divider(
+              color: Color(0x33999999),
+              thickness: 2.h,
+            ),
+            SizedBox(height: 50.h),
+          ],
+        ))
       ],
     ));
   }
@@ -81,6 +93,9 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 40.h,
+                  ),
                   TextWithDivider(text: item.name),
                   ListView.builder(
                     shrinkWrap: true,
@@ -92,13 +107,66 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                         onTap: () {
                           goodsinfo(it.id);
                         },
-                        child: GoodItem(
-                          image_url: it.imageUrl,
-                          cat_name: it.catName,
-                          name: it.name,
-                          scoreSum: it.scoreSum,
-                          price: it.price,
-                          mktprice: it.mktprice,
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl: it.imageUrl, width: 150.w),
+                                SizedBox(width: 20.w),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 450.w,
+                                          child: Text(
+                                            it.name,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.left,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Color(0xff333333),
+                                              fontSize: 24.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      children: [
+                                        RatingWidget(
+                                            size: 30.w, initialRating: 5),
+                                        Text('(${it?.scoreSum ?? ''})',
+                                            style: TextStyle(fontSize: 10)),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "\$" +
+                                          it.price +
+                                          "-" +
+                                          "\$" +
+                                          it.mktprice,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.left,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Color(0xff333333),
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -116,22 +184,23 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
           var item = getGoodsCatlist[index];
           if (item.child.length > 0) {
             return Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: EdgeInsets.only(left: 20.w, right: 20.w),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  Divider(color: Colors.blue, thickness: 1),
-                  SizedBox(height: 20),
+                  SizedBox(height: 20.h),
+                  Divider(color: Theme.of(context).primaryColor, thickness: 1),
+                  SizedBox(height: 20.h),
                   Text(
                     item.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 32.sp,
                       color: Color(0xFF072D8C),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20.h),
+                  Divider(color: Color(0x33999999), thickness: 1),
                   Row(
                     children: item.child.map<Widget>((ite) {
                       return Expanded(
@@ -142,9 +211,8 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                           child: Text(ite.name,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 24.sp,
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
                               )),
                         ),
                       );
@@ -157,7 +225,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     itemCount: item.goods.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // 一行显示
-                      childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                      childAspectRatio: 335 / 430, // 调整子项的宽高比例
                       crossAxisSpacing: 10, // 子项之间的横向间距
                       mainAxisSpacing: 10, // 两个子项
                     ),
@@ -170,8 +238,11 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
-                                CachedNetworkImage(imageUrl: it.imageUrl),
-                                SizedBox(height: 15),
+                                CachedNetworkImage(
+                                  imageUrl: it.imageUrl,
+                                  width: 295.w,
+                                ),
+                                SizedBox(height: 15.sp),
                                 Text(
                                   it.name,
                                   maxLines: 1,
@@ -179,11 +250,11 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: Color(0xff333333),
-                                    fontSize: 12,
+                                    fontSize: 24.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 10),
+                                SizedBox(height: 10.sp),
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -240,12 +311,15 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                 children: [
                   ClipOval(
                     child: CachedNetworkImage(
-                      width: 141.w,
+                      width: 140.w,
                       imageUrl: item.image,
-                      placeholder: (context, url) => CircularProgressIndicator(
-                        color:Colors.white
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(color: Colors.white),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.downloading,
+                        size: 141.w,
+                        color: Colors.grey,
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.downloading, size:141.w,color: Colors.grey,),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -254,7 +328,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     maxLines: 3,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: Color(0xff333333),
                       fontSize: 14,
                     ),
                   ),
@@ -311,14 +385,14 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                   child: Column(
                     children: [
                       Container(
-                        height: 70.h,
+                        height: 65.h,
                         margin: EdgeInsets.only(right: 8),
                         padding: EdgeInsets.fromLTRB(28.w, 18.h, 28.w, 18.h),
                         color: Theme.of(context).primaryColor,
                         alignment: Alignment.center,
                         child: Text(localizations.viewAll,
                             style: TextStyle(
-                                fontSize: 20.sp, color: Colors.white)),
+                                fontSize: 22.sp, color: Colors.white)),
                       ),
                       SizedBox(
                         height: 30.h,
@@ -334,65 +408,23 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
               itemCount: featurednlist.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // 一行显示
-                childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                childAspectRatio: 335 / 500, // 调整子项的宽高比例
                 crossAxisSpacing: 10, // 子项之间的横向间距
                 mainAxisSpacing: 10, // 两个子项
               ),
               itemBuilder: (BuildContext context, int index) {
-                var item = featurednlist[index];
+                var it = featurednlist[index];
                 return GestureDetector(
                   onTap: () {
-                    goodsinfo(item.id);
+                    goodsinfo(it.id);
                   },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          CachedNetworkImage(imageUrl: item.image_url),
-                          Text(
-                            item.cat_name,
-                            maxLines: 1,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              item.name,
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Color(0xff333333),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '\$${item.price}-\$${item.mktprice}',
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Color(0xff333333),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  child: GoodItem(
+                    image_url: it.image_url,
+                    cat_name: it.cat_name,
+                    name: it.name,
+                    scoreSum: it.scoreSum,
+                    price: it.price,
+                    mktprice: it.mktprice,
                   ),
                 );
               },
@@ -497,7 +529,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
 
   void collection(int id, int index) {}
 
-  void seachgoods(String name){
+  void seachgoods(String name) {
     var where = {};
     if (name == 'SEARCH') {
       where["search_name"] = this.keyworde;
@@ -507,7 +539,9 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
     var wheredata = json.encode(where);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ClassifyPage(where: wheredata, name: name, id: -1)),
+      MaterialPageRoute(
+          builder: (context) =>
+              ClassifyPage(where: wheredata, name: name, id: -1)),
     );
     this.keyworde = '';
   }
@@ -515,7 +549,8 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   void meninfo(int id, String name) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ClassifyPage(where: "",id: id, name: name)),
+      MaterialPageRoute(
+          builder: (context) => ClassifyPage(where: "", id: id, name: name)),
     );
   }
 

@@ -27,28 +27,29 @@ class _WishListPageState extends State<WishListPage>
   @override
   void initState() {
     print('AACCDD执行了WishListPage 1initState');
-    var data = this.datapost;
     JsonCacheManager().getJson("wishList").then((value) {
       setState(() {
         wishlishlist =
             jsonConvert.convertListNotNull<CollectItemEntity>(value) ?? [];
       });
     });
+    getWishList();
+  }
 
-    if (LoginStatus.hasLogin()) {
-      ApiClient().goodscollectionlist(data).then((res) {
-        if (res['status']) {
-          setState(() {
-            wishlishlist = jsonConvert.convertListNotNull<CollectItemEntity>(
-                    res['data']['list']) ??
-                [];
-            JsonCacheManager().cacheJson("wishList", res['data']['list']);
-          });
-        }
-      }).catchError((err) {
-        err.toString();
-      });
-    }
+  void getWishList() {
+    var data = this.datapost;
+    ApiClient().goodscollectionlist(data).then((res) {
+      if (res['status']) {
+        setState(() {
+          wishlishlist = jsonConvert
+                  .convertListNotNull<CollectItemEntity>(res['data']['list']) ??
+              [];
+          JsonCacheManager().cacheJson("wishList", res['data']['list']);
+        });
+      }
+    }).catchError((err) {
+      err.toString();
+    });
   }
 
   @override

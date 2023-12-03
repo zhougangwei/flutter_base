@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import 'check_out.dart';
@@ -20,6 +21,8 @@ class CartPage extends StatefulWidget {
   @override
   _CartPageState createState() => _CartPageState();
 }
+
+typedef void EventCallback(arg);
 
 class _CartPageState extends State<CartPage>
     with AutomaticKeepAliveClientMixin {
@@ -32,25 +35,25 @@ class _CartPageState extends State<CartPage>
   void initState() {
     print('AACCDD执行了CartPage 1initState');
     gotoLogin();
-    bus.on("Login", (arg){
-      gotoLogin();
-    });
+    bus.on("Login", afterLogin);
     super.initState();
   }
 
-  void gotoLogin() {
-    if (LoginStatus.hasLogin()) {
-      var data = this.datapost;
-      print('AACCDD还没登陆');
-      getCatoPeration(data);
-    }
+  void afterLogin(arg) {
+    gotoLogin();
   }
+
+  void gotoLogin() {
+    var data = this.datapost;
+    print('AACCDD还没登陆');
+    getCatoPeration(data);
+  }
+
   dispose() {
     print('AACCDD执行了CartPage 2dispose');
     super.dispose();
-    bus.off('Login');
+    bus.off('Login', afterLogin);
   }
-
 
   void getCatoPeration(Map<String, String> data) {
     ApiClient().CatoPeration(data).then((res) {
@@ -69,6 +72,17 @@ class _CartPageState extends State<CartPage>
           });
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
         });
+      } else {
+        if (res['data'] == 14007 || res['data'] == 14006) {
+          /*showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return LoginPopup(onLoginSuccess: () {
+                  Navigator.of(context).pop();
+                  bus.emit('Login', true);
+                });
+              });*/
+        }
       }
     }).catchError((err) {
       err.toString();
@@ -79,51 +93,51 @@ class _CartPageState extends State<CartPage>
   Widget build(BuildContext context) {
     super.build(context);
     var localizations = S.of(context);
-    return  Scaffold(
-          body: Container(
-        child: Stack(
-          children: [
-            CustomScrollView(
-                physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-                slivers: [
-                  SliverToBoxAdapter(child: obtainWishTilte(localizations)),
-                  buildGoodCastList(localizations),
-                  SliverToBoxAdapter(child: obtainWishBottom(localizations)),
-                  SliverToBoxAdapter(child: Container(height: 150.h)),
-                ]),
-            Positioned(
-                right: 0,
-                left: 0,
-                bottom: 1.h,
-                child: GestureDetector(
-                  onTap: () {
-                    String ids = '';
-                    cartlist?.forEach((item) {
-                      if(ids!=''){
-                        ids += ',';
-                      }
-                      ids += item.id.toString();
-                    });
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CheckoutPage(ids: ids)));
-                  },
-                  child: Container(
-                    height: 100.h,
-                    color: Color(0xffFB641B), // 自定义头部的背景颜色
-                    child: Center(
-                      child: Text(
-                        localizations.proceedCheckout,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
+    return Scaffold(
+        body: Container(
+      child: Stack(
+        children: [
+          CustomScrollView(
+              physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+              slivers: [
+                SliverToBoxAdapter(child: obtainWishTilte(localizations)),
+                buildGoodCastList(localizations),
+                SliverToBoxAdapter(child: obtainWishBottom(localizations)),
+                SliverToBoxAdapter(child: Container(height: 150.h)),
+              ]),
+          Positioned(
+              right: 0,
+              left: 0,
+              bottom: 1.h,
+              child: GestureDetector(
+                onTap: () {
+                  String ids = '';
+                  cartlist?.forEach((item) {
+                    if (ids != '') {
+                      ids += ',';
+                    }
+                    ids += item.id.toString();
+                  });
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CheckoutPage(ids: ids)));
+                },
+                child: Container(
+                  height: 100.h,
+                  color: Color(0xffFB641B), // 自定义头部的背景颜色
+                  child: Center(
+                    child: Text(
+                      localizations.proceedCheckout,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                )),
-          ],
-        ),
-      ));
+                ),
+              )),
+        ],
+      ),
+    ));
   }
 
   SliverList buildGoodCastList(S localizations) {
@@ -201,9 +215,11 @@ class _CartPageState extends State<CartPage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(localizations.quantity),
-                                    NumberBox(onChange: (int nums) {
-                                      unmchange(item.id,nums);
-                                    },)
+                                    NumberBox(
+                                      onChange: (int nums) {
+                                        unmchange(item.id, nums);
+                                      },
+                                    )
                                   ],
                                 ),
                                 Row(
@@ -306,14 +322,11 @@ class _CartPageState extends State<CartPage>
   bool get wantKeepAlive => false;
 
   void unmchange(int id, int nums) {
-    Map<String,dynamic> data = {
-      "nums":nums,
-      "id":id
-    };
+    Map<String, dynamic> data = {"nums": nums, "id": id};
     ApiClient().setnums(data).then((value) {
       if (value['status']) {
-          gotoLogin();
-      }else{
+        gotoLogin();
+      } else {
         errorToShow(value['msg']);
       }
     }).catchError((e) {

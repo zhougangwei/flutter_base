@@ -30,7 +30,7 @@ class GoodItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(imageUrl: image_url),
+            CachedNetworkImage(imageUrl: image_url,width: 295.w,),
             if(cat_name.isNotEmpty)
               Text(
                 cat_name,
@@ -40,7 +40,6 @@ class GoodItem extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xff333333),
                   fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             SizedBox(height: 15.h),

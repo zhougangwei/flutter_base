@@ -418,9 +418,9 @@ class _GoodPageState extends State<GoodPage> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return LoginPopup(onPressed: () {
+          return LoginPopup(onLoginSuccess: () {
             Navigator.of(context).pop();
-            bus.emit('Login', "hello PageA from PageB");
+            bus.emit('Login', true);
           });
         });
   }

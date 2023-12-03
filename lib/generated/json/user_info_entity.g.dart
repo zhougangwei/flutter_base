@@ -7,7 +7,7 @@ UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   if (id != null) {
     userInfoEntity.id = id;
   }
-  final dynamic username = json['username'];
+  final String username = json['username'];
   if (username != null) {
     userInfoEntity.username = username;
   }
@@ -114,7 +114,7 @@ Map<String, dynamic> $UserInfoEntityToJson(UserInfoEntity entity) {
 extension UserInfoEntityExtension on UserInfoEntity {
   UserInfoEntity copyWith({
     int? id,
-    dynamic username,
+    String? username,
     dynamic mobile,
     int? sex,
     dynamic birthday,

@@ -14,7 +14,9 @@ import '../login/login_locale.dart';
 import '../network/user.dart';
 import '../shop/bean/order_bean_entity.dart';
 import '../shop/bean/user_info_entity.dart';
+import '../utils/sp_utils.dart';
 import 'balance.dart';
+import 'login_out.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -26,7 +28,6 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage>
     with AutomaticKeepAliveClientMixin {
   UserInfoEntity? userinfo;
-  String? username;
   List<dynamic>? couponlist;
   List<BalanceBeanEntity> balancelist = [];
   List<OrderBeanList>? orderlist;
@@ -38,19 +39,28 @@ class _MinePageState extends State<MinePage>
     couponlist = [];
     balancelist = [];
     afterLogin();
-    bus.on("Login", (arg) {
-      afterLogin();
-    });
+    bus.on("Login", loginState);
     super.initState();
   }
 
-  void afterLogin() {
-    if (LoginStatus.hasLogin()) {
-      getbalancelist();
-      getcouponlist();
-      getorderlist();
-      getuserinfo();
+  void loginState(arg) {
+    if(!arg){
+      setState(() {
+        orderlist = [];
+        couponlist = [];
+        balancelist = [];
+        userinfo=null;
+      });
+    }else{
+      afterLogin();
     }
+  }
+
+  void afterLogin() {
+    getbalancelist();
+    getcouponlist();
+    getorderlist();
+    getuserinfo();
   }
 
   @override
@@ -68,87 +78,90 @@ class _MinePageState extends State<MinePage>
                   height: 421.h,
                   alignment: Alignment.center,
                   color: Color(0xffE8EBFC),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Stack(
                     children: [
-                      SizedBox(height: 33.h),
-                      if (userinfo != null)
-                        ClipOval(
-                          child: CachedNetworkImage(
-                            height: 188.w,
-                            width: 188.w,
-                            imageUrl: userinfo!.avatar,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(color: Colors.white),
-                            errorWidget: (context, url, error) => Icon(
-                                Icons.account_circle,
-                                size: 188.w,
-                                color: Colors.grey),
-                          ),
-                        )
-                      else
-                        ClipOval(
-                          child: Container(
-                            color: Colors.white,
-                            width: 188.w,
-                            height: 188.h,
-                          ),
-                        ),
-                      SizedBox(height: 14.h),
-                      Text(userinfo?.nickname ?? "",
-                          style: TextStyle(
-                              color: Color(0xff333333), fontSize: 32.sp)),
-                      SizedBox(height: 33.h),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BalancePage()),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  Text("\$" + (userinfo?.balance ?? "0.0"),
-                                      style: TextStyle(
-                                          color: Color(0xffFB641B),
-                                          fontSize: 36.sp)),
-                                  Text(localizations.balance,
-                                      style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 24.sp))
-                                ],
+                      obtainLoginOut(),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 33.h),
+                          if (userinfo != null)
+                            ClipOval(
+                              child: CachedNetworkImage(
+                                height: 188.w,
+                                width: 188.w,
+                                imageUrl: userinfo!.avatar,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(
+                                        color: Colors.white),
+                                errorWidget: (context, url, error) => Icon(
+                                    Icons.account_circle,
+                                    size: 188.w,
+                                    color: Color(0x33333333)),
                               ),
-                            ),
-                            Column(
-                              children: [
-                                Text((userinfo?.wishlist ?? 0).toString(),
-                                    style: TextStyle(
-                                        color: Color(0xffFB641B),
-                                        fontSize: 36.sp)),
-                                Text(localizations.wishlist,
-                                    style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 24.sp))
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text((userinfo?.cart ?? 0).toString(),
-                                    style: TextStyle(
-                                        color: Color(0xffFB641B),
-                                        fontSize: 36.sp)),
-                                Text(localizations.cart,
-                                    style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 24.sp))
-                              ],
                             )
-                          ])
+                          else
+                            ClipOval(
+                              child: Icon(Icons.account_circle,
+                                  size: 188.w, color: Color(0x33333333)),
+                            ),
+                          SizedBox(height: 14.h),
+                          Text(userinfo?.nickname ?? "",
+                              style: TextStyle(
+                                  color: Color(0xff333333), fontSize: 32.sp)),
+                          SizedBox(height: 33.h),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => BalancePage()),
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text("\$" + (userinfo?.balance ?? "0.0"),
+                                          style: TextStyle(
+                                              color: Color(0xffFB641B),
+                                              fontSize: 36.sp)),
+                                      Text(localizations.balance,
+                                          style: TextStyle(
+                                              color: Color(0xff333333),
+                                              fontSize: 24.sp))
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Text((userinfo?.wishlist ?? 0).toString(),
+                                        style: TextStyle(
+                                            color: Color(0xffFB641B),
+                                            fontSize: 36.sp)),
+                                    Text(localizations.wishlist,
+                                        style: TextStyle(
+                                            color: Color(0xff333333),
+                                            fontSize: 24.sp))
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text((userinfo?.cart ?? 0).toString(),
+                                        style: TextStyle(
+                                            color: Color(0xffFB641B),
+                                            fontSize: 36.sp)),
+                                    Text(localizations.cart,
+                                        style: TextStyle(
+                                            color: Color(0xff333333),
+                                            fontSize: 24.sp))
+                                  ],
+                                )
+                              ])
+                        ],
+                      )
                     ],
                   )),
               bottom: PreferredSize(
@@ -237,7 +250,7 @@ class _MinePageState extends State<MinePage>
 
   editinfo() {
     //修改个人信息
-    ApiClient().editinfo({"nickname": this.username}).then((res) {
+    ApiClient().editinfo({"nickname": userinfo?.username??""}).then((res) {
       if (res['status']) {
         setState(() {
           userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
@@ -398,7 +411,7 @@ class _MinePageState extends State<MinePage>
                                       textAlign: TextAlign.right,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color:Theme.of(context).primaryColor,
+                                        color: Theme.of(context).primaryColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -556,5 +569,47 @@ class _MinePageState extends State<MinePage>
         ],
       );
     }));
+  }
+
+  Future<void> loginOut() async {
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LogoutDialog();
+      },
+    );
+
+    if (confirm == true) {
+      SPUtils.setString('token', '');
+      bus.emit('Login', false);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    bus.off("Login",loginState);
+  }
+
+  Widget obtainLoginOut() {
+    if(LoginStatus.hasLogin()){
+      return Positioned(
+        right: 0,
+        top: 0,
+        child: GestureDetector(
+          onTap: () {
+            loginOut();
+          },
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Icon(Icons.login,
+                size: 65.w, color: Color(0xff333333)),
+          ),
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 }

@@ -20,12 +20,13 @@ Future<Map<String, dynamic>> ax({
 
   final token =   SPUtils.getString("token");
 
-  if (auth && token == null) {
+  if (auth && token.isEmpty) {
     errorToShow('Please log in first');
-    return {};
+    Map<String, dynamic> back={"status":false,"data":14006};
+    return back ;
   }
 
-  if (auth && token != null) {
+  if (auth && token.isNotEmpty ){
     data['token'] = token;
   }
   print("http： 请求了接口"+jsonEncode(data)+ "\n\n  token是"+token);

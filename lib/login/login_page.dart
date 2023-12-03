@@ -10,9 +10,9 @@ import '../generated/l10n.dart';
 import '../network/user.dart';
 
 class LoginPopup extends StatefulWidget {
-  final VoidCallback? onPressed;
+  final VoidCallback? onLoginSuccess;
 
-  LoginPopup({this.onPressed});
+  LoginPopup({this.onLoginSuccess});
 
   @override
   _LoginPopupState createState() => _LoginPopupState();
@@ -134,7 +134,7 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().login(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
-          widget.onPressed!();
+          widget.onLoginSuccess!();
           successToShow('Login succeeded');
           // await ApiClient().userInfo();
           loginType = 1;
@@ -148,7 +148,7 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().passwordlogin(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
-          widget.onPressed!();
+          widget.onLoginSuccess!();
           successToShow('Sign succeeded');
           // await ApiClient().userInfo();
           loginType = 1;

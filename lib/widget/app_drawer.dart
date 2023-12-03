@@ -11,8 +11,13 @@ import '../home/faq.dart';
 import '../home/voucher.dart';
 import '../login/login_locale.dart';
 import '../login/login_page.dart';
+import '../login/page_controller_provider.dart';
 
 class AppDrawerWidget extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  AppDrawerWidget({required this.scaffoldKey});
+
   @override
   _AppDrawerWidgetState createState() => _AppDrawerWidgetState();
 }
@@ -20,12 +25,24 @@ class AppDrawerWidget extends StatefulWidget {
 class _AppDrawerWidgetState extends State<AppDrawerWidget> {
   @override
   void initState() {
-    bus.on("Login", (arg) {
-      print('AACCDD执行了_AppDrawerWidgetState initState');
-      setState(() {});
-    });
+    print("Appdrawer"+"init");
+    bus.on("Login", loginState);
     super.initState();
   }
+
+  void loginState(arg) {
+    print('AACCDD执行了_AppDrawerWidgetState initState');
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    print("Appdrawer"+"dispose");
+    // TODO: implement dispose
+   bus.off("Login", loginState);
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +60,12 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                   if (!LoginStatus.hasLogin()) {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) {
+                      builder: (BuildContext scontext) {
                         return LoginPopup(
-                          onPressed: () {
+                          onLoginSuccess: () {
+                            widget.scaffoldKey.currentState?.closeDrawer();
                             Navigator.of(context).pop();
-                            bus.emit('Login', "hello PageA from PageB");
+                            bus.emit('Login', true);
                           },
                         );
                       },
@@ -102,7 +120,12 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
             ),
           ),
           buildGestureDetector(localizations.home, true,
-              ontap: () => {Navigator.of(context).pop()})
+              ontap: () {
+            Navigator.of(context).pop();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Provider.of<PageControllerProvider>(context, listen: false)
+                  .goToPage(0);
+          })
 
           ,
           buildGestureDetector(localizations.activities, false,
