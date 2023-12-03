@@ -89,7 +89,7 @@ class ApiClient {
 
   Future getdetial(Map<String, dynamic> params) async {
     params['method'] = 'goods.getdetial';
-    return await post(url: url, params: params, auth: true, showToast: false);
+    return await post(url: url, params: params, auth: false, showToast: false);
   }
 
   Future relatedlist(Map<String, dynamic> params) async {

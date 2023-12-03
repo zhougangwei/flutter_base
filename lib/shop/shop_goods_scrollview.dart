@@ -561,7 +561,6 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   void getPageList() {
     ApiClient().getPageList({}).then((res) {
       if (res['status']) {
-        successToShow('Successfully added');
         setState(() {
           pageList = jsonConvert
                   .convertListNotNull<PageBeanEntity>(res['data']['list']) ??

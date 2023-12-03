@@ -71,10 +71,18 @@ class _GoodPageState extends State<GoodPage> {
       if (mounted) {
         if (res['status']) {
           setState(() {
-            this.Size = res['data']['spes_desc'][
-                'Size']; //{\"853\":\"50ml\",\"854\":\"100ml\",\"856\":\"30ml\"}
-            this.default_spes_desc =
-                res['data']['product']['default_spes_desc'];
+            try {
+              if (res['data']['spes_desc'] != null &&
+                  res['data']['spes_desc'] != "") {
+                this.Size = res['data']['spes_desc']['Size'];
+              }
+              if (res['data']['product'] != null &&
+                  res['data']['product'] != "") {
+                this.default_spes_desc =
+                    res['data']['product']['default_spes_desc'];
+              }
+            } catch (e) {}
+            //{\"853\":\"50ml\",\"854\":\"100ml\",\"856\":\"30ml\"}
             //{\"50ml\":{\"name\":\"50ml\",\"is_default\":true},\"100ml\":{\"name\":\"100ml\",\"product_id\":1618},\"30ml\":{\"name\":\"30ml\",\"product_id\":1619}}
             this.goods_data = jsonConvert.convert<GoodBeanEntity>(res['data']);
           });

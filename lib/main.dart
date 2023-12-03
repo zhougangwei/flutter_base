@@ -30,11 +30,12 @@ void main() async {
     child: ShoppingApp(),
   ));
 }
-FlutterNativeSplash.remove();
+
 
 class ShoppingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     ScreenUtil.init(
       context,
       designSize: Size(750, 1624), // 设计稿尺寸（宽度和高度）
