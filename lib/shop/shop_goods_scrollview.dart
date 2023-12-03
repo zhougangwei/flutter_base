@@ -419,6 +419,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     goodsinfo(it.id);
                   },
                   child: GoodItem(
+                    isfav:it.isfav,
                     image_url: it.image_url,
                     cat_name: it.cat_name,
                     name: it.name,

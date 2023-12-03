@@ -61,15 +61,8 @@ class _CartPageState extends State<CartPage>
         setState(() {
           CartBeanEntity? carBean =
               jsonConvert.convert<CartBeanEntity>(res['data']);
-
           cartlist = carBean?.list;
-          cartlist?.forEach((item) {
-            item.itemnums = item.nums;
-            item.total =
-                (item.nums.toDouble() * double.parse(item.products.price))
-                    .toStringAsFixed(2);
-            totalnumberDouble += item.nums * double.parse(item.products.price);
-          });
+          refreshTotalNum();
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
         });
       } else {
@@ -86,6 +79,18 @@ class _CartPageState extends State<CartPage>
       }
     }).catchError((err) {
       err.toString();
+    });
+  }
+
+  void refreshTotalNum() {
+    if (cartlist?.length == 0) {
+      totalnumberDouble = 0.0;
+    }
+    cartlist?.forEach((item) {
+      item.itemnums = item.nums;
+      item.total = (item.nums.toDouble() * double.parse(item.products.price))
+          .toStringAsFixed(2);
+      totalnumberDouble += item.nums * double.parse(item.products.price);
     });
   }
 
@@ -163,13 +168,14 @@ class _CartPageState extends State<CartPage>
                           width: 162.w,
                           height: 182.h,
                         ),
-                        Container(width: 15.w),
+                        Container(width: 25.w),
                         Expanded(
                           child: Container(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 20.h),
                                 Row(
                                   children: [
                                     Expanded(
@@ -180,9 +186,20 @@ class _CartPageState extends State<CartPage>
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: Color(0xff333333),
-                                          fontSize: 12,
+                                          fontSize: 28.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        catdel(item.id, index);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                            'assets/images/image/icon-28.png',
+                                            width: 30.w),
                                       ),
                                     )
                                   ],
@@ -192,7 +209,11 @@ class _CartPageState extends State<CartPage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(localizations.price),
+                                    Text(localizations.price,
+                                        style: TextStyle(
+                                          color: Color(0xff333333),
+                                          fontSize: 24.sp,
+                                        )),
                                     Text(
                                       "\$" +
                                           item.products.price +
@@ -203,18 +224,23 @@ class _CartPageState extends State<CartPage>
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 12,
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 24.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 10.h),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(localizations.quantity),
+                                    Text(localizations.quantity,
+                                        style: TextStyle(
+                                          color: Color(0xff333333),
+                                          fontSize: 24.sp,
+                                        )),
                                     NumberBox(
                                       onChange: (int nums) {
                                         unmchange(item.id, nums);
@@ -222,6 +248,7 @@ class _CartPageState extends State<CartPage>
                                     )
                                   ],
                                 ),
+                                SizedBox(height: 10.h),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -237,20 +264,21 @@ class _CartPageState extends State<CartPage>
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 12,
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 24.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 20.h),
                               ],
                             ),
                           ),
                         ),
                       ]),
                   Divider(
-                    color: Colors.blueGrey,
+                    color: Color(0x33333333),
                     height: 1.h,
                   )
                 ],
@@ -273,7 +301,9 @@ class _CartPageState extends State<CartPage>
             children: [
               Text(localizations.cart,
                   style: TextStyle(
-                      fontSize: ScreenUtil().setSp(62), color: Colors.black)),
+                      fontSize: ScreenUtil().setSp(62),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold)),
             ]),
       )
     ]);
@@ -288,6 +318,7 @@ class _CartPageState extends State<CartPage>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 30.h),
           Text(
             "CART TOTALS",
             textAlign: TextAlign.left,
@@ -295,10 +326,12 @@ class _CartPageState extends State<CartPage>
               fontSize: 36.sp,
             ),
           ),
+          SizedBox(height: 20.h),
           Divider(
-            color: Colors.blueGrey,
+            color: Color(0x33333333),
             height: 1.h,
           ),
+          SizedBox(height: 20.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -307,8 +340,9 @@ class _CartPageState extends State<CartPage>
                 style: TextStyle(fontSize: 28.sp),
               ),
               Text(
-                totalnumberDouble.toStringAsFixed(2),
-                style: TextStyle(fontSize: 36.sp),
+                "\$${totalnumberDouble.toStringAsFixed(2)}",
+                style: TextStyle(
+                    fontSize: 36.sp, color: Theme.of(context).primaryColor),
               )
             ],
           )
@@ -332,5 +366,49 @@ class _CartPageState extends State<CartPage>
     }).catchError((e) {
       print(e);
     });
+  }
+
+  void catdel(int id, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Point'),
+          content: Text('Are you sure want to delete?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // 取消退出登陆
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // 确认退出登陆
+                Navigator.of(context).pop();
+                ApiClient().catdel({'ids': id}).then((res) {
+                  setState(() {
+                    if (res['status']) {
+                      cartlist?.removeAt(index);
+                    }
+                    refreshTotalNum();
+                  });
+                }).catchError((err) {
+                  err.toString();
+                });
+              },
+              child: Text(
+                'Confirm',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

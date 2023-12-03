@@ -11,9 +11,11 @@ class GoodItem extends StatelessWidget {
   final String scoreSum;
   final String price;
   final String mktprice;
+  final bool isfav;
 
   const GoodItem(
       {super.key,
+      required this.isfav,
       required this.image_url,
       required this.cat_name,
       required this.name,
@@ -26,61 +28,81 @@ class GoodItem extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            CachedNetworkImage(imageUrl: image_url,width: 295.w,),
-            if(cat_name.isNotEmpty)
-              Text(
-                cat_name,
-                maxLines: 1,
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Color(0xff333333),
-                  fontSize: 20.sp,
-                ),
-              ),
-            SizedBox(height: 15.h),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                name,
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Color(0xff333333),
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 15.h),
-
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RatingWidget(size: 30.w, initialRating: 5),
-                Text('(${scoreSum ?? ''})', style: TextStyle(fontSize: 20.sp)),
+                CachedNetworkImage(
+                  imageUrl: image_url,
+                  width: 295.w,
+                ),
+                if (cat_name.isNotEmpty)
+                  Text(
+                    cat_name,
+                    maxLines: 1,
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Color(0xff333333),
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                SizedBox(height: 15.h),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Color(0xff333333),
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.h),
+                Row(
+                  children: [
+                    RatingWidget(size: 30.w, initialRating: 5),
+                    Text('(${scoreSum ?? ''})',
+                        style: TextStyle(fontSize: 20.sp)),
+                  ],
+                ),
+                SizedBox(height: 15.h),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '\$${price}-\$${mktprice}',
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Color(0xff333333),
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 15.h),
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '\$${price}-\$${mktprice}',
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Color(0xff333333),
-                  fontSize: 28.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            Positioned(
+                right: 5.w,
+                top: 5.w,
+                child: Padding(
+                  padding: EdgeInsets.all(10.w),
+                  child: Builder(builder: (context) {
+                    if (isfav) {
+                      return Image.asset('assets/images/image/icon-6.png',
+                          width: 40.w);
+                    }
+                    return Image.asset('assets/images/image/icon-17.png',
+                        width: 40.w);
+                  }),
+                )),
           ],
         ),
       ),

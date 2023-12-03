@@ -1,7 +1,4 @@
-import 'package:atest/login/login_locale.dart';
 import 'package:atest/network/json_cache_manager.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -65,43 +62,37 @@ class _WishListPageState extends State<WishListPage>
         ]));
   }
 
-  SliverList buildGoodCastList() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          var item = wishlishlist[index];
-          var it = item.goods;
-          return Container(
-            margin: EdgeInsets.only(left: 20, right: 20),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: wishlishlist.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 一行显示
-                childAspectRatio: 335 / 495, // 调整子项的宽高比例
-                crossAxisSpacing: 10, // 子项之间的横向间距
-                mainAxisSpacing: 10, // 两个子项
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () => goodsinfo(it.id),
-                  child: GoodItem(
-                    image_url: it.imageUrl,
-                    cat_name: "",
-                    name: it.name,
-                    scoreSum: it.scoreSum,
-                    price: it.price,
-                    mktprice: it.mktprice,
-                  ),
-                );
-              },
+  Widget buildGoodCastList() {
+    return SliverToBoxAdapter(
+        child: Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: wishlishlist.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 一行显示
+          childAspectRatio: 335 / 495, // 调整子项的宽高比例
+          crossAxisSpacing: 10, // 子项之间的横向间距
+          mainAxisSpacing: 10, // 两个子项
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          var it = wishlishlist[index].goods;
+          return GestureDetector(
+            onTap: () => goodsinfo(it.id),
+            child: GoodItem(
+              isfav: true,
+              image_url: it.imageUrl,
+              cat_name: "",
+              name: it.name,
+              scoreSum: it.scoreSum,
+              price: it.price,
+              mktprice: it.mktprice,
             ),
           );
         },
-        childCount: wishlishlist.length,
       ),
-    );
+    ));
   }
 
   Column obtainWishTilte(BuildContext context, S localizations) {

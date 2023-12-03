@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:atest/widget/custom_scaffoldr.dart';
 import 'package:atest/widget/number_box.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +44,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     var localizations = S.of(context);
-    return Scaffold(
+    return CustomScafflold(
         body: Stack(children: [
       CustomScrollView(
           physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
@@ -62,7 +63,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           bottom: 1.h,
           child: GestureDetector(
             onTap: () {
-                submit();
+              submit();
             },
             child: Container(
               height: 100.h,
@@ -92,9 +93,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
           return Container(
               alignment: Alignment.centerLeft,
               width: double.infinity,
-              margin: EdgeInsets.only(left: 20, right: 20),
+
               child: Column(
                 children: [
+                  obtainAddressItem(item),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
@@ -153,7 +155,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     color: Colors.blueGrey,
                     height: 1.h,
                   ),
-                  obtainAddressItem(item)
                 ],
               ));
         },
@@ -163,47 +164,53 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget obtainAddressItem(CartBeanList item) {
-    return Row(
-      children: [
-        Image.asset('assets/images/image/icon-30.png', width: 26.w),
-        Column(children: [
-          Text(
-            '${item.address?.firstName}|${item.address?.lastName}'
-            '|${item.address?.country}|${item.address?.zipCode}|'
-            '${item.address?.code}|${item.address?.mobile}',
-            maxLines: 1,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Color(0xff333333),
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
+    return Container(
+      margin: EdgeInsets.only(right:25.h,left: 25.w),
+      color: Color(0x33999999),
+      padding: EdgeInsets.all(20.h),
+      child: Row(
+        children: [
+          Image.asset('assets/images/image/icon-30.png', width: 26.w),
+          SizedBox(width: 10.w),
+          Column(children: [
+            Text(
+              '${item.address?.firstName}|${item.address?.lastName}'
+              '|${item.address?.country}|${item.address?.zipCode}|'
+              '${item.address?.code}|${item.address?.mobile}',
+              maxLines: 1,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color(0xff333333),
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Container(width: 20.h),
-          Text(
-            '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
-            maxLines: 1,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Color(0xff333333),
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
+            Container(width: 20.h),
+            Text(
+              '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
+              maxLines: 1,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color(0xff333333),
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ]),
-      ],
+          ]),
+        ],
+      ),
     );
   }
 
   Container obtainAddressTilte(BuildContext context, S localizations) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+      padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.w),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Divider(height: 1.0, color: Color(0xff072D8C)),
+            Divider(thickness: 3.h, height: 3.h, color: Color(0xff072D8C)),
             GestureDetector(
               onTap: () {
                 showAddressDialog(context);
@@ -212,20 +219,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 alignment: Alignment.centerLeft,
                 height: 90.h,
                 color: Color(0xfff8f8f8),
-                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+                padding: EdgeInsets.only(left: 20.w, right: 20.w),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/image/icon-30.png', width: 26.w),
+                    Image.asset('assets/images/image/icon-30.png', width: 30.w),
+                    SizedBox(
+                      width: 20.w,
+                    ),
                     Text(localizations.addAddressPS,
                         style: TextStyle(fontSize: 24.sp, color: Colors.black)),
                     Icon(Icons.navigate_next,
-                        color: Color(0xff333333), size: 24.w),
+                        color: Color(0xff333333), size: 40.w),
                   ],
                 ),
               ),
             ),
+            Divider(height: 1.0, color: Color(0x99999999)),
             GestureDetector(
               onTap: () {
                 showMultiDialog(context);
@@ -234,16 +245,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 alignment: Alignment.centerLeft,
                 height: 90.h,
                 color: Color(0xfff8f8f8),
-                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.w),
+                padding: EdgeInsets.only(left: 20.w, right: 20.w),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/image/icon-31.png', width: 26.w),
+                    Image.asset('assets/images/image/icon-31.png', width: 30.w),
+                    SizedBox(
+                      width: 20.w,
+                    ),
                     Text(localizations.multipleAddress,
                         style: TextStyle(fontSize: 24.sp, color: Colors.black)),
                     Icon(Icons.navigate_next,
-                        color: Color(0xff333333), size: 24.w),
+                        color: Color(0xff333333), size: 40.w),
                   ],
                 ),
               ),
@@ -251,7 +265,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(height: 20.h),
             Text(localizations.yourOrder,
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 36.sp, color: Colors.black)),
+                style: TextStyle(
+                    fontSize: 36.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 20.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,6 +279,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(fontSize: 24.sp, color: Colors.black)),
               ],
             ),
+            SizedBox(height: 20.h),
+            Divider(height: 1.0, color: Color(0x99999999)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        delShip();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 20.w, top: 10.w, bottom: 10.w, right: 20.w),
+                        color: Theme.of(context).primaryColor,
+                        child: Text(
+                          localizations.deleteAddress,
+                          style:
+                              TextStyle(fontSize: 22.sp, color: Colors.white),
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+            SizedBox(height: 30.h),
           ]),
     );
   }
@@ -286,35 +329,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   goodsinfo(id) {}
 
-  void showAddressDialog(BuildContext context) {
-    showModalBottomSheet(
+  Future<void> showAddressDialog(BuildContext context) async {
+    bool confirm = await showModalBottomSheet(
         context: context,
         builder: (context) {
           return Add_Address();
         });
+    if (confirm == true) {
+      this.getCatoPeration();
+    }
   }
 
-  void delShip(BuildContext context) {
+  void delShip() {
     showDialog(
       context: context,
-      builder: (_) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('删除吗'),
-          content: const Text(
-            '删除吗',
-          ),
-          actions: <Widget>[
+          title: Text('Point'),
+          content: Text('Are you sure want to delete?'),
+          actions: [
             TextButton(
               onPressed: () {
-                var data = {"is_def": 2};
+                // 取消退出登陆
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Map<String, dynamic> data = {"is_def": 2};
                 ApiClient().delShip(data).then((res) {
                   if (res['status']) {
                     getCatoPeration();
+                    new Timer(Duration(milliseconds: 300), () {
+                      successToShow('Deleted successfully');
+                    });
                   }
+                }).catchError((err) {
+                  err.toString();
                 });
+                ;
                 Navigator.of(context).pop();
               },
-              child: const Text('删除'),
+              child: Text(
+                'Confirm',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
             ),
           ],
         );
@@ -517,8 +580,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       }
       new Timer(Duration(milliseconds: 1000), () {
         Navigator.of(context).popUntil((route) => route.isFirst);
-        Provider.of<PageControllerProvider>(context, listen: false)
-            .goToPage(3);
+        Provider.of<PageControllerProvider>(context, listen: false).goToPage(3);
       });
     }).catchError((err) {
       err.toString();
