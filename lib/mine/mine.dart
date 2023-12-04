@@ -4,6 +4,7 @@ import 'package:abce/shop/bean/balance_bean_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -14,6 +15,7 @@ import '../login/login_locale.dart';
 import '../network/user.dart';
 import '../shop/bean/order_bean_entity.dart';
 import '../shop/bean/user_info_entity.dart';
+import '../utils/common_utils.dart';
 import '../utils/sp_utils.dart';
 import 'balance.dart';
 import 'login_out.dart';
@@ -44,14 +46,14 @@ class _MinePageState extends State<MinePage>
   }
 
   void loginState(arg) {
-    if(!arg){
+    if (!arg) {
       setState(() {
         orderlist = [];
         couponlist = [];
         balancelist = [];
-        userinfo=null;
+        userinfo = null;
       });
-    }else{
+    } else {
       afterLogin();
     }
   }
@@ -66,6 +68,7 @@ class _MinePageState extends State<MinePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     final localizations = S.of(context);
     return DefaultTabController(
         length: 3, // 选项卡的数量
@@ -87,18 +90,25 @@ class _MinePageState extends State<MinePage>
                         children: [
                           SizedBox(height: 33.h),
                           if (userinfo != null)
-                            ClipOval(
-                              child: CachedNetworkImage(
-                                height: 188.w,
-                                width: 188.w,
-                                imageUrl: userinfo!.avatar,
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(
-                                        color: Colors.white),
-                                errorWidget: (context, url, error) => Icon(
-                                    Icons.account_circle,
-                                    size: 188.w,
-                                    color: Color(0x33333333)),
+                            GestureDetector(
+                              onTap: () {
+                                chooseImg();
+                              },
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  height: 188.w,
+                                  width: 188.w,
+                                  fit: BoxFit.cover,
+                                  imageUrl: userinfo!.avatar,
+                                  placeholder: (context, url) => Icon(
+                                      Icons.account_circle,
+                                      size: 188.w,
+                                      color: Color(0x33333333)),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.account_circle,
+                                      size: 188.w,
+                                      color: Color(0x33333333)),
+                                ),
                               ),
                             )
                           else
@@ -235,12 +245,12 @@ class _MinePageState extends State<MinePage>
 
   editavatar(data) {
     //修改头像
-    Map<String, dynamic> datapost = jsonDecode(data);
-    String avatar = datapost['data']['url'];
+    String avatar = data['url'];
     ApiClient().changeavatar({"avatar": avatar}).then((res) {
       if (res['status']) {
         setState(() {
-          userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
+          successToShow(res['msg']);
+          userinfo?.avatar = res['data']['avatar'];
         });
       }
     }).catchError((err) {
@@ -250,7 +260,7 @@ class _MinePageState extends State<MinePage>
 
   editinfo() {
     //修改个人信息
-    ApiClient().editinfo({"nickname": userinfo?.username??""}).then((res) {
+    ApiClient().editinfo({"nickname": userinfo?.username ?? ""}).then((res) {
       if (res['status']) {
         setState(() {
           userinfo = jsonConvert.convert<UserInfoEntity>(res['data']);
@@ -479,14 +489,112 @@ class _MinePageState extends State<MinePage>
   bool get wantKeepAlive => true;
 
   Future<void> chooseImg() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      submitImage(image.path);
-    } else {}
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image =
+                        await _picker.pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      submitImage(image.path);
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(15.h),
+                    child: Text(
+                      "Album",
+                      style: TextStyle(color: Colors.black, fontSize: 32.sp),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color(0x99999999),
+                  thickness: 1.h,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image =
+                        await _picker.pickImage(source: ImageSource.camera);
+                    if (image != null) {
+                      submitImage(image.path);
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(15.h),
+                    child: Text(
+                      "Camera",
+                      style: TextStyle(color: Colors.black, fontSize: 32.sp),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color(0x33999999),
+                  thickness: 20.h,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(15.h),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.black, fontSize: 32.sp),
+                    ),
+                  ),
+                )
+              ]);
+        });
   }
 
   void submitImage(String image) async {
+    showDialog(
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                  child: Positioned(
+                      top: 0,
+                      right: 0,
+                      left: 0,
+                      bottom: 0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 40.h),
+                          SpinKitRotatingCircle(
+                            color: Color(0x99999999),
+                            size: 100.w,
+                          ),
+                          SizedBox(height: 30.h),
+                          Text("Loading...",
+                              style: TextStyle(
+                                  color: Color(0x99999999),
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w500))
+                        ],
+                      )),
+                )),
+          );
+        });
+
     String url = 'https://abcadm.cc/api.html';
     String filePath = image;
     String fileType = 'image';
@@ -497,7 +605,7 @@ class _MinePageState extends State<MinePage>
     request.headers['Content-Type'] = 'multipart/form-data';
 
     var file = await http.MultipartFile.fromPath(name, filePath,
-        contentType: MediaType.parse(fileType));
+        contentType: MediaType('image', 'jpeg'));
 
     request.files.add(file);
     request.fields['method'] = 'images.upload';
@@ -517,9 +625,7 @@ class _MinePageState extends State<MinePage>
       // Handle error
     } finally {
       // Hide loading after a delay
-      Future.delayed(Duration(milliseconds: 250), () {
-        // Hide loading
-      });
+      Future.delayed(Duration(milliseconds: 250), () {});
     }
   }
 
@@ -589,11 +695,11 @@ class _MinePageState extends State<MinePage>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    bus.off("Login",loginState);
+    bus.off("Login", loginState);
   }
 
   Widget obtainLoginOut() {
-    if(LoginStatus.hasLogin()){
+    if (LoginStatus.hasLogin()) {
       return Positioned(
         right: 0,
         top: 0,
@@ -603,12 +709,11 @@ class _MinePageState extends State<MinePage>
           },
           child: Padding(
             padding: EdgeInsets.all(20.w),
-            child: Icon(Icons.login,
-                size: 65.w, color: Color(0xff333333)),
+            child: Icon(Icons.login, size: 65.w, color: Color(0xff333333)),
           ),
         ),
       );
-    }else{
+    } else {
       return Container();
     }
   }

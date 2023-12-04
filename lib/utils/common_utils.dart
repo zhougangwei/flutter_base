@@ -12,7 +12,8 @@ Future<void> errorToShow( msg, {int duration = 1500}) async {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
+        fontSize: 16.0,
+
     );
   } catch (e) {
     print("errorToShow"+msg);
@@ -28,7 +29,7 @@ Future<void> successToShow(String msg, {int duration = 1500}) async {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
+        fontSize: 16.0,
     );
 
   } catch (e) {
