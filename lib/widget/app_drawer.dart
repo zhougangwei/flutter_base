@@ -1,5 +1,4 @@
-import 'package:abce/utils/sp_utils.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:abce/home/contact_us.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,7 @@ class AppDrawerWidget extends StatefulWidget {
 class _AppDrawerWidgetState extends State<AppDrawerWidget> {
   @override
   void initState() {
-    print("Appdrawer"+"init");
+    print("Appdrawer" + "init");
     bus.on("Login", loginState);
     super.initState();
   }
@@ -37,12 +36,11 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
 
   @override
   void dispose() {
-    print("Appdrawer"+"dispose");
+    print("Appdrawer" + "dispose");
     // TODO: implement dispose
-   bus.off("Login", loginState);
+    bus.off("Login", loginState);
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +83,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
                       SizedBox(width: 8.w),
                       Text(localizations.loginSigup,
                           style:
-                          TextStyle(fontSize: 28.sp, color: Colors.white)),
+                              TextStyle(fontSize: 28.sp, color: Colors.white)),
                       Expanded(child: Container()),
                       Icon(Icons.keyboard_arrow_right,
                           size: 20, color: Colors.white)
@@ -103,75 +101,71 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
               children: [
                 Expanded(
                     child: Container(
-                      child: Text(localizations.mend,
-                          textAlign: TextAlign.center,
-                          style:
+                  child: Text(localizations.mend,
+                      textAlign: TextAlign.center,
+                      style:
                           TextStyle(fontSize: 28.sp, color: Color(0xff072D8C))),
-                    )),
+                )),
                 Expanded(
                     child: Container(
-                      color: Color(0xfff8f8f8),
-                      child: Text(localizations.categories,
-                          textAlign: TextAlign.center,
-                          style:
+                  color: Color(0xfff8f8f8),
+                  child: Text(localizations.categories,
+                      textAlign: TextAlign.center,
+                      style:
                           TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
-                    ))
+                ))
               ],
             ),
           ),
-          buildGestureDetector(localizations.home, true,
-              ontap: () {
+          buildGestureDetector(localizations.home, true, ontap: () {
             Navigator.of(context).pop();
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              Provider.of<PageControllerProvider>(context, listen: false)
-                  .goToPage(0);
-          })
-
-          ,
-          buildGestureDetector(localizations.activities, false,
-              ontap: () {
-                Navigator.of(context).pop();
-                Navigator
-                    .of(context)
-                    .push(MaterialPageRoute(builder: (context) => ActivityPage()));
-              }),
-          buildGestureDetector(localizations.voucheer, true,
-              ontap: () {
-                Navigator.of(context).pop();
-                Navigator
-                    .of(context)
-                    .push(MaterialPageRoute(builder: (context) => VoucherPage()));
-                }
-          ),
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            Provider.of<PageControllerProvider>(context, listen: false)
+                .goToPage(0);
+          }),
+          buildGestureDetector(localizations.activities, false, ontap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => ActivityPage()));
+          }),
+          buildGestureDetector(localizations.voucheer, true, ontap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => VoucherPage()));
+          }),
           buildGestureDetector(localizations.faq, false, ontap: () {
             Navigator.of(context).pop();
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => FaqPage()));
           }),
-          buildGestureDetector(localizations.contactUs, false,
-              ontap: () => {Navigator.of(context).pop()}),
+          buildGestureDetector(localizations.contactUs, false, ontap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => ContactUsPage()));
+          }),
         ],
       ),
     );
   }
 
-  Container buildGestureDetector(String home, bool hasAdd,
+  Widget buildGestureDetector(String home, bool hasAdd,
       {required Function() ontap}) {
-    return Container(
-      height: 91.h,
-      child: GestureDetector(
-          child: Row(
-            children: [
-              SizedBox(width: 30.w),
-              Text(home,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
-              Expanded(child: Container()),
-              getAdd(hasAdd),
-              SizedBox(width: 42.w),
-            ],
-          ),
-          onTap: () => ontap()),
+    return GestureDetector(
+      onTap: () => ontap(),
+      child: Container(
+        height: 91.h,
+        child: Row(
+          children: [
+            SizedBox(width: 30.w),
+            Text(home,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
+            Expanded(child: Container()),
+            getAdd(hasAdd),
+            SizedBox(width: 42.w),
+          ],
+        ),
+      ),
     );
   }
 

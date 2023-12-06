@@ -30,7 +30,9 @@ class CurrentLocale with ChangeNotifier {
       imgCode = '4';
     } else if (e == 'it') {
       imgCode = '5';
-    } else {
+    } else if (e == 'zh'){
+      imgCode = '6';}
+    else {
       imgCode = '2';
     }
     return imgCode;

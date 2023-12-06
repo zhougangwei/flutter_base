@@ -9,7 +9,11 @@ import '../network/user.dart';
 import '../shop/bean/setting_bean_entity.dart';
 
 class GoodFoot extends StatefulWidget {
-  const GoodFoot({super.key});
+  Function? onGetFoot;
+
+
+  GoodFoot({super.key, this.onGetFoot=null});
+
 
   @override
   _GoodFootState createState() => _GoodFootState();
@@ -41,6 +45,7 @@ class _GoodFootState extends State<GoodFoot> {
         setState(() {
           footdata = jsonConvert.convert<SettingBeanEntity>(res['data']);
           JsonCacheManager().cacheJson("foot",res['data']);
+          this.widget.onGetFoot?.call(footdata);
         });
       }
     }).catchError((err) {
