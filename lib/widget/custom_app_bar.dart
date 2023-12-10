@@ -12,6 +12,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   List<Map<String, String>> langList = [
     {"label": 'German', "value": 'de'},
     {"label": 'Spanish', "value": 'es'},
+    {"label": 'Chinese', "value": 'zh'},
     {"label": 'English', "value": 'en'},
     {"label": 'French', "value": 'fr'},
     {"label": 'Japanese', "value": 'ja'},
