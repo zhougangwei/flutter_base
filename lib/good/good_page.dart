@@ -194,21 +194,37 @@ class _GoodPageState extends State<GoodPage> {
                     obtainIsfav(localizations.CancelWishlist)
                   else
                     obtainNotFav(localizations.AddWishlist),
+                  SizedBox(height: 20.h),
                   if (goods_data?.category != null)
                     Row(
                       children: [
                         Image.asset('assets/images/image/icon-9.png',
                             width: 26.w),
-                        Text(goods_data?.category?.toString() ?? ''),
+                        SizedBox(width: 20.w),
+                        Text(localizations.Category,
+                            style: TextStyle(fontSize: 30.sp,fontWeight: FontWeight.bold)),
+                        SizedBox(width: 20.w),
+                        Expanded(
+                            child: Text(goods_data?.category?['category_name'] ?? '',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 30.sp)))
                       ],
                     ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 20.h),
                   Row(
                     children: [
                       Image.asset('assets/images/image/icon-7.png',
                           width: 26.w),
-                      SizedBox(width: 15.w),
-                      Expanded(child: Text(goods_data?.tags ?? '')),
+                      SizedBox(width: 20.w),
+                      Text(localizations.Tags,
+                          style: TextStyle(fontSize: 30.sp,fontWeight: FontWeight.bold)),
+                      SizedBox(width: 20.w),
+                      Expanded(
+                          child: Text(goods_data?.tags ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 30.sp))),
                     ],
                   ),
                   SizedBox(height: 50.h),
@@ -314,6 +330,7 @@ class _GoodPageState extends State<GoodPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset('assets/images/image/icon-6.png', width: 26.w),
+            SizedBox(width: 15.w),
             Text(text,
                 style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold))
           ]),

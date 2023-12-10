@@ -68,8 +68,8 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
         buildFeatured(localizations),
         buildGoodCastList(),
         buildPageList(),
-
-        SliverToBoxAdapter(child: Column(
+        SliverToBoxAdapter(
+            child: Column(
           children: [
             Divider(
               color: Color(0x33999999),
@@ -225,7 +225,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     itemCount: item.goods.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // 一行显示
-                      childAspectRatio: 335 / 430, // 调整子项的宽高比例
+                      childAspectRatio: 335 / 500, // 调整子项的宽高比例
                       crossAxisSpacing: 10, // 子项之间的横向间距
                       mainAxisSpacing: 10, // 两个子项
                     ),
@@ -241,6 +241,18 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                                 CachedNetworkImage(
                                   imageUrl: it.imageUrl,
                                   width: 295.w,
+                                  height: 320.h,
+                                  placeholder: (context, url) =>
+                                      Icon(
+                                        Icons.downloading,
+                                        size: 141.w,
+                                        color: Color(0x22333333),
+                                      ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.downloading,
+                                    size: 141.w,
+                                    color: Color(0x22333333),
+                                  ),
                                 ),
                                 SizedBox(height: 15.sp),
                                 Text(
@@ -314,11 +326,15 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                       width: 140.w,
                       imageUrl: item.image,
                       placeholder: (context, url) =>
-                          CircularProgressIndicator(color: Colors.white),
+                          Icon(
+                            Icons.downloading,
+                            size: 141.w,
+                            color: Color(0x22333333),
+                          ),
                       errorWidget: (context, url, error) => Icon(
                         Icons.downloading,
                         size: 141.w,
-                        color: Colors.grey,
+                        color: Color(0x22333333),
                       ),
                     ),
                   ),
@@ -408,7 +424,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
               itemCount: featurednlist.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // 一行显示
-                childAspectRatio: 335 / 500, // 调整子项的宽高比例
+                childAspectRatio: 335 / 520, // 调整子项的宽高比例
                 crossAxisSpacing: 10, // 子项之间的横向间距
                 mainAxisSpacing: 10, // 两个子项
               ),
@@ -419,13 +435,17 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     goodsinfo(it.id);
                   },
                   child: GoodItem(
-                    isfav:it.isfav,
+                    id: it.id,
+                    isfav: it.isfav,
                     image_url: it.image_url,
                     cat_name: it.cat_name,
                     name: it.name,
                     scoreSum: it.scoreSum,
                     price: it.price,
                     mktprice: it.mktprice,
+                    callback: () {
+                      relatedList();
+                    },
                   ),
                 );
               },

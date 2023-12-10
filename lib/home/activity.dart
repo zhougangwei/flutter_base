@@ -73,7 +73,7 @@ class _ActivityPageState extends State<ActivityPage>
                   itemCount: fatherItem.child.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // 一行显示
-                    childAspectRatio: 335 / 475, // 调整子项的宽高比例
+                    childAspectRatio: 335 / 500, // 调整子项的宽高比例
                     crossAxisSpacing: 10, // 子项之间的横向间距
                     mainAxisSpacing: 10, // 两个子项
                   ),

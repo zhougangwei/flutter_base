@@ -4,7 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GoodItem extends StatelessWidget {
+import '../network/user.dart';
+import '../utils/common_utils.dart';
+
+class GoodItem extends StatefulWidget {
+  final int id;
   final String image_url;
   final String cat_name;
   final String name;
@@ -12,16 +16,16 @@ class GoodItem extends StatelessWidget {
   final String price;
   final String mktprice;
   final bool isfav;
+  final Function? callback;
 
-  const GoodItem(
-      {super.key,
-      required this.isfav,
-      required this.image_url,
-      required this.cat_name,
-      required this.name,
-      required this.scoreSum,
-      required this.price,
-      required this.mktprice});
+  const GoodItem({super.key, required this.image_url, required this.cat_name, required this.name, required this.scoreSum, required this.price, required this.mktprice, required this.isfav, required this.callback, required this.id});
+  @override
+  State<StatefulWidget> createState() {
+    return GoodItemState();
+  }
+}
+
+class GoodItemState extends State<GoodItem> {
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +39,24 @@ class GoodItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CachedNetworkImage(
-                  imageUrl: image_url,
+                  imageUrl: widget.image_url,
                   width: 295.w,
+                  height: 320.h,
+                  placeholder: (context, url) =>
+                      Icon(
+                        Icons.downloading,
+                        size: 141.w,
+                        color: Color(0x22333333),
+                      ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.downloading,
+                    size: 141.w,
+                    color: Color(0x22333333),
+                  ),
                 ),
-                if (cat_name.isNotEmpty)
+                if (widget.cat_name.isNotEmpty)
                   Text(
-                    cat_name,
+                    widget.cat_name,
                     maxLines: 1,
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
@@ -53,7 +69,7 @@ class GoodItem extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    name,
+                    widget.name,
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -68,7 +84,7 @@ class GoodItem extends StatelessWidget {
                 Row(
                   children: [
                     RatingWidget(size: 30.w, initialRating: 5),
-                    Text('(${scoreSum ?? ''})',
+                    Text('(${widget.scoreSum ?? ''})',
                         style: TextStyle(fontSize: 20.sp)),
                   ],
                 ),
@@ -76,7 +92,7 @@ class GoodItem extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    '\$${price}-\$${mktprice}',
+                    '\$${widget.price}-\$${widget.mktprice}',
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -95,9 +111,14 @@ class GoodItem extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(10.w),
                   child: Builder(builder: (context) {
-                    if (isfav) {
-                      return Image.asset('assets/images/image/icon-6.png',
-                          width: 40.w);
+                    if (widget.isfav) {
+                      return GestureDetector(
+                        onTap: () {
+                          collection(widget.id);
+                        },
+                        child: Image.asset('assets/images/image/icon-6.png',
+                            width: 40.w),
+                      );
                     }
                     return Image.asset('assets/images/image/icon-17.png',
                         width: 40.w);
@@ -107,5 +128,22 @@ class GoodItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void collection(int id) {
+    Map<String, dynamic> data = {
+      'goods_id': id,
+    };
+    ApiClient().goodscollection(data).then((res) {
+      if (res['status']) {
+        successToShow(res['msg']);
+       widget.callback?.call();
+      }
+    }).catchError((err) {
+      if (err.status == false && err.data == 14006) {
+        setState(() {
+        });
+      }
+    });
   }
 }

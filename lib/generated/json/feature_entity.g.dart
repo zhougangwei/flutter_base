@@ -370,11 +370,7 @@ FeatureProduct $FeatureProductFromJson(Map<String, dynamic> json) {
   if (gradePrice != null) {
     featureProduct.gradePrice = gradePrice;
   }
-  final List<dynamic>? gradeInfo = (json['grade_info'] as List<dynamic>?)?.map(
-          (e) => e).toList();
-  if (gradeInfo != null) {
-    featureProduct.gradeInfo = gradeInfo;
-  }
+
   final String? amount = jsonConvert.convert<String>(json['amount']);
   if (amount != null) {
     featureProduct.amount = amount;
@@ -413,7 +409,6 @@ Map<String, dynamic> $FeatureProductToJson(FeatureProduct entity) {
   data['total_stock'] = entity.totalStock;
   data['is_combo'] = entity.isCombo;
   data['grade_price'] = entity.gradePrice;
-  data['grade_info'] = entity.gradeInfo;
   data['amount'] = entity.amount;
   data['promotion_list'] = entity.promotionList;
   data['promotion_amount'] = entity.promotionAmount;
@@ -464,7 +459,6 @@ extension FeatureProductExtension on FeatureProduct {
       ..totalStock = totalStock ?? this.totalStock
       ..isCombo = isCombo ?? this.isCombo
       ..gradePrice = gradePrice ?? this.gradePrice
-      ..gradeInfo = gradeInfo ?? this.gradeInfo
       ..amount = amount ?? this.amount
       ..promotionList = promotionList ?? this.promotionList
       ..promotionAmount = promotionAmount ?? this.promotionAmount;

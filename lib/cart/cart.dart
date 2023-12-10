@@ -2,15 +2,12 @@ import 'package:abce/login/login_locale.dart';
 import 'package:abce/utils/common_utils.dart';
 import 'package:abce/widget/number_box.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
-import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import 'check_out.dart';
@@ -47,6 +44,7 @@ class _CartPageState extends State<CartPage>
     var data = this.datapost;
     print('AACCDD还没登陆');
     getCatoPeration(data);
+    if (!LoginStatus.hasLogin()) {}
   }
 
   dispose() {
@@ -66,16 +64,7 @@ class _CartPageState extends State<CartPage>
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
         });
       } else {
-        if (res['data'] == 14007 || res['data'] == 14006) {
-          /*showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return LoginPopup(onLoginSuccess: () {
-                  Navigator.of(context).pop();
-                  bus.emit('Login', true);
-                });
-              });*/
-        }
+        if (res['data'] == 14007 || res['data'] == 14006) {}
       }
     }).catchError((err) {
       err.toString();
@@ -98,18 +87,42 @@ class _CartPageState extends State<CartPage>
   Widget build(BuildContext context) {
     super.build(context);
     var localizations = S.of(context);
-    return Scaffold(
-        body: Container(
-      child: Stack(
+    return Scaffold(body: Container(child: Builder(builder: (context) {
+      return Stack(
         children: [
-          CustomScrollView(
-              physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-              slivers: [
-                SliverToBoxAdapter(child: obtainWishTilte(localizations)),
-                buildGoodCastList(localizations),
-                SliverToBoxAdapter(child: obtainWishBottom(localizations)),
-                SliverToBoxAdapter(child: Container(height: 150.h)),
-              ]),
+          Builder(builder: (context) {
+            if (cartlist == null || cartlist?.length == 0) {
+              return Column(
+                children: [
+                  obtainWishTilte(localizations),
+                  Container(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 200.h),
+                          Icon(Icons.hourglass_empty,
+                              color: Color(0x33333333), size: 150.w),
+                          SizedBox(height: 30.h),
+                          Text("Shopping cart is empty",
+                              style: TextStyle(
+                                  color: Color(0x33333333), fontSize: 24.sp))
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return CustomScrollView(
+                  physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+                  slivers: [
+                    SliverToBoxAdapter(child: obtainWishTilte(localizations)),
+                    buildGoodCastList(localizations),
+                    SliverToBoxAdapter(child: obtainWishBottom(localizations)),
+                    SliverToBoxAdapter(child: Container(height: 150.h)),
+                  ]);
+            }
+          }),
           Positioned(
               right: 0,
               left: 0,
@@ -141,8 +154,8 @@ class _CartPageState extends State<CartPage>
                 ),
               )),
         ],
-      ),
-    ));
+      );
+    })));
   }
 
   SliverList buildGoodCastList(S localizations) {

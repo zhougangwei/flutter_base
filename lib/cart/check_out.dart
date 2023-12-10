@@ -14,6 +14,8 @@ import '../login/page_controller_provider.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import '../utils/common_utils.dart';
+import '../widget/app_drawer.dart';
+import '../widget/custom_app_bar.dart';
 import 'add_address.dart';
 import 'multi_address.dart';
 
@@ -34,6 +36,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   double totalnumberDouble = 0.0;
   String memo = '';
   var defaultship = {};
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -44,42 +47,48 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     var localizations = S.of(context);
-    return CustomScafflold(
-        body: Stack(children: [
-      CustomScrollView(
-          physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
-          slivers: [
-            SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
-            SliverToBoxAdapter(
-                child: obtainAddressTilte(context, localizations)),
-            buildGoodCastList(localizations),
-            SliverToBoxAdapter(
-                child: obtainTotalMessage(context, localizations)),
-            SliverToBoxAdapter(child: obtainBottom(context, localizations)),
-          ]),
-      Positioned(
-          right: 0,
-          left: 0,
-          bottom: 1.h,
-          child: GestureDetector(
-            onTap: () {
-              submit();
-            },
-            child: Container(
-              height: 100.h,
-              color: Color(0xffFB641B), // 自定义头部的背景颜色
-              child: Center(
-                child: Text(
-                  localizations.proceedCheckout,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+        drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
+        body: Container(
+          child: Stack(children: [
+            CustomScrollView(
+                physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
+                slivers: [
+                  SliverToBoxAdapter(
+                      child: obtainWishTilte(context, localizations)),
+                  SliverToBoxAdapter(
+                      child: obtainAddressTilte(context, localizations)),
+                  buildGoodCastList(localizations),
+                  SliverToBoxAdapter(
+                      child: obtainTotalMessage(context, localizations)),
+                  SliverToBoxAdapter(child: obtainBottom(context, localizations)),
+                ]),
+            Positioned(
+                right: 0,
+                left: 0,
+                bottom: 1.h,
+                child: GestureDetector(
+                  onTap: () {
+                    submit();
+                  },
+                  child: Container(
+                    height: 100.h,
+                    color: Color(0xffFB641B), // 自定义头部的背景颜色
+                    child: Center(
+                      child: Text(
+                        localizations.proceedCheckout,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ))
-    ]));
+                ))
+          ]),
+        ));
   }
 
   SliverList buildGoodCastList(S localizations) {
@@ -93,7 +102,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
           return Container(
               alignment: Alignment.centerLeft,
               width: double.infinity,
-
               child: Column(
                 children: [
                   obtainAddressItem(item),
@@ -151,9 +159,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                       ]),
-                  Divider(
-                    color: Colors.blueGrey,
-                    height: 1.h,
+                  SizedBox(height: 20.h),
+                  Container(
+                    padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                    child: Divider(
+                      color: Color(0x11999999),
+                      height: 1.h,
+                    ),
                   ),
                 ],
               ));
@@ -165,8 +177,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Widget obtainAddressItem(CartBeanList item) {
     return Container(
-      margin: EdgeInsets.only(right:25.h,left: 25.w),
-      color: Color(0x33999999),
+      margin: EdgeInsets.only(right: 25.h, left: 25.w),
+      color: Color(0x11999999),
       padding: EdgeInsets.all(20.h),
       child: Row(
         children: [
@@ -330,10 +342,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
   goodsinfo(id) {}
 
   Future<void> showAddressDialog(BuildContext context) async {
-    bool confirm = await showModalBottomSheet(
+    bool confirm = await showDialog(
         context: context,
-        builder: (context) {
-          return Add_Address();
+        builder: (BuildContext dialogcontext) {
+          return Material(
+              type: MaterialType.transparency,
+              child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Column(children: [
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(color: Colors.transparent),
+                    )),
+                    Add_Address()
+                  ])));
         });
     if (confirm == true) {
       this.getCatoPeration();
@@ -422,17 +447,47 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   obtainTotalMessage(BuildContext context, S localizations) {
-    return Column(children: [
-      getItem(localizations.subtotal, "",
-          (carBean?.goodsAmount ?? "0.00").toString()),
-      getItem(localizations.goodsDiscount, localizations?.discount,
-          (carBean?.goodsPmt ?? "0.00").toString()),
-      getItem(localizations.orderDiscount, localizations?.discount,
-          (carBean?.orderPmt ?? "0.00").toString()),
-      getItem(localizations.shipping, "",
-          (carBean?.costFreight ?? "0.00").toString()),
-      getItem(localizations.total, "", (carBean?.amount ?? "0.00").toString()),
-    ]);
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      child: Column(children: [
+        SizedBox(height: 10.h),
+        getItem(localizations.subtotal, "",
+            (carBean?.goodsAmount ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.goodsDiscount, localizations?.discount,
+            (carBean?.goodsPmt ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.orderDiscount, localizations?.discount,
+            (carBean?.orderPmt ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.shipping, "",
+            (carBean?.costFreight ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(
+            localizations.total, "", (carBean?.amount ?? "0.00").toString()),
+        SizedBox(height: 10.h),
+      ]),
+    );
   }
 
   Row getItem(String startText, String? middleText, String endText) {
@@ -453,67 +508,107 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   obtainBottom(BuildContext context, S localizations) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(localizations.haveCoupon,
-                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
-                GestureDetector(
-                  onTap: () {
-                    showBottomDialog(
-                        localizations.str2, localizations.useCoupon, context);
-                  },
-                  child: Text(localizations.clickCode,
-                      style: TextStyle(
-                          fontSize: 24.sp,
-                          color: Theme.of(context).primaryColor)),
-                ),
-              ],
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(
+              height: 1,
+              color: Theme.of(context).primaryColor,
             ),
-          ),
-          Text(localizations.orderNote,
-              style: TextStyle(fontSize: 24.sp, color: Colors.black)),
-          TextField(
-            style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
-            onChanged: (value) {
-              memo = value;
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xff333333), width: 1.0)),
-              hintText:
-                  "Notes about your order, e.g.special notes for delivery",
+            Container(
+              padding: EdgeInsets.only(top: 20.w, bottom: 20.w),
+              color: Color(0x33999999),
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(localizations.haveCoupon,
+                      style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                  GestureDetector(
+                    onTap: () {
+                      showBottomDialog(
+                          localizations.str2, localizations.useCoupon, context);
+                    },
+                    child: Text(localizations.clickCode,
+                        style: TextStyle(
+                            fontSize: 24.sp,
+                            color: Theme.of(context).primaryColor)),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Divider(
-            color: Theme.of(context).primaryColor,
-            height: 1.h,
-          ),
-          Column(children: [
-            Text(localizations.paymentMethod,
+            SizedBox(
+              height: 40.h,
+            ),
+            Text(localizations.orderNote,
                 style: TextStyle(fontSize: 24.sp, color: Colors.black)),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/image/icon-32.png',
-                  height: 52.h,
-                ),
-                Text(localizations.balancePayment,
-                    style: TextStyle(fontSize: 24.sp, color: Colors.black)),
-              ],
+            SizedBox(
+              height: 20.h,
             ),
-            Text(localizations.str1,
-                style: TextStyle(fontSize: 24.sp, color: Colors.black)),
-            SizedBox(height: 80.h)
-          ])
-        ]);
+            TextField(
+              style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
+              onChanged: (value) {
+                memo = value;
+              },
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color(0xff333333), width: 1.0)),
+                hintText:
+                    "Notes about your order, e.g.special notes for delivery",
+              ),
+            ),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 20.w, bottom: 20.w),
+                    color: Color(0x22999999),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(localizations.paymentMethod,
+                            style: TextStyle(
+                                fontSize: 24.sp, color: Colors.black)),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Image.asset(
+                              'assets/images/image/icon-32.png',
+                              height: 52.h,
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(localizations.balancePayment,
+                                style: TextStyle(
+                                    fontSize: 24.sp, color: Colors.black)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(localizations.str1,
+                      style: TextStyle(fontSize: 24.sp, color: Colors.black)),
+                  SizedBox(height: 280.h)
+                ])
+          ]),
+    );
   }
 
   getuserdefaultship() {

@@ -99,8 +99,7 @@ class FeatureProduct {
 	late double isCombo;
 	@JSONField(name: "grade_price")
 	late List<dynamic> gradePrice = [];
-	@JSONField(name: "grade_info")
-	late List<dynamic> gradeInfo = [];
+
 	late String amount = '';
 	@JSONField(name: "promotion_list")
 	late List<dynamic> promotionList = [];

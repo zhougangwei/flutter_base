@@ -153,6 +153,7 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
     return GestureDetector(
       onTap: () => ontap(),
       child: Container(
+        color: Color(0x01333333),
         height: 91.h,
         child: Row(
           children: [

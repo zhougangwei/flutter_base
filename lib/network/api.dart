@@ -26,9 +26,10 @@ Future<Map<String, dynamic>> ax({
     return back ;
   }
 
-  if (auth && token.isNotEmpty ){
+  if(token.isNotEmpty){
     data['token'] = token;
   }
+
   print("http： 请求了接口"+jsonEncode(data)+ "\n\n  token是"+token);
 
   final response = await http.post(
