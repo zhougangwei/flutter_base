@@ -99,33 +99,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var local = S.of(context);
     return Consumer<PageControllerProvider>(builder: (context, provider, _) {
-      final String htmlContent = '''
-      <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <style>
-		body {
-		background-color: #000000;
-		color: #FFFFFF;
-		text-align: center;
-		font-family: Arial, sans-serif;
-		margin: 0;
-		padding: 0;
-		}
-
-    </style>
-    <script src="https://assets.salesmartly.com/js/project_20217_20814_1688638738.js"></script>
-</head>
-<body>
-<noscript>
-    <strong> hhahaha</strong>
-</noscript>
-<div id="app"></div>
-</body>
-</html>
-
-    ''';
       return Stack(
         children: <Widget>[
           Scaffold(
@@ -178,26 +151,49 @@ class _HomePageState extends State<HomePage> {
           ),
           Positioned(
               right: 30.w,
-              bottom: 30.w,
-              child: Container(
-                width: 500.h,
-                height: 1000.h,
-                color: Colors.black,
-                child: WebView(
-                  initialUrl: "https://chat.ssrchat.com/service/fh41w6",
-                  javascriptMode: JavascriptMode.unrestricted,
-                ),
-              ))
+              bottom: 130.w,
+              child: GestureDetector(
+                  onTap: () {
+                    showHelp(context);
+                  },
+                  child: Image.asset('assets/images/image/message.png',
+                      width: 100.w)))
         ],
       );
     });
   }
 
-  _loadHtmlFromAssets() async {
-    String fileHtmlContents =
-        await rootBundle.loadString("assets/template.html");
-    controller.loadUrl(Uri.dataFromString(fileHtmlContents,
-            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-        .toString());
+  void showHelp(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext dialogcontext) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                children: [
+                  Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(color: Colors.transparent),
+                  )),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                        height: 1200.h,
+                        width: double.infinity,
+                        child: WebView(
+                          initialUrl: "https://chat.ssrchat.com/service/fh41w6",
+                          javascriptMode: JavascriptMode.unrestricted,
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
