@@ -45,6 +45,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   late S localizations;
 
   int num = 1;
+  int product_id = 0;
 
   @override
   void initState() {
@@ -91,6 +92,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
             //{\"853\":\"50ml\",\"854\":\"100ml\",\"856\":\"30ml\"}
             //{\"50ml\":{\"name\":\"50ml\",\"is_default\":true},\"100ml\":{\"name\":\"100ml\",\"product_id\":1618},\"30ml\":{\"name\":\"30ml\",\"product_id\":1619}}
             this.goods_data = jsonConvert.convert<GoodBeanEntity>(res['data']);
+            product_id=goods_data?.product?.id??0;
           });
           getRelatedList(goods_data?.goodsCatId);
         }
@@ -414,7 +416,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
     var data = {
       'type': '1',
       'nums': this.num,
-      'product_id': this.goods_data?.product?.id
+      'product_id': product_id
     };
     ApiClient().cartadd(data).then((res) {
       if (res['status']) {
@@ -438,7 +440,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
       if (res['status']) {
         setState(() {
           this.goods_data?.price = res['data']['price'];
-          this.goods_data?.id = res['data']['id'];
+          product_id =res['data']['id'];
           this.default_spes_desc = res['data']['default_spes_desc'];
         });
       }
