@@ -19,6 +19,7 @@ import '../utils/common_utils.dart';
 import '../utils/sp_utils.dart';
 import 'balance.dart';
 import 'login_out.dart';
+import 'orderinfo.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -32,8 +33,13 @@ class _MinePageState extends State<MinePage>
   UserInfoEntity? userinfo;
   List<dynamic>? couponlist;
   List<BalanceBeanEntity> balancelist = [];
+  ScrollController _scrollController1 = ScrollController();
+  ScrollController _scrollController2= ScrollController();
+  bool _isLoading =false;
   List<OrderBeanList>? orderlist;
   var datapost = {"page": 1, "limit": "10"};
+  int pageNum = 1;
+  int currentPage = 0;
 
   @override
   void initState() {
@@ -42,7 +48,50 @@ class _MinePageState extends State<MinePage>
     balancelist = [];
     afterLogin();
     bus.on("Login", loginState);
+    _scrollController1.addListener(_handleScroll);
+    _scrollController2.addListener(_handleScroll);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController1.removeListener(_handleScroll);
+    _scrollController2.removeListener(_handleScroll);
+    bus.off("Login", loginState);
+
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    if (_isLoading) {
+      return; // 避免重复加载
+    }
+    if(currentPage == 1){
+      if (_scrollController1.position.pixels ==
+          _scrollController1.position.maxScrollExtent) {
+        _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
+        _loadMoreData(); // 加
+        print('加载更多');
+      }
+    }else if(currentPage == 2){
+      if (_scrollController2.position.pixels ==
+          _scrollController2.position.maxScrollExtent) {
+        _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
+        _loadMoreData(); // 加
+        print('加载更多');
+      }
+    }
+
+  }
+
+  void _loadMoreData() {
+    pageNum++;
+    this.datapost['page']=pageNum.toString();
+    if(currentPage == 1){
+      getbalancelist();
+    }else if(currentPage == 2){
+      getorderlist();
+    }
   }
 
   void loginState(arg) {
@@ -177,6 +226,11 @@ class _MinePageState extends State<MinePage>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(100.h),
                 child: TabBar(
+                  onTap: (index) {
+                    setState(() {
+                      currentPage = index;
+                    });
+                  },
                   indicatorColor: Colors.white,
                   padding: EdgeInsets.all(0),
                   tabs: [
@@ -297,6 +351,7 @@ class _MinePageState extends State<MinePage>
 
   obtainOrder(S localizations) {
     return CustomScrollView(
+        controller: _scrollController2,
         physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
         slivers: [
           buildOrderList(localizations),
@@ -344,18 +399,34 @@ class _MinePageState extends State<MinePage>
                                 color: Colors.white,
                               ),
                             )),
-                        onTap: () {}),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => OrderInfoPage(ids: item.orderId)),
+                          );
+                          Navigator.pushNamed(context, 'orderdetails',
+                              arguments: {'order_id': item.orderId});
+                        }),
                     Expanded(child: Container()),
-                    GestureDetector(
-                        child: Container(
-                          padding: EdgeInsets.all(10.w),
-                          color: Color(0xffFB641B),
-                          child: Text(localizations.payNow,
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
-                        ),
-                        onTap: () {}),
+                    Builder(builder: (context) {
+                      if (item.status == 1 && item.payStatus == 1) {
+                        return GestureDetector(
+                            child: Container(
+                              padding: EdgeInsets.all(10.w),
+                              color: Color(0xffFB641B),
+                              child: Text(localizations.payNow,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            onTap: () {
+                              payorder(item.orderId);
+
+                            });
+                      } else {
+                        return Container();
+                      }
+                    }),
                   ]),
                   ListView.builder(
                     shrinkWrap: true,
@@ -486,7 +557,7 @@ class _MinePageState extends State<MinePage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   Future<void> chooseImg() async {
     showModalBottomSheet(
@@ -691,12 +762,6 @@ class _MinePageState extends State<MinePage>
     }
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    bus.off("Login", loginState);
-  }
 
   Widget obtainLoginOut() {
     if (LoginStatus.hasLogin()) {
@@ -717,4 +782,23 @@ class _MinePageState extends State<MinePage>
       return Container();
     }
   }
+
+  void payorder(order_id) {
+    var data = {
+      "ids": order_id,
+      "payment_code": 'balancepay',
+      "payment_type": 1, //1=>订单支付，2=>充值
+    };
+
+    ApiClient().payorder(data).then((res) {
+      if (res["status"]) {
+         getorderlist();
+      }
+      successToShow(res['msg']);
+    }).catchError((err) {
+      err.toString();
+    });
+  }
+
+
 }

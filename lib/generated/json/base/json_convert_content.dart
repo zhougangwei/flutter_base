@@ -12,6 +12,7 @@ import 'package:abce/shop/bean/feature_entity.dart';
 import 'package:abce/shop/bean/good_bean_entity.dart';
 import 'package:abce/shop/bean/good_cat_bean_entity.dart';
 import 'package:abce/shop/bean/order_bean_entity.dart';
+import 'package:abce/shop/bean/orderinfobean_entity.dart';
 import 'package:abce/shop/bean/page_bean_entity.dart';
 import 'package:abce/shop/bean/promotion_bean_entity.dart';
 import 'package:abce/shop/bean/qr_bean_entity.dart';
@@ -241,6 +242,35 @@ class JsonConvert {
       return data.map<OrderBeanListItems>((Map<String, dynamic> e) =>
           OrderBeanListItems.fromJson(e)).toList() as M;
     }
+    if (<OrderinfobeanEntity>[] is M) {
+      return data.map<OrderinfobeanEntity>((Map<String, dynamic> e) =>
+          OrderinfobeanEntity.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanLogistics>[] is M) {
+      return data.map<OrderinfobeanLogistics>((Map<String, dynamic> e) =>
+          OrderinfobeanLogistics.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanInvoice>[] is M) {
+      return data.map<OrderinfobeanInvoice>((Map<String, dynamic> e) =>
+          OrderinfobeanInvoice.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanItems>[] is M) {
+      return data.map<OrderinfobeanItems>((Map<String, dynamic> e) =>
+          OrderinfobeanItems.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanUser>[] is M) {
+      return data.map<OrderinfobeanUser>((Map<String, dynamic> e) =>
+          OrderinfobeanUser.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanPaymentRelItem>[] is M) {
+      return data.map<OrderinfobeanPaymentRelItem>((Map<String, dynamic> e) =>
+          OrderinfobeanPaymentRelItem.fromJson(e)).toList() as M;
+    }
+    if (<OrderinfobeanPaymentRelItemBill>[] is M) {
+      return data.map<OrderinfobeanPaymentRelItemBill>((
+          Map<String, dynamic> e) =>
+          OrderinfobeanPaymentRelItemBill.fromJson(e)).toList() as M;
+    }
     if (<PageBeanEntity>[] is M) {
       return data.map<PageBeanEntity>((Map<String, dynamic> e) =>
           PageBeanEntity.fromJson(e)).toList() as M;
@@ -340,6 +370,15 @@ class JsonConvertClassCollection {
     (OrderBeanEntity).toString(): OrderBeanEntity.fromJson,
     (OrderBeanList).toString(): OrderBeanList.fromJson,
     (OrderBeanListItems).toString(): OrderBeanListItems.fromJson,
+    (OrderinfobeanEntity).toString(): OrderinfobeanEntity.fromJson,
+    (OrderinfobeanLogistics).toString(): OrderinfobeanLogistics.fromJson,
+    (OrderinfobeanInvoice).toString(): OrderinfobeanInvoice.fromJson,
+    (OrderinfobeanItems).toString(): OrderinfobeanItems.fromJson,
+    (OrderinfobeanUser).toString(): OrderinfobeanUser.fromJson,
+    (OrderinfobeanPaymentRelItem).toString(): OrderinfobeanPaymentRelItem
+        .fromJson,
+    (OrderinfobeanPaymentRelItemBill)
+        .toString(): OrderinfobeanPaymentRelItemBill.fromJson,
     (PageBeanEntity).toString(): PageBeanEntity.fromJson,
     (PageBeanChild).toString(): PageBeanChild.fromJson,
     (PageBeanChildProduct).toString(): PageBeanChildProduct.fromJson,

@@ -5,12 +5,14 @@ typedef MyCallback = void Function(int param);
 
 class NumberBox extends StatefulWidget {
   final int min;
+  final int defaultValue;
   final bool disabledInput;
   final MyCallback onChange;
 
   const NumberBox({
     Key? key,
     required this.onChange,
+    this.defaultValue = 1,
     this.min = 1,
     this.disabledInput = true,
   }) : super(key: key);
@@ -24,9 +26,17 @@ class _NumberBoxState extends State<NumberBox> {
   int currentValue = 1;
 
   @override
+  void didUpdateWidget(covariant NumberBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    currentValue = widget.defaultValue;
+    _controller.text = widget.defaultValue.toString();
+  }
+
+  @override
   void initState() {
     super.initState();
-    _controller.text = widget.min.toString(); // 初始化文本为最小值
+    currentValue = widget.defaultValue;
+    _controller.text = widget.defaultValue.toString(); // 初始化文本为最小值
   }
 
   void _increment() {
@@ -61,7 +71,7 @@ class _NumberBoxState extends State<NumberBox> {
             _decrement();
           },
           child: Padding(
-            padding:  EdgeInsets.all(10.w),
+            padding: EdgeInsets.all(10.w),
             child: Icon(
               Icons.remove_circle_outline,
               color: Color(0xff999999),
@@ -95,7 +105,7 @@ class _NumberBoxState extends State<NumberBox> {
             _increment();
           },
           child: Padding(
-            padding:  EdgeInsets.all(10.w),
+            padding: EdgeInsets.all(10.w),
             child: Icon(Icons.add_circle_outline,
                 color: Color(0xff999999), size: 58.w),
           ),

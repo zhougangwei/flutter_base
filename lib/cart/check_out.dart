@@ -446,49 +446,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-  obtainTotalMessage(BuildContext context, S localizations) {
-    return Container(
-      padding: EdgeInsets.only(left: 20.w, right: 20.w),
-      child: Column(children: [
-        SizedBox(height: 10.h),
-        getItem(localizations.subtotal, "",
-            (carBean?.goodsAmount ?? "0.00").toString()),
-        SizedBox(height: 20.h),
-        Divider(
-          height: 1,
-          color: Color(0x33999999),
-        ),
-        SizedBox(height: 20.h),
-        getItem(localizations.goodsDiscount, localizations?.discount,
-            (carBean?.goodsPmt ?? "0.00").toString()),
-        SizedBox(height: 20.h),
-        Divider(
-          height: 1,
-          color: Color(0x33999999),
-        ),
-        SizedBox(height: 20.h),
-        getItem(localizations.orderDiscount, localizations?.discount,
-            (carBean?.orderPmt ?? "0.00").toString()),
-        SizedBox(height: 20.h),
-        Divider(
-          height: 1,
-          color: Color(0x33999999),
-        ),
-        SizedBox(height: 20.h),
-        getItem(localizations.shipping, "",
-            (carBean?.costFreight ?? "0.00").toString()),
-        SizedBox(height: 20.h),
-        Divider(
-          height: 1,
-          color: Color(0x33999999),
-        ),
-        SizedBox(height: 20.h),
-        getItem(
-            localizations.total, "", (carBean?.amount ?? "0.00").toString()),
-        SizedBox(height: 10.h),
-      ]),
-    );
-  }
+    obtainTotalMessage(BuildContext context, S localizations) {
+      return Container(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w),
+        child: Column(children: [
+          SizedBox(height: 10.h),
+          getItem(localizations.subtotal, "",
+              (carBean?.goodsAmount ?? "0.00").toString()),
+          SizedBox(height: 20.h),
+          Divider(
+            height: 1,
+            color: Color(0x33999999),
+          ),
+          SizedBox(height: 20.h),
+          getItem(localizations.goodsDiscount, localizations?.discount,
+              (carBean?.goodsPmt ?? "0.00").toString()),
+          SizedBox(height: 20.h),
+          Divider(
+            height: 1,
+            color: Color(0x33999999),
+          ),
+          SizedBox(height: 20.h),
+          getItem(localizations.orderDiscount, localizations?.discount,
+              (carBean?.orderPmt ?? "0.00").toString()),
+          SizedBox(height: 20.h),
+          Divider(
+            height: 1,
+            color: Color(0x33999999),
+          ),
+          SizedBox(height: 20.h),
+          getItem(localizations.shipping, "",
+              (carBean?.costFreight ?? "0.00").toString()),
+          SizedBox(height: 20.h),
+          Divider(
+            height: 1,
+            color: Color(0x33999999),
+          ),
+          SizedBox(height: 20.h),
+          getItem(
+              localizations.total, "", (carBean?.amount ?? "0.00").toString()),
+          SizedBox(height: 10.h),
+        ]),
+      );
+    }
 
   Row getItem(String startText, String? middleText, String endText) {
     return Row(

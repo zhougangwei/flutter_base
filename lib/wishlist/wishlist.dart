@@ -17,10 +17,13 @@ class WishListPage extends StatefulWidget {
 }
 
 class _WishListPageState extends State<WishListPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin,SingleTickerProviderStateMixin  {
+  ScrollController _scrollController = ScrollController();
   List<CollectItemEntity> wishlishlist = [];
+  int pageNum=1;
   var datapost = {"page": "1", "limit": "10"};
-
+  bool _isLoading =false;
+  double _lastScrollPosition =0;
   @override
   void initState() {
     print('AACCDD执行了WishListPage 1initState');
@@ -30,22 +33,54 @@ class _WishListPageState extends State<WishListPage>
             jsonConvert.convertListNotNull<CollectItemEntity>(value) ?? [];
       });
     });
+    pageNum=1;
+    getWishList();
+    _scrollController.addListener(_handleScroll);
+  }
+
+
+  void _handleScroll() {
+    if (_isLoading) {
+      return; // 避免重复加载
+    }
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
+      _loadMoreData(); // 加
+      print('加载更多');
+    }else{
+      _lastScrollPosition = _scrollController.position.pixels;
+    }
+  }
+
+  _loadMoreData(){
+    pageNum++;
+    this.datapost['page']=pageNum.toString();
     getWishList();
   }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_handleScroll);
+    super.dispose();
+  }
+
 
   void getWishList() {
     var data = this.datapost;
     ApiClient().goodscollectionlist(data).then((res) {
       if (res['status']) {
         setState(() {
-          wishlishlist = jsonConvert
+          wishlishlist.addAll(jsonConvert
                   .convertListNotNull<CollectItemEntity>(res['data']['list']) ??
-              [];
+              []);
           JsonCacheManager().cacheJson("wishList", res['data']['list']);
+          _isLoading=false;
         });
       }
     }).catchError((err) {
       err.toString();
+      _isLoading=false;
     });
   }
 
@@ -55,6 +90,7 @@ class _WishListPageState extends State<WishListPage>
     var localizations = S.of(context);
     return Scaffold(
         body: CustomScrollView(
+            controller: _scrollController,
             physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
             slivers: [
           SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
@@ -92,7 +128,7 @@ class _WishListPageState extends State<WishListPage>
           itemCount: wishlishlist.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // 一行显示
-            childAspectRatio: 335 / 500, // 调整子项的宽高比例
+            childAspectRatio: 335 / 532, // 调整子项的宽高比例
             crossAxisSpacing: 10, // 子项之间的横向间距
             mainAxisSpacing: 10, // 两个子项
           ),

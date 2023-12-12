@@ -41,9 +41,9 @@ class _CartPageState extends State<CartPage>
   }
 
   void gotoLogin() {
-    var data = this.datapost;
+
     print('AACCDD还没登陆');
-    getCatoPeration(data);
+    getCatoPeration();
     if (!LoginStatus.hasLogin()) {}
   }
 
@@ -53,16 +53,17 @@ class _CartPageState extends State<CartPage>
     bus.off('Login', afterLogin);
   }
 
-  void getCatoPeration(Map<String, String> data) {
+  void getCatoPeration() {
+    var data = this.datapost;
     ApiClient().CatoPeration(data).then((res) {
       if (res['status']) {
-        setState(() {
           CartBeanEntity? carBean =
               jsonConvert.convert<CartBeanEntity>(res['data']);
           cartlist = carBean?.list;
           refreshTotalNum();
+          setState(() {
+          });
           //totalnumber = totalnumberDouble.toStringAsFixed(2);
-        });
       } else {
         if (res['data'] == 14007 || res['data'] == 14006) {}
       }
@@ -72,15 +73,18 @@ class _CartPageState extends State<CartPage>
   }
 
   void refreshTotalNum() {
-    if (cartlist?.length == 0) {
-      totalnumberDouble = 0.0;
+    this.totalnumberDouble = 0.0;
+
+    if(cartlist!=null){
+      for (var i = 0; i < cartlist!.length; i++) {
+        CartBeanList item = cartlist![i];
+        item.itemnums = item.nums;
+        item.total = (item.nums.toDouble() * double.parse(item.products.price))
+            .toStringAsFixed(2);
+        totalnumberDouble += item.nums * double.parse(item.products.price);
+      }
     }
-    cartlist?.forEach((item) {
-      item.itemnums = item.nums;
-      item.total = (item.nums.toDouble() * double.parse(item.products.price))
-          .toStringAsFixed(2);
-      totalnumberDouble += item.nums * double.parse(item.products.price);
-    });
+
   }
 
   @override
@@ -229,10 +233,8 @@ class _CartPageState extends State<CartPage>
                                         )),
                                     Text(
                                       "\$" +
-                                          item.products.price +
-                                          "-" +
-                                          "\$" +
-                                          item.products.mktprice,
+                                          item.products.price ,
+
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -255,6 +257,7 @@ class _CartPageState extends State<CartPage>
                                           fontSize: 24.sp,
                                         )),
                                     NumberBox(
+                                      defaultValue: item?.itemnums??1 ,
                                       onChange: (int nums) {
                                         unmchange(item.id, nums);
                                       },
@@ -269,10 +272,7 @@ class _CartPageState extends State<CartPage>
                                     Text(localizations.subtotal),
                                     Text(
                                       "\$" +
-                                          item.products.price +
-                                          "-" +
-                                          "\$" +
-                                          item.products.mktprice,
+                                          item.total,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,

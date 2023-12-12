@@ -7,7 +7,7 @@ UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   if (id != null) {
     userInfoEntity.id = id;
   }
-  final String username = json['username'];
+  final String? username = jsonConvert.convert<String>(json['username']);
   if (username != null) {
     userInfoEntity.username = username;
   }

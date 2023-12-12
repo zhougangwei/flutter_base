@@ -370,7 +370,6 @@ FeatureProduct $FeatureProductFromJson(Map<String, dynamic> json) {
   if (gradePrice != null) {
     featureProduct.gradePrice = gradePrice;
   }
-
   final String? amount = jsonConvert.convert<String>(json['amount']);
   if (amount != null) {
     featureProduct.amount = amount;
@@ -435,7 +434,6 @@ extension FeatureProductExtension on FeatureProduct {
     double? totalStock,
     double? isCombo,
     List<dynamic>? gradePrice,
-    List<dynamic>? gradeInfo,
     String? amount,
     List<dynamic>? promotionList,
     double? promotionAmount,

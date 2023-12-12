@@ -29,11 +29,9 @@ class _LoginPopupState extends State<LoginPopup> {
   String email = '214979627@qq.com';
   String code = '';
   String password = '123456';
-  TextEditingController emailController =
-      TextEditingController(text: '214979627@qq.com');
+  late TextEditingController emailController;
   TextEditingController codeController = TextEditingController();
-  TextEditingController passwordController =
-      TextEditingController(text: '123456');
+  late TextEditingController passwordController;
   TextEditingController againPwdController = TextEditingController();
   TextEditingController captchaController = TextEditingController();
 
@@ -49,6 +47,8 @@ class _LoginPopupState extends State<LoginPopup> {
   @override
   void initState() {
     super.initState();
+    emailController = TextEditingController(text: SPUtils.getString('email'));
+    passwordController = TextEditingController(text: SPUtils.getString('password'));
     getcodeimage();
   }
 
@@ -60,7 +60,6 @@ class _LoginPopupState extends State<LoginPopup> {
 
   void getCode(GlobalKey<UVerificationCodeState> verificationCodeKey) {
     String type = '';
-    email = '892537848@qq.com';
     if (email.isEmpty) {
       errorToShow('Please enter your email');
       return;
@@ -89,7 +88,7 @@ class _LoginPopupState extends State<LoginPopup> {
 
   void getcodeimage() {
     ApiClient().sendCaptcha({}).then((res) {
-      print('执行到这了' + res['status'].toString()+res['msg']);
+      print('执行到这了' + res['status'].toString() + res['msg']);
       if (res['status']) {
         setState(() {
           this.codeImage = res['data']['captcha_image'];
@@ -128,7 +127,7 @@ class _LoginPopupState extends State<LoginPopup> {
         return;
       }
       if (againPwd != password) {
-         errorToShow('Inconsistent input, please confirm');
+        errorToShow('Inconsistent input, please confirm');
         return;
       }
       ApiClient().login(data).then((res) {
@@ -136,10 +135,12 @@ class _LoginPopupState extends State<LoginPopup> {
           SPUtils.setString('token', res['data']);
           widget.onLoginSuccess!();
           successToShow('Login succeeded');
+          SPUtils.setString('email', email);
+          SPUtils.setString('password', password);
           // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
-        }else{
+        } else {
           errorToShow(res['msg']);
         }
       });
@@ -153,7 +154,7 @@ class _LoginPopupState extends State<LoginPopup> {
           // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
-        }else{
+        } else {
           errorToShow(res['msg']);
         }
       });
@@ -170,7 +171,7 @@ class _LoginPopupState extends State<LoginPopup> {
           loginType = 1;
           showLogin = false;
           Navigator.of(context).pop();
-        }else{
+        } else {
           errorToShow(res['msg']);
         }
       });

@@ -75,6 +75,8 @@ class _Add_AddressState extends State<Add_Address> {
   Widget build(BuildContext context) {
     var localizations = S.of(context);
     return Container(
+      color:Colors.white,
+      height: 1000.h,
         child: Stack(
       children: [
         Column(
