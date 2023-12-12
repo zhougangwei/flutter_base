@@ -138,6 +138,9 @@ class _WishListPageState extends State<WishListPage>
               onTap: () => goodsinfo(it.id),
               child: GoodItem(
                 callback: () {
+                  pageNum=1;
+                  wishlishlist=[];
+                  this.datapost['page']=pageNum.toString();
                   getWishList();
                 },
                 isfav: true,

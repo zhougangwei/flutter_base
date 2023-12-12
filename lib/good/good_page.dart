@@ -10,6 +10,8 @@ import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
 import '../utils/common_utils.dart';
+import '../widget/app_drawer.dart';
+import '../widget/custom_app_bar.dart';
 import '../widget/custom_scaffoldr.dart';
 import '../widget/number_box.dart';
 import '../widget/rating_widget.dart';
@@ -26,9 +28,10 @@ class GoodPage extends StatefulWidget {
   final int goods_id;
 }
 
-class _GoodPageState extends State<GoodPage> {
+class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin {
   List<FeatureEntity> featurednlist = [];
   final GlobalKey<HtmlWidgetState> _html_key = GlobalKey<HtmlWidgetState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   GoodBeanEntity? goods_data;
 
@@ -53,7 +56,10 @@ class _GoodPageState extends State<GoodPage> {
   @override
   Widget build(BuildContext context) {
     localizations = S.of(context);
-    return CustomScafflold(
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+    drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
         slivers: [
@@ -508,4 +514,8 @@ class _GoodPageState extends State<GoodPage> {
       }
     }).catchError((err) {});
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

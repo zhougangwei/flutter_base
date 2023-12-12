@@ -3,14 +3,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class CommonUtils {}
 
-Future<void> errorToShow( msg, {int duration = 1500}) async {
+Future<void> errorToShow( msg, {int duration = 1000}) async {
   try {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xff072D8C),
         textColor: Colors.white,
         fontSize: 16.0,
 
@@ -20,14 +20,14 @@ Future<void> errorToShow( msg, {int duration = 1500}) async {
   }
 }
 
-Future<void> successToShow(String msg, {int duration = 1500}) async {
+Future<void> successToShow(String msg, {int duration = 1000}) async {
   try {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xff072D8C),
         textColor: Colors.white,
         fontSize: 16.0,
     );
