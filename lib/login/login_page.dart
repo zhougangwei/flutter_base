@@ -26,9 +26,9 @@ class _LoginPopupState extends State<LoginPopup> {
   String codeTips = 'Get Code';
   String codeImage = '';
   int loginStatus = 1;
-  String email = '214979627@qq.com';
+  String email = '';
   String code = '';
-  String password = '123456';
+  String password = '';
   late TextEditingController emailController;
   TextEditingController codeController = TextEditingController();
   late TextEditingController passwordController;
@@ -47,8 +47,17 @@ class _LoginPopupState extends State<LoginPopup> {
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController(text: SPUtils.getString('email'));
-    passwordController = TextEditingController(text: SPUtils.getString('password'));
+    if(SPUtils.getString('email').isNotEmpty){
+      emailController = TextEditingController(text: SPUtils.getString('email'));
+      email = SPUtils.getString('email');
+    }
+    if(SPUtils.getString('password').isNotEmpty){
+      passwordController =
+          TextEditingController(text: SPUtils.getString('password'));
+      password = SPUtils.getString('password');
+    }
+
+
     getcodeimage();
   }
 
@@ -150,6 +159,8 @@ class _LoginPopupState extends State<LoginPopup> {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
           successToShow('Sign succeeded');
+          SPUtils.setString('email', email);
+          SPUtils.setString('password', password);
           loginType = 1;
           showLogin = false;
           widget.onLoginSuccess!();
@@ -166,6 +177,8 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().forgetpwd(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
+          SPUtils.setString('email', email);
+          SPUtils.setString('password', password);
           loginType = 1;
           showLogin = false;
           Navigator.of(context).pop();
@@ -282,6 +295,7 @@ class _LoginPopupState extends State<LoginPopup> {
                 height: 88.h,
                 padding: EdgeInsets.only(left: 32.w, right: 32.w),
                 child: TextField(
+                  obscureText: true,
                   style: TextStyle(fontSize: 24.sp, color: Color(0xff666666)),
                   controller: passwordController,
                   onChanged: (value) {

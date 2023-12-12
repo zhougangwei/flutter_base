@@ -100,20 +100,36 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                    child: Container(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      },
+                      child: Container(
+                  alignment: Alignment.center,
+                  height: 100.h,
                   child: Text(localizations.mend,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 28.sp, color: Color(0xff072D8C))),
-                )),
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 28.sp, color: Color(0xff072D8C))),
+                ),
+                    )),
                 Expanded(
-                    child: Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      },
+                      child: Container(
+                  alignment: Alignment.center,
+                  height: 100.h,
                   color: Color(0xfff8f8f8),
                   child: Text(localizations.categories,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
-                ))
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 28.sp, color: Color(0xff333333))),
+                ),
+                    ))
               ],
             ),
           ),
