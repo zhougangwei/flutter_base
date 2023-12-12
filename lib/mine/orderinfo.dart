@@ -11,6 +11,8 @@ import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
 import '../utils/common_utils.dart';
+import '../widget/app_drawer.dart';
+import '../widget/custom_app_bar.dart';
 import '../widget/good_item.dart';
 
 class OrderInfoPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class OrderInfoPage extends StatefulWidget {
 
 class _OrderInfoPageState extends State<OrderInfoPage> {
   OrderinfobeanEntity? orderInfo;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<OrderinfobeanItems>? orderlist;
 
@@ -35,19 +38,25 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   @override
   Widget build(BuildContext context) {
     var localizations = S.of(context);
-    return CustomScafflold(
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+        drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
         body: CustomScrollView(
             physics: ClampingScrollPhysics(), // 可选的，设置滚动物理属性
             slivers: [
-          SliverToBoxAdapter(child: obtainWishTilte(context, localizations)),
-          SliverToBoxAdapter(
-              child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(top: 30.h, left: 20.w, bottom: 30.h),
-                  child: Text(localizations.yourOrder))),
-          buildGoodCastList(localizations),
-          SliverToBoxAdapter(child: obtainTotalMessage(context, localizations)),
-        ]));
+              SliverToBoxAdapter(
+                  child: obtainWishTilte(context, localizations)),
+              SliverToBoxAdapter(
+                  child: Container(
+                      color: Colors.white,
+                      padding:
+                          EdgeInsets.only(top: 30.h, left: 20.w, bottom: 30.h),
+                      child: Text(localizations.yourOrder))),
+              buildGoodCastList(localizations),
+              SliverToBoxAdapter(
+                  child: obtainTotalMessage(context, localizations)),
+            ]));
   }
 
   Column obtainWishTilte(BuildContext context, S localizations) {
@@ -116,7 +125,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                             child: Container(
                               width: 200.w,
                               child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     item.name,
