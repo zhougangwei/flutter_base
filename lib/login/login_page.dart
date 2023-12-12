@@ -133,13 +133,13 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().login(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
-          widget.onLoginSuccess!();
           successToShow('Login succeeded');
           SPUtils.setString('email', email);
           SPUtils.setString('password', password);
           // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
+          widget.onLoginSuccess!();
         } else {
           errorToShow(res['msg']);
         }
@@ -149,11 +149,10 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().passwordlogin(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
-          widget.onLoginSuccess!();
           successToShow('Sign succeeded');
-          // await ApiClient().userInfo();
           loginType = 1;
           showLogin = false;
+          widget.onLoginSuccess!();
         } else {
           errorToShow(res['msg']);
         }
@@ -167,10 +166,10 @@ class _LoginPopupState extends State<LoginPopup> {
       ApiClient().forgetpwd(data).then((res) {
         if (res['status']) {
           SPUtils.setString('token', res['data']);
-          successToShow('Plase sign');
           loginType = 1;
           showLogin = false;
           Navigator.of(context).pop();
+          successToShow('Plase sign');
         } else {
           errorToShow(res['msg']);
         }
