@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:abce/cart/cart.dart';
+import 'package:abce/network/user.dart';
 import 'package:abce/shop/shop_goods_scrollview.dart';
+import 'package:abce/update/update_dialog.dart';
 import 'package:abce/utils/sp_utils.dart';
 import 'package:abce/widget/app_drawer.dart';
 import 'package:abce/widget/custom_app_bar.dart';
@@ -11,9 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:r_upgrade/r_upgrade.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'dart:io' show Platform;
 import 'generated/l10n.dart';
 import 'language/current_locale.dart';
 import 'login/page_controller_provider.dart';
@@ -43,6 +47,7 @@ class ShoppingApp extends StatelessWidget {
       minTextAdapt: false, // 不允许字体缩放
     );
 
+
     return Consumer<CurrentLocale>(builder: (context, currentLocale, _) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -61,6 +66,8 @@ class ShoppingApp extends StatelessWidget {
       );
     });
   }
+
+
 }
 
 class HomePage extends StatefulWidget {
@@ -73,6 +80,50 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     print('AACCDD执行了MainPage initState');
     super.initState();
+    Future.delayed(Duration(milliseconds: 1500), () {
+      upgrade(context);
+    });
+  }
+
+  Future<void> upgrade(BuildContext scontext) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    print("version:" + version);
+    String type = Platform.isAndroid ? 'android' : Platform.isIOS
+        ? 'ios'
+        : 'other';
+    ApiClient().checkUpdate({'version': version, 'type':type}).then((value) {
+      if (value != null) {
+        showDialog(
+          context: scontext,
+          builder: (BuildContext context) {
+            return UpdateDialog(
+              message: 'A new version is available, please update to the latest version for a better experience.',
+              onConfirm: () {
+                Navigator.of(context).pop();
+                upgradeFromUrl();
+              },
+            );
+          },
+        );
+      }
+    });
+  }
+
+  void upgradeFromUrl() async {
+    if (Platform.isIOS) {
+      bool? isSuccess = await RUpgrade.upgradeFromAppStore(
+        '您的AppId', //例如:微信的AppId:414478124
+      );
+    } else if (Platform.isAndroid) {
+
+      int? id = await RUpgrade.upgrade(
+        'https://raw.githubusercontent.com/rhymelph/r_upgrade/master/apk/app-release.apk',
+        fileName: 'app-release.apk',installType: RUpgradeInstallType.normal,);
+      if(id!=null){
+        RUpgrade.install(id);
+      }
+    }
   }
 
   final List<Widget> _pages = [
@@ -85,7 +136,8 @@ class _HomePageState extends State<HomePage> {
 
   void _onTabTapped(int index) {
     setState(() {
-      Provider.of<PageControllerProvider>(context, listen: false)
+      Provider
+          .of<PageControllerProvider>(context, listen: false)
           .pageController
           .jumpToPage(index);
     });
@@ -175,11 +227,11 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                       child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(color: Colors.transparent),
-                  )),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(color: Colors.transparent),
+                      )),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(

@@ -742,6 +742,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
+  package_info:
+    dependency: "direct main"
+    description:
+      name: package_info
+      sha256: "6c07d9d82c69e16afeeeeb6866fe43985a20b3b50df243091bfc4a4ad2b03b75"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.2"
   path:
     dependency: "direct main"
     description:
@@ -902,6 +910,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.3"
+  r_upgrade:
+    dependency: "direct main"
+    description:
+      name: r_upgrade
+      sha256: "14337dd29cf67265ec86e1d518212cb6b6eafe9167fd366b050ccb1656461c55"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.4.2"
   riverpod:
     dependency: transitive
     description:

@@ -236,4 +236,9 @@ class ApiClient {
     params['method'] = 'user.sendCaptcha';
     return await post(url: url, params: params, auth: false, showToast: false);
   }
+
+  Future<dynamic> checkUpdate(Map<String, dynamic> params) async{
+    params['method'] = 'common.checkVersion';
+    return await post(url: url, params: params, auth: false, showToast: false);
+  }
 }
