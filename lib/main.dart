@@ -47,7 +47,6 @@ class ShoppingApp extends StatelessWidget {
       minTextAdapt: false, // 不允许字体缩放
     );
 
-
     return Consumer<CurrentLocale>(builder: (context, currentLocale, _) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -66,8 +65,6 @@ class ShoppingApp extends StatelessWidget {
       );
     });
   }
-
-
 }
 
 class HomePage extends StatefulWidget {
@@ -89,24 +86,27 @@ class _HomePageState extends State<HomePage> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     print("version:" + version);
-    String type = Platform.isAndroid ? 'android' : Platform.isIOS
-        ? 'ios'
-        : 'other';
-    ApiClient().checkUpdate({'version': version, 'type':type}).then((value) {
-      if (value != null) {
-        showDialog(
-          context: scontext,
-          builder: (BuildContext context) {
-            return UpdateDialog(
-              message: 'A new version is available, please update to the latest version for a better experience.',
-              onConfirm: () {
-                Navigator.of(context).pop();
-                upgradeFromUrl();
-              },
-            );
-          },
-        );
-      }
+    String type = Platform.isAndroid
+        ? "1"
+        : Platform.isIOS
+            ? '2'
+            : '3';
+    ApiClient().checkUpdate({'version': version, 'type': type}).then((res) {
+        if (res != null&& res['status'] == false) {
+          showDialog(
+            context: scontext,
+            builder: (BuildContext context) {
+              return UpdateDialog(
+                message:
+                    'A new version is available, please update to the latest version for a better experience.',
+                onConfirm: () {
+                  Navigator.of(context).pop();
+                  upgradeFromUrl();
+                },
+              );
+            },
+          );
+        }
     });
   }
 
@@ -116,11 +116,12 @@ class _HomePageState extends State<HomePage> {
         '您的AppId', //例如:微信的AppId:414478124
       );
     } else if (Platform.isAndroid) {
-
       int? id = await RUpgrade.upgrade(
         'https://raw.githubusercontent.com/rhymelph/r_upgrade/master/apk/app-release.apk',
-        fileName: 'app-release.apk',installType: RUpgradeInstallType.normal,);
-      if(id!=null){
+        fileName: 'app-release.apk',
+        installType: RUpgradeInstallType.normal,
+      );
+      if (id != null) {
         RUpgrade.install(id);
       }
     }
@@ -136,8 +137,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onTabTapped(int index) {
     setState(() {
-      Provider
-          .of<PageControllerProvider>(context, listen: false)
+      Provider.of<PageControllerProvider>(context, listen: false)
           .pageController
           .jumpToPage(index);
     });
@@ -227,11 +227,11 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(color: Colors.transparent),
-                      )),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(color: Colors.transparent),
+                  )),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
