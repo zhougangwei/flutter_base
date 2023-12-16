@@ -242,12 +242,6 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                                   imageUrl: it.imageUrl,
                                   width: 295.w,
                                   height: 320.h,
-                                  placeholder: (context, url) =>
-                                      Icon(
-                                        Icons.downloading,
-                                        size: 141.w,
-                                        color: Color(0x22333333),
-                                      ),
                                   errorWidget: (context, url, error) => Icon(
                                     Icons.downloading,
                                     size: 141.w,
@@ -325,12 +319,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
                     child: CachedNetworkImage(
                       width: 140.w,
                       imageUrl: item.image,
-                      placeholder: (context, url) =>
-                          Icon(
-                            Icons.downloading,
-                            size: 141.w,
-                            color: Color(0x22333333),
-                          ),
+
                       errorWidget: (context, url, error) => Icon(
                         Icons.downloading,
                         size: 141.w,

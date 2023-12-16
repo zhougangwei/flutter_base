@@ -2,9 +2,11 @@ import 'package:abce/network/json_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../good/good_page.dart';
+import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
 import '../widget/good_item.dart';
@@ -17,13 +19,14 @@ class WishListPage extends StatefulWidget {
 }
 
 class _WishListPageState extends State<WishListPage>
-    with AutomaticKeepAliveClientMixin,SingleTickerProviderStateMixin  {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
   List<CollectItemEntity> wishlishlist = [];
-  int pageNum=1;
+  int pageNum = 1;
   var datapost = {"page": "1", "limit": "10"};
-  bool _isLoading =false;
-  double _lastScrollPosition =0;
+  bool _isLoading = false;
+  double _lastScrollPosition = 0;
+
   @override
   void initState() {
     print('AACCDD执行了WishListPage 1initState');
@@ -33,11 +36,10 @@ class _WishListPageState extends State<WishListPage>
             jsonConvert.convertListNotNull<CollectItemEntity>(value) ?? [];
       });
     });
-    pageNum=1;
+    pageNum = 1;
     getWishList();
     _scrollController.addListener(_handleScroll);
   }
-
 
   void _handleScroll() {
     if (_isLoading) {
@@ -48,14 +50,14 @@ class _WishListPageState extends State<WishListPage>
       _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
       _loadMoreData(); // 加
       print('加载更多');
-    }else{
+    } else {
       _lastScrollPosition = _scrollController.position.pixels;
     }
   }
 
-  _loadMoreData(){
+  _loadMoreData() {
     pageNum++;
-    this.datapost['page']=pageNum.toString();
+    this.datapost['page'] = pageNum.toString();
     getWishList();
   }
 
@@ -64,7 +66,6 @@ class _WishListPageState extends State<WishListPage>
     _scrollController.removeListener(_handleScroll);
     super.dispose();
   }
-
 
   void getWishList() {
     var data = this.datapost;
@@ -75,12 +76,23 @@ class _WishListPageState extends State<WishListPage>
                   .convertListNotNull<CollectItemEntity>(res['data']['list']) ??
               []);
           JsonCacheManager().cacheJson("wishList", res['data']['list']);
-          _isLoading=false;
+          _isLoading = false;
         });
+      } else {
+        if (res['data'] == 14007 || res['data'] == 14006) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return LoginPopup(onLoginSuccess: () {
+                  Navigator.of(context).pop();
+                  bus.emit('Login', true);
+                });
+              });
+        }
       }
     }).catchError((err) {
       err.toString();
-      _isLoading=false;
+      _isLoading = false;
     });
   }
 
@@ -138,9 +150,9 @@ class _WishListPageState extends State<WishListPage>
               onTap: () => goodsinfo(it.id),
               child: GoodItem(
                 callback: () {
-                  pageNum=1;
-                  wishlishlist=[];
-                  this.datapost['page']=pageNum.toString();
+                  pageNum = 1;
+                  wishlishlist = [];
+                  this.datapost['page'] = pageNum.toString();
                   getWishList();
                 },
                 isfav: true,

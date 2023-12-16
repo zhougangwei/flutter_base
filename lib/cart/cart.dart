@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
 import 'check_out.dart';
@@ -57,15 +58,23 @@ class _CartPageState extends State<CartPage>
     var data = this.datapost;
     ApiClient().CatoPeration(data).then((res) {
       if (res['status']) {
-          CartBeanEntity? carBean =
-              jsonConvert.convert<CartBeanEntity>(res['data']);
-          cartlist = carBean?.list;
-          refreshTotalNum();
-          setState(() {
-          });
-          //totalnumber = totalnumberDouble.toStringAsFixed(2);
+        CartBeanEntity? carBean =
+            jsonConvert.convert<CartBeanEntity>(res['data']);
+        cartlist = carBean?.list;
+        refreshTotalNum();
+        setState(() {});
+        //totalnumber = totalnumberDouble.toStringAsFixed(2);
       } else {
-        if (res['data'] == 14007 || res['data'] == 14006) {}
+        if (res['data'] == 14007 || res['data'] == 14006) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return LoginPopup(onLoginSuccess: () {
+                    Navigator.of(context).pop();
+                    bus.emit('Login', true);
+                  });
+                });
+        }
       }
     }).catchError((err) {
       err.toString();
@@ -75,7 +84,7 @@ class _CartPageState extends State<CartPage>
   void refreshTotalNum() {
     this.totalnumberDouble = 0.0;
 
-    if(cartlist!=null){
+    if (cartlist != null) {
       for (var i = 0; i < cartlist!.length; i++) {
         CartBeanList item = cartlist![i];
         item.itemnums = item.nums;
@@ -84,7 +93,6 @@ class _CartPageState extends State<CartPage>
         totalnumberDouble += item.nums * double.parse(item.products.price);
       }
     }
-
   }
 
   @override
@@ -127,36 +135,41 @@ class _CartPageState extends State<CartPage>
                   ]);
             }
           }),
-          Positioned(
-              right: 0,
-              left: 0,
-              bottom: 1.h,
-              child: GestureDetector(
-                onTap: () {
-                  String ids = '';
-                  cartlist?.forEach((item) {
-                    if (ids != '') {
-                      ids += ',';
-                    }
-                    ids += item.id.toString();
-                  });
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CheckoutPage(ids: ids)));
-                },
-                child: Container(
-                  height: 100.h,
-                  color: Color(0xffFB641B), // 自定义头部的背景颜色
-                  child: Center(
-                    child: Text(
-                      localizations.proceedCheckout,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
+          Builder(builder: (context) {
+            if (cartlist == null || cartlist?.length == 0) {
+              return Container();
+            }
+            return Positioned(
+                right: 0,
+                left: 0,
+                bottom: 1.h,
+                child: GestureDetector(
+                  onTap: () {
+                    String ids = '';
+                    cartlist?.forEach((item) {
+                      if (ids != '') {
+                        ids += ',';
+                      }
+                      ids += item.id.toString();
+                    });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CheckoutPage(ids: ids)));
+                  },
+                  child: Container(
+                    height: 100.h,
+                    color: Color(0xffFB641B), // 自定义头部的背景颜色
+                    child: Center(
+                      child: Text(
+                        localizations.proceedCheckout,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )),
+                ));
+          }),
         ],
       );
     })));
@@ -232,9 +245,7 @@ class _CartPageState extends State<CartPage>
                                           fontSize: 24.sp,
                                         )),
                                     Text(
-                                      "\$" +
-                                          item.products.price ,
-
+                                      "\$" + item.products.price,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -257,7 +268,7 @@ class _CartPageState extends State<CartPage>
                                           fontSize: 24.sp,
                                         )),
                                     NumberBox(
-                                      defaultValue: item?.itemnums??1 ,
+                                      defaultValue: item?.itemnums ?? 1,
                                       onChange: (int nums) {
                                         unmchange(item.id, nums);
                                       },
@@ -271,8 +282,7 @@ class _CartPageState extends State<CartPage>
                                   children: [
                                     Text(localizations.subtotal),
                                     Text(
-                                      "\$" +
-                                          item.total,
+                                      "\$" + item.total,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,

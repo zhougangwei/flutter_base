@@ -296,24 +296,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Positioned(
-                    right: 0,
-                    top: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        delShip();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: 20.w, top: 10.w, bottom: 10.w, right: 20.w),
-                        color: Theme.of(context).primaryColor,
-                        child: Text(
-                          localizations.deleteAddress,
-                          style:
-                              TextStyle(fontSize: 22.sp, color: Colors.white),
-                        ),
-                      ),
-                    ))
+                GestureDetector(
+                  onTap: () {
+                    delShip();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: 20.w, top: 10.w, bottom: 10.w, right: 20.w),
+                    color: Theme.of(context).primaryColor,
+                    child: Text(
+                      localizations.deleteAddress,
+                      style:
+                          TextStyle(fontSize: 22.sp, color: Colors.white),
+                    ),
+                  ),
+                )
               ],
             ),
             SizedBox(height: 30.h),

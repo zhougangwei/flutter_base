@@ -2,11 +2,13 @@ import 'package:abce/shop/bean/good_bean_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../login/login_page.dart';
+import '../login/page_controller_provider.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
 import '../utils/common_utils.dart';

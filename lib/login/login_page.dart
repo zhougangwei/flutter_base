@@ -50,11 +50,16 @@ class _LoginPopupState extends State<LoginPopup> {
     if(SPUtils.getString('email').isNotEmpty){
       emailController = TextEditingController(text: SPUtils.getString('email'));
       email = SPUtils.getString('email');
+    }else{
+      emailController = TextEditingController();
     }
     if(SPUtils.getString('password').isNotEmpty){
       passwordController =
           TextEditingController(text: SPUtils.getString('password'));
       password = SPUtils.getString('password');
+    }else{
+      passwordController =
+          TextEditingController();
     }
 
 

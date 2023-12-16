@@ -12,6 +12,7 @@ import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../login/login_locale.dart';
+import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/order_bean_entity.dart';
 import '../shop/bean/user_info_entity.dart';
@@ -34,8 +35,8 @@ class _MinePageState extends State<MinePage>
   List<dynamic>? couponlist;
   List<BalanceBeanEntity> balancelist = [];
   ScrollController _scrollController1 = ScrollController();
-  ScrollController _scrollController2= ScrollController();
-  bool _isLoading =false;
+  ScrollController _scrollController2 = ScrollController();
+  bool _isLoading = false;
   List<OrderBeanList>? orderlist;
   var datapost = {"page": 1, "limit": "10"};
   int pageNum = 1;
@@ -46,7 +47,10 @@ class _MinePageState extends State<MinePage>
     orderlist = [];
     couponlist = [];
     balancelist = [];
-    afterLogin();
+    if (!LoginStatus.hasLogin()) {
+      getbalancelist();
+    }
+    print('initMinePage');
     bus.on("Login", loginState);
     _scrollController1.addListener(_handleScroll);
     _scrollController2.addListener(_handleScroll);
@@ -66,14 +70,14 @@ class _MinePageState extends State<MinePage>
     if (_isLoading) {
       return; // 避免重复加载
     }
-    if(currentPage == 1){
+    if (currentPage == 1) {
       if (_scrollController1.position.pixels ==
           _scrollController1.position.maxScrollExtent) {
         _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
         _loadMoreData(); // 加
         print('加载更多');
       }
-    }else if(currentPage == 2){
+    } else if (currentPage == 2) {
       if (_scrollController2.position.pixels ==
           _scrollController2.position.maxScrollExtent) {
         _isLoading = true; // 标记为正在加载中，防止重复触发加载操作
@@ -81,15 +85,14 @@ class _MinePageState extends State<MinePage>
         print('加载更多');
       }
     }
-
   }
 
   void _loadMoreData() {
     pageNum++;
-    this.datapost['page']=pageNum.toString();
-    if(currentPage == 1){
+    this.datapost['page'] = pageNum.toString();
+    if (currentPage == 1) {
       getbalancelist();
-    }else if(currentPage == 2){
+    } else if (currentPage == 2) {
       getorderlist();
     }
   }
@@ -161,9 +164,21 @@ class _MinePageState extends State<MinePage>
                               ),
                             )
                           else
-                            ClipOval(
-                              child: Icon(Icons.account_circle,
-                                  size: 188.w, color: Color(0x33333333)),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return LoginPopup(onLoginSuccess: () {
+                                        Navigator.of(context).pop();
+                                        bus.emit('Login', true);
+                                      });
+                                    });
+                              },
+                              child: ClipOval(
+                                child: Icon(Icons.account_circle,
+                                    size: 188.w, color: Color(0x33333333)),
+                              ),
                             ),
                           SizedBox(height: 14.h),
                           Text(userinfo?.nickname ?? "",
@@ -402,7 +417,9 @@ class _MinePageState extends State<MinePage>
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => OrderInfoPage(ids: item.orderId)),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    OrderInfoPage(ids: item.orderId)),
                           );
                           Navigator.pushNamed(context, 'orderdetails',
                               arguments: {'order_id': item.orderId});
@@ -421,7 +438,6 @@ class _MinePageState extends State<MinePage>
                             ),
                             onTap: () {
                               payorder(item.orderId);
-
                             });
                       } else {
                         return Container();
@@ -550,6 +566,17 @@ class _MinePageState extends State<MinePage>
               jsonConvert.convertListNotNull<BalanceBeanEntity>(res['data']) ??
                   [];
         });
+      } else {
+        if (res['data'] == 14007 || res['data'] == 14006) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return LoginPopup(onLoginSuccess: () {
+                  Navigator.of(context).pop();
+                  bus.emit('Login', true);
+                });
+              });
+        }
       }
     }).catchError((err) {
       err.toString();
@@ -762,7 +789,6 @@ class _MinePageState extends State<MinePage>
     }
   }
 
-
   Widget obtainLoginOut() {
     if (LoginStatus.hasLogin()) {
       return Positioned(
@@ -792,13 +818,11 @@ class _MinePageState extends State<MinePage>
 
     ApiClient().payorder(data).then((res) {
       if (res["status"]) {
-         getorderlist();
+        getorderlist();
       }
       successToShow(res['msg']);
     }).catchError((err) {
       err.toString();
     });
   }
-
-
 }

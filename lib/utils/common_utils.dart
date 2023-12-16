@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class CommonUtils {}
+class CommonUtils {
+  static bool hasShow =false;
+}
 
 Future<void> errorToShow( msg, {int duration = 1000}) async {
   try {
+    if(CommonUtils.hasShow){
+      print('拦截了');
+      return;
+    }
+    CommonUtils.hasShow=true;
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
@@ -13,8 +20,8 @@ Future<void> errorToShow( msg, {int duration = 1000}) async {
         backgroundColor: Color(0xff072D8C),
         textColor: Colors.white,
         fontSize: 16.0,
-
     );
+    CommonUtils.hasShow=false;
   } catch (e) {
     print("errorToShow"+msg);
   }

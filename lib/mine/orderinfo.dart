@@ -194,6 +194,21 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       height: 1.h,
                     ),
                   ),
+                  if (item?.orderChildId?.isNotEmpty == true)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 20.w),
+                        Text(localizations.oddNumbers,style: TextStyle(
+                            fontSize: 26.sp,
+                           fontWeight: FontWeight.bold)),
+                        SizedBox(width: 20.w),
+                        Text(item?.orderChildId ?? "",style: TextStyle(
+                            fontSize: 24.sp
+                            )),
+                      ],
+                    ),
+                  SizedBox(height: 20.h),
                 ],
               ));
         },

@@ -9,7 +9,6 @@ import '../generated/json/base/json_convert_content.dart';
 import '../good/good_page.dart';
 import '../network/user.dart';
 import '../shop/bean/feature_entity.dart';
-import '../widget/rounded_searchbar.dart';
 import '../widget/custom_scaffoldr.dart';
 
 class ClassifyPage extends StatefulWidget {
@@ -143,12 +142,6 @@ class _ClassifyPageState extends State<ClassifyPage> {
                           CachedNetworkImage(imageUrl: item.image_url,
                             width: 295.w,
                             height: 320.h,
-                            placeholder: (context, url) =>
-                                Icon(
-                                  Icons.downloading,
-                                  size: 141.w,
-                                  color: Color(0x22333333),
-                                ),
                             errorWidget: (context, url, error) => Icon(
                               Icons.downloading,
                               size: 141.w,

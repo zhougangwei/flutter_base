@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:abce/cart/cart.dart';
 import 'package:abce/network/user.dart';
 import 'package:abce/shop/shop_goods_scrollview.dart';
@@ -17,7 +15,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:r_upgrade/r_upgrade.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, exit;
 import 'generated/l10n.dart';
 import 'language/current_locale.dart';
 import 'login/page_controller_provider.dart';
@@ -92,21 +90,21 @@ class _HomePageState extends State<HomePage> {
             ? '2'
             : '3';
     ApiClient().checkUpdate({'version': version, 'type': type}).then((res) {
-        if (res != null&& res['status'] == false) {
-          showDialog(
-            context: scontext,
-            builder: (BuildContext context) {
-              return UpdateDialog(
-                message:
-                    'A new version is available, please update to the latest version for a better experience.',
-                onConfirm: () {
-                  Navigator.of(context).pop();
-                  upgradeFromUrl();
-                },
-              );
-            },
-          );
-        }
+      if (res != null && res['status'] == false) {
+        showDialog(
+          context: scontext,
+          builder: (BuildContext context) {
+            return UpdateDialog(
+              message:
+                  'A new version is available, please update to the latest version for a better experience.',
+              onConfirm: () {
+                Navigator.of(context).pop();
+                upgradeFromUrl();
+              },
+            );
+          },
+        );
+      }
     });
   }
 
@@ -150,69 +148,103 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var local = S.of(context);
-    return Consumer<PageControllerProvider>(builder: (context, provider, _) {
-      return Stack(
-        children: <Widget>[
-          Scaffold(
-            key: _scaffoldKey,
-            appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
-            drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
-            body: PageView(
-                controller: provider.pageController, //初始化的PageController
-                children: _pages,
-                onPageChanged: (index) {
-                  provider.currentPageIndex = index;
-                }),
-            bottomNavigationBar: BottomNavigationBar(
-              onTap: (index) {
-                _onTabTapped(index);
-              },
-              currentIndex: provider.currentPageIndex,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Image.asset('assets/images/img/indexicon_w.png',
-                      width: 55.w),
-                  activeIcon: Image.asset('assets/images/img/indexicon.png',
-                      width: 55.w),
-                  label: local.shop,
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset('assets/images/img/shoucangicon_w.png',
-                      width: 55.w),
-                  activeIcon: Image.asset('assets/images/img/shoucangicon.png',
-                      width: 55.w),
-                  label: local.wishlist,
-                ),
-                BottomNavigationBarItem(
-                    icon: Image.asset('assets/images/img/caricon_w.png',
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Confirmation'),
+                content: Text('Are you sure you want to exit the app?'),
+                actions: [
+                  TextButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                        if(Platform.isAndroid){
+                          SystemNavigator.pop();
+                        }else if(Platform.isIOS){
+                          exit(0);
+                        }
+                       // 替换为你应用的主页
+                    },
+                  ),
+                ],
+              );
+            });
+        return true;
+      },
+      child: Consumer<PageControllerProvider>(builder: (context, provider, _) {
+        return Stack(
+          children: <Widget>[
+            Scaffold(
+              key: _scaffoldKey,
+              appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+              drawer: AppDrawerWidget(scaffoldKey: _scaffoldKey),
+              body: PageView(
+                  controller: provider.pageController, //初始化的PageController
+                  children: _pages,
+                  onPageChanged: (index) {
+                    provider.currentPageIndex = index;
+                    _onTabTapped(index);
+                  }),
+              bottomNavigationBar: BottomNavigationBar(
+                onTap: (index) {
+                  _onTabTapped(index);
+                },
+                currentIndex: provider.currentPageIndex,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Image.asset('assets/images/img/indexicon_w.png',
                         width: 55.w),
-                    activeIcon: Image.asset('assets/images/img/caricon.png',
+                    activeIcon: Image.asset('assets/images/img/indexicon.png',
                         width: 55.w),
-                    label: local.cart),
-                BottomNavigationBarItem(
-                  icon: Image.asset('assets/images/img/usericon_w.png',
-                      width: 55.w),
-                  activeIcon: Image.asset('assets/images/img/usericon.png',
-                      width: 55.w),
-                  label: local.user,
-                ),
-              ],
-              selectedItemColor: Colors.blue,
-              unselectedItemColor: Colors.grey,
+                    label: local.shop,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset('assets/images/img/shoucangicon_w.png',
+                        width: 55.w),
+                    activeIcon: Image.asset(
+                        'assets/images/img/shoucangicon.png',
+                        width: 55.w),
+                    label: local.wishlist,
+                  ),
+                  BottomNavigationBarItem(
+                      icon: Image.asset('assets/images/img/caricon_w.png',
+                          width: 55.w),
+                      activeIcon: Image.asset('assets/images/img/caricon.png',
+                          width: 55.w),
+                      label: local.cart),
+                  BottomNavigationBarItem(
+                    icon: Image.asset('assets/images/img/usericon_w.png',
+                        width: 55.w),
+                    activeIcon: Image.asset('assets/images/img/usericon.png',
+                        width: 55.w),
+                    label: local.user,
+                  ),
+                ],
+                selectedItemColor: Colors.blue,
+                unselectedItemColor: Colors.grey,
+              ),
             ),
-          ),
-          Positioned(
-              right: 30.w,
-              bottom: 130.w,
-              child: GestureDetector(
-                  onTap: () {
-                    showHelp(context);
-                  },
-                  child: Image.asset('assets/images/image/message.png',
-                      width: 100.w)))
-        ],
-      );
-    });
+            Positioned(
+                right: 30.w,
+                bottom: 130.w,
+                child: GestureDetector(
+                    onTap: () {
+                      showHelp(context);
+                    },
+                    child: Image.asset('assets/images/image/message.png',
+                        width: 100.w)))
+          ],
+        );
+      }),
+    );
   }
 
   void showHelp(BuildContext context) {
