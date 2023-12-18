@@ -11,6 +11,7 @@ import 'package:http_parser/http_parser.dart';
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/login_controller.dart';
 import '../login/login_locale.dart';
 import '../login/login_page.dart';
 import '../network/user.dart';
@@ -49,6 +50,8 @@ class _MinePageState extends State<MinePage>
     balancelist = [];
     if (!LoginStatus.hasLogin()) {
       getbalancelist();
+    }else{
+      afterLogin();
     }
     print('initMinePage');
     bus.on("Login", loginState);
@@ -166,14 +169,7 @@ class _MinePageState extends State<MinePage>
                           else
                             GestureDetector(
                               onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return LoginPopup(onLoginSuccess: () {
-                                        Navigator.of(context).pop();
-                                        bus.emit('Login', true);
-                                      });
-                                    });
+                               LoginController().showLogin(context);
                               },
                               child: ClipOval(
                                 child: Icon(Icons.account_circle,
@@ -568,14 +564,7 @@ class _MinePageState extends State<MinePage>
         });
       } else {
         if (res['data'] == 14007 || res['data'] == 14006) {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return LoginPopup(onLoginSuccess: () {
-                  Navigator.of(context).pop();
-                  bus.emit('Login', true);
-                });
-              });
+            LoginController().showLogin(context);
         }
       }
     }).catchError((err) {

@@ -6,6 +6,7 @@ import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
 import '../good/good_page.dart';
+import '../login/login_controller.dart';
 import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/collect_item_entity.dart';
@@ -30,12 +31,6 @@ class _WishListPageState extends State<WishListPage>
   @override
   void initState() {
     print('AACCDD执行了WishListPage 1initState');
-    JsonCacheManager().getJson("wishList").then((value) {
-      setState(() {
-        wishlishlist =
-            jsonConvert.convertListNotNull<CollectItemEntity>(value) ?? [];
-      });
-    });
     pageNum = 1;
     getWishList();
     _scrollController.addListener(_handleScroll);
@@ -80,14 +75,7 @@ class _WishListPageState extends State<WishListPage>
         });
       } else {
         if (res['data'] == 14007 || res['data'] == 14006) {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return LoginPopup(onLoginSuccess: () {
-                  Navigator.of(context).pop();
-                  bus.emit('Login', true);
-                });
-              });
+          LoginController().showLogin(context);
         }
       }
     }).catchError((err) {

@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../eventbus/eventbus.dart';
 import '../generated/json/base/json_convert_content.dart';
 import '../generated/l10n.dart';
+import '../login/login_controller.dart';
 import '../login/login_page.dart';
 import '../network/user.dart';
 import '../shop/bean/cart_bean_entity.dart';
@@ -66,14 +67,7 @@ class _CartPageState extends State<CartPage>
         //totalnumber = totalnumberDouble.toStringAsFixed(2);
       } else {
         if (res['data'] == 14007 || res['data'] == 14006) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return LoginPopup(onLoginSuccess: () {
-                    Navigator.of(context).pop();
-                    bus.emit('Login', true);
-                  });
-                });
+          LoginController().showLogin(context);
         }
       }
     }).catchError((err) {

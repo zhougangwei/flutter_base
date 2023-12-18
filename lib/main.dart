@@ -190,8 +190,10 @@ class _HomePageState extends State<HomePage> {
                   controller: provider.pageController, //初始化的PageController
                   children: _pages,
                   onPageChanged: (index) {
-                    provider.currentPageIndex = index;
-                    _onTabTapped(index);
+                    setState(() {
+                      provider.currentPageIndex = index;
+                    });
+
                   }),
               bottomNavigationBar: BottomNavigationBar(
                 onTap: (index) {
