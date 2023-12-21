@@ -15,8 +15,18 @@ class Add_Address extends StatefulWidget {
 
 class _Add_AddressState extends State<Add_Address> {
   Map<String, dynamic> datapost = {"is_def": 1};
-  final TextEditingController aController = TextEditingController();
-  final TextEditingController a = TextEditingController();
+  String smartData =
+      '대원 오 ;+82-6-673-9517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007';
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController streetController = TextEditingController();
+  final TextEditingController etcController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController zipCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -75,91 +85,107 @@ class _Add_AddressState extends State<Add_Address> {
   Widget build(BuildContext context) {
     var localizations = S.of(context);
     return Container(
-      color:Colors.white,
-      height: 1000.h,
+        color: Colors.white,
+        height: 1000.h,
         child: Stack(
-      children: [
-        Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
+          children: [
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(25.w),
-                    color: Color(0x11999999),
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Text(
-                      localizations.AddAddress,
-                      style: TextStyle(fontSize: 32.sp, color: Colors.black),
-                    ),
-                  ),
-                  Positioned(
-                      right: 10,
-                      top: 0,
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.close),
+                  Stack(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(25.w),
+                        color: Color(0x11999999),
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text(
+                          localizations.AddAddress,
+                          style:
+                              TextStyle(fontSize: 32.sp, color: Colors.black),
                         ),
-                      ))
-                ],
-              ),
-              Expanded(
-                child: ListView(children: <Widget>[
-                  ObtainList(localizations.firstName, 'first_name', "", true),
-                  ObtainList(localizations.lastName, 'last_name', "", true),
-                  ObtainList(localizations.country, 'country',
-                      "United States (Us)", true),
-                  ObtainList(localizations.street, 'house_num',
-                      "House number and street name", true),
-                  ObtainList("", 'etc',
-                      "Apartment, suite, unit, etc. (optional)", false),
-                  ObtainList(localizations.city, 'city', "", false),
-                  ObtainList(localizations.state, 'state', "", false),
-                  ObtainPhone(localizations, 'code', "mobile"),
-                  ObtainList(localizations.zipCode, 'zip_code', "", true),
+                      ),
+                      Positioned(
+                          right: 10,
+                          top: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.close),
+                            ),
+                          ))
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(children: <Widget>[
+                      ObtainIntelligentRecognition(),
+                      ObtainList(localizations.firstName, 'first_name', "",
+                          true, firstNameController),
+                      ObtainList(localizations.lastName, 'last_name', "", true,
+                          lastNameController),
+                      ObtainList(localizations.country, 'country',
+                          "United States (Us)", true, countryController),
+                      ObtainList(
+                          localizations.street,
+                          'house_num',
+                          "House number and street name",
+                          true,
+                          streetController),
+                      ObtainList(
+                          "",
+                          'etc',
+                          "Apartment, suite, unit, etc. (optional)",
+                          false,
+                          etcController),
+                      ObtainList(localizations.city, 'city', "", false,
+                          cityController),
+                      ObtainList(localizations.state, 'state', "", false,
+                          stateController),
+                      ObtainPhone(localizations, 'code', "mobile"),
+                      ObtainList(localizations.zipCode, 'zip_code', "", true,
+                          zipCodeController),
+                      SizedBox(
+                        height: 100.h,
+                      )
+                    ]),
+                  ),
                   SizedBox(
                     height: 100.h,
                   )
                 ]),
-              ),
-              SizedBox(
-                height: 100.h,
-              )
-            ]),
-        Positioned(
-            right: 0,
-            left: 0,
-            bottom: 1.h,
-            child: GestureDetector(
-              onTap: () {
-                confirm();
-              },
-              child: Container(
-                height: 90.h,
-                color: Color(0xffFB641B), // 自定义头部的背景颜色
-                child: Center(
-                  child: Text(
-                    localizations.confirm,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
+            Positioned(
+                right: 0,
+                left: 0,
+                bottom: 1.h,
+                child: GestureDetector(
+                  onTap: () {
+                    confirm();
+                  },
+                  child: Container(
+                    height: 90.h,
+                    color: Color(0xffFB641B), // 自定义头部的背景颜色
+                    child: Center(
+                      child: Text(
+                        localizations.confirm,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ))
-      ],
-    ));
+                ))
+          ],
+        ));
   }
 
-  ObtainList(String firstName, String key, String hint, bool isRequired) {
+  ObtainList(String firstName, String key, String hint, bool isRequired,
+      TextEditingController controller) {
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 35.w),
       child: Column(
@@ -202,6 +228,7 @@ class _Add_AddressState extends State<Add_Address> {
                   onChanged: (value) {
                     datapost[key] = value;
                   },
+                  controller: controller,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 24.sp),
                   decoration: InputDecoration(
@@ -260,6 +287,7 @@ class _Add_AddressState extends State<Add_Address> {
                     height: 78.h,
                     width: 128.w,
                     child: TextField(
+                      controller: codeController,
                       onChanged: (value) {
                         datapost[code] = value;
                       },
@@ -282,6 +310,7 @@ class _Add_AddressState extends State<Add_Address> {
                     child: Container(
                   height: 78.h,
                   child: TextField(
+                    controller: phoneController,
                     onChanged: (value) {
                       datapost[mobile] = value;
                     },
@@ -307,5 +336,83 @@ class _Add_AddressState extends State<Add_Address> {
 
   void confirm() {
     addAddress();
+  }
+
+  ObtainIntelligentRecognition() {
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 35.w),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                height: 200.h,
+                child: TextField(
+                  maxLines: 10,
+                  controller: TextEditingController(
+                      text:
+                          '대원 오 ;+82-6-673-9517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007'),
+                  onChanged: (value) {
+                    smartData = value;
+                  },
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 24.sp),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff333333), width: 1.0)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      hintText: "Intelligent recognition",
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0)),
+                )),
+            SizedBox(height: 20.h),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                  onTap: () {
+                    try {
+                      List<String> datas = smartData.split(';');
+                      if (datas.length >= 4) {
+                        String name = datas[0];
+                        List<String> namelist = name.split(' ');
+                        if (namelist.length >= 2) {
+                          String lastName = namelist[0];
+                          String firstName = namelist[1];
+                          firstNameController.text = firstName;
+                          lastNameController.text = lastName;
+                        }
+                        String phoneNum = datas[1];
+                        String address = datas[2];
+                        List<String> addresslist = address.split(',');
+                        if (addresslist.length >= 3) {
+                          String country = addresslist[addresslist.length - 1];
+                          String city = addresslist[addresslist.length - 2];
+                          String menpai = addresslist[0];
+                          countryController.text = country;
+                          cityController.text = city;
+                          streetController.text = menpai;
+                        }
+                        phoneController.text = phoneNum;
+                        String youbian = datas[3];
+                        zipCodeController.text = youbian;
+                      }
+                    } catch (err) {
+
+                    }
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(8),
+                      color: Theme.of(context).primaryColor,
+                      child: Text(
+                        "Perform",
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            )
+          ]),
+    );
   }
 }
