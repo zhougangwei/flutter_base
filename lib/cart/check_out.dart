@@ -63,7 +63,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   buildGoodCastList(localizations),
                   SliverToBoxAdapter(
                       child: obtainTotalMessage(context, localizations)),
-                  SliverToBoxAdapter(child: obtainBottom(context, localizations)),
+                  SliverToBoxAdapter(
+                      child: obtainBottom(context, localizations)),
                 ]),
             Positioned(
                 right: 0,
@@ -181,34 +182,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
       color: Color(0x11999999),
       padding: EdgeInsets.all(20.h),
       child: Row(
-        children: [
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+         children: [
           Image.asset('assets/images/image/icon-30.png', width: 26.w),
           SizedBox(width: 10.w),
-          Column(children: [
-            Text(
-              '${item.address?.firstName}|${item.address?.lastName}'
-              '|${item.address?.country}|${item.address?.zipCode}|'
-              '${item.address?.code}|${item.address?.mobile}',
-              maxLines: 1,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Color(0xff333333),
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(children: [
+              Text(
+                '${item.address?.firstName}|${item.address?.lastName}'
+                '|${item.address?.country}|${item.address?.zipCode}|'
+                '${item.address?.code}|${item.address?.mobile}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Color(0xff333333),
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Container(width: 20.h),
-            Text(
-              '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
-              maxLines: 1,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Color(0xff333333),
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
+              Container(width: 20.h),
+              Text(
+                '${item.address?.etc},${item.address?.houseNum},${item.address?.city},${item.address?.state}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Color(0xff333333),
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ],
       ),
     );
@@ -306,8 +313,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     color: Theme.of(context).primaryColor,
                     child: Text(
                       localizations.deleteAddress,
-                      style:
-                          TextStyle(fontSize: 22.sp, color: Colors.white),
+                      style: TextStyle(fontSize: 22.sp, color: Colors.white),
                     ),
                   ),
                 )
@@ -443,49 +449,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-    obtainTotalMessage(BuildContext context, S localizations) {
-      return Container(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w),
-        child: Column(children: [
-          SizedBox(height: 10.h),
-          getItem(localizations.subtotal, "",
-              (carBean?.goodsAmount ?? "0.00").toString()),
-          SizedBox(height: 20.h),
-          Divider(
-            height: 1,
-            color: Color(0x33999999),
-          ),
-          SizedBox(height: 20.h),
-          getItem(localizations.goodsDiscount, localizations?.discount,
-              (carBean?.goodsPmt ?? "0.00").toString()),
-          SizedBox(height: 20.h),
-          Divider(
-            height: 1,
-            color: Color(0x33999999),
-          ),
-          SizedBox(height: 20.h),
-          getItem(localizations.orderDiscount, localizations?.discount,
-              (carBean?.orderPmt ?? "0.00").toString()),
-          SizedBox(height: 20.h),
-          Divider(
-            height: 1,
-            color: Color(0x33999999),
-          ),
-          SizedBox(height: 20.h),
-          getItem(localizations.shipping, "",
-              (carBean?.costFreight ?? "0.00").toString()),
-          SizedBox(height: 20.h),
-          Divider(
-            height: 1,
-            color: Color(0x33999999),
-          ),
-          SizedBox(height: 20.h),
-          getItem(
-              localizations.total, "", (carBean?.amount ?? "0.00").toString()),
-          SizedBox(height: 10.h),
-        ]),
-      );
-    }
+  obtainTotalMessage(BuildContext context, S localizations) {
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      child: Column(children: [
+        SizedBox(height: 10.h),
+        getItem(localizations.subtotal, "",
+            (carBean?.goodsAmount ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.goodsDiscount, localizations?.discount,
+            (carBean?.goodsPmt ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.orderDiscount, localizations?.discount,
+            (carBean?.orderPmt ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(localizations.shipping, "",
+            (carBean?.costFreight ?? "0.00").toString()),
+        SizedBox(height: 20.h),
+        Divider(
+          height: 1,
+          color: Color(0x33999999),
+        ),
+        SizedBox(height: 20.h),
+        getItem(
+            localizations.total, "", (carBean?.amount ?? "0.00").toString()),
+        SizedBox(height: 10.h),
+      ]),
+    );
+  }
 
   Row getItem(String startText, String? middleText, String endText) {
     return Row(

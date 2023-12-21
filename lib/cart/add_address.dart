@@ -16,7 +16,7 @@ class Add_Address extends StatefulWidget {
 class _Add_AddressState extends State<Add_Address> {
   Map<String, dynamic> datapost = {"is_def": 1};
   String smartData =
-      '대원 오 ;+82-6-673-9517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007';
+      '대원 오 ;+82 66739517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007';
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
@@ -35,6 +35,18 @@ class _Add_AddressState extends State<Add_Address> {
   }
 
   void addAddress() {
+    datapost['last_name']= lastNameController.text;
+    datapost['first_name']= firstNameController.text;
+    datapost['country']= countryController.text;
+    datapost['house_num']= streetController.text;
+    datapost['state']= stateController.text;
+    datapost['etc']= etcController.text;
+    datapost['mobile']= phoneController.text;
+    datapost['code']= codeController.text;
+    datapost['city']= cityController.text;
+    datapost['zip_code']= zipCodeController.text;
+
+
     if (datapost['last_name'] == null) {
       errorToShow('Please enter Your Last name');
       return;
@@ -51,18 +63,6 @@ class _Add_AddressState extends State<Add_Address> {
       errorToShow('Please enter Your House number and street name');
       return;
     }
-    if (datapost['etc'] == null) {
-      errorToShow('Please enter Your Apartment, suite, unit, etc');
-      return;
-    }
-    if (datapost['city'] == null) {
-      // errorToShow('Please enter Your City');
-      // return;
-    }
-    if (datapost['state'] == null) {
-      // errorToShow('Please enter Your State');
-      // return;
-    }
     if (datapost['mobile'] == null) {
       errorToShow('Please enter Your Mob.phone no');
       return;
@@ -70,6 +70,15 @@ class _Add_AddressState extends State<Add_Address> {
     if (datapost['zip_code'] == null) {
       errorToShow('Please enter Your Zip Code');
       return;
+    }
+
+    if (datapost['city'] == null) {
+      // errorToShow('Please enter Your City');
+      // return;
+    }
+    if (datapost['state'] == null) {
+      // errorToShow('Please enter Your State');
+      // return;
     }
 
     ApiClient().AddShip(datapost).then((res) {
@@ -225,9 +234,6 @@ class _Add_AddressState extends State<Add_Address> {
             Container(
                 height: 78.h,
                 child: TextField(
-                  onChanged: (value) {
-                    datapost[key] = value;
-                  },
                   controller: controller,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 24.sp),
@@ -288,9 +294,6 @@ class _Add_AddressState extends State<Add_Address> {
                     width: 128.w,
                     child: TextField(
                       controller: codeController,
-                      onChanged: (value) {
-                        datapost[code] = value;
-                      },
                       textAlign: TextAlign.start,
                       style: TextStyle(fontSize: 24.sp),
                       decoration: InputDecoration(
@@ -311,9 +314,6 @@ class _Add_AddressState extends State<Add_Address> {
                   height: 78.h,
                   child: TextField(
                     controller: phoneController,
-                    onChanged: (value) {
-                      datapost[mobile] = value;
-                    },
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 24.sp),
                     decoration: InputDecoration(
@@ -351,7 +351,7 @@ class _Add_AddressState extends State<Add_Address> {
                   maxLines: 10,
                   controller: TextEditingController(
                       text:
-                          '대원 오 ;+82-6-673-9517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007'),
+                          '대원 오 ;+82 66739517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007'),
                   onChanged: (value) {
                     smartData = value;
                   },
@@ -386,6 +386,12 @@ class _Add_AddressState extends State<Add_Address> {
                           lastNameController.text = lastName;
                         }
                         String phoneNum = datas[1];
+                        List<String> phoneNumList = phoneNum.split(' ');
+                        if (phoneNumList.length>=2) {
+                          phoneController.text = phoneNumList[1];
+                          codeController.text = phoneNumList[0];
+                        }
+
                         String address = datas[2];
                         List<String> addresslist = address.split(',');
                         if (addresslist.length >= 3) {
@@ -396,7 +402,7 @@ class _Add_AddressState extends State<Add_Address> {
                           cityController.text = city;
                           streetController.text = menpai;
                         }
-                        phoneController.text = phoneNum;
+
                         String youbian = datas[3];
                         zipCodeController.text = youbian;
                       }
