@@ -15,8 +15,8 @@ class Add_Address extends StatefulWidget {
 
 class _Add_AddressState extends State<Add_Address> {
   Map<String, dynamic> datapost = {"is_def": 1};
-  String smartData =
-      '대원 오 ;+82 66739517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007';
+  String smartData ='';
+
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
@@ -27,6 +27,8 @@ class _Add_AddressState extends State<Add_Address> {
   final TextEditingController codeController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController zipCodeController = TextEditingController();
+
+  final TextEditingController smartController = TextEditingController();
 
   @override
   void initState() {
@@ -349,12 +351,7 @@ class _Add_AddressState extends State<Add_Address> {
                 height: 200.h,
                 child: TextField(
                   maxLines: 10,
-                  controller: TextEditingController(
-                      text:
-                          '대원 오 ;+82 66739517;22-11  Samhwanapateu Munraedong 4(sa)-ga Yeongdeungpo-gu, Seoul, Korea;999007'),
-                  onChanged: (value) {
-                    smartData = value;
-                  },
+                  controller: smartController,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 24.sp),
                   decoration: InputDecoration(
@@ -375,6 +372,7 @@ class _Add_AddressState extends State<Add_Address> {
               child: GestureDetector(
                   onTap: () {
                     try {
+                      smartData=smartController.text;
                       List<String> datas = smartData.split(';');
                       if (datas.length >= 4) {
                         String name = datas[0];
