@@ -1,6 +1,7 @@
 import 'package:abce/cart/cart.dart';
 import 'package:abce/network/user.dart';
 import 'package:abce/shop/shop_goods_scrollview.dart';
+import 'package:abce/update/privacy_policy_dialog.dart';
 import 'package:abce/update/update_dialog.dart';
 import 'package:abce/utils/sp_utils.dart';
 import 'package:abce/widget/app_drawer.dart';
@@ -76,7 +77,23 @@ class _HomePageState extends State<HomePage> {
     print('AACCDD执行了MainPage initState');
     super.initState();
     Future.delayed(Duration(milliseconds: 1500), () {
-      upgrade(context);
+      if (SPUtils.getBool("hasAccept",defaultValue: false)==false) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext scontext) {
+            return WillPopScope(
+              onWillPop: () async => false,//关键代码
+              child: PrivacyPolicyDialog(onConfirm: () {
+                SPUtils.setBool("hasAccept", true);
+                upgrade(context);
+              }),
+            );
+          },
+        );
+      } else {
+        upgrade(context);
+      }
     });
   }
 
@@ -92,15 +109,18 @@ class _HomePageState extends State<HomePage> {
     ApiClient().checkUpdate({'version': version, 'type': type}).then((res) {
       if (res != null && res['status'] == false) {
         showDialog(
+          barrierDismissible: false,
           context: scontext,
           builder: (BuildContext context) {
-            return UpdateDialog(
-              message:
-                  'A new version is available, please update to the latest version for a better experience.',
-              onConfirm: () {
-                Navigator.of(context).pop();
-                upgradeFromUrl();
-              },
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: UpdateDialog(
+                message:
+                    'A new version is available, please update to the latest version for a better experience.',
+                onConfirm: () {
+                  upgradeFromUrl();
+                },
+              ),
             );
           },
         );
@@ -109,20 +129,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void upgradeFromUrl() async {
-    if (Platform.isIOS) {
-      bool? isSuccess = await RUpgrade.upgradeFromAppStore(
-        '您的AppId', //例如:微信的AppId:414478124
-      );
-    } else if (Platform.isAndroid) {
-      int? id = await RUpgrade.upgrade(
-        'https://raw.githubusercontent.com/rhymelph/r_upgrade/master/apk/app-release.apk',
-        fileName: 'app-release.apk',
-        installType: RUpgradeInstallType.normal,
-      );
-      if (id != null) {
-        RUpgrade.install(id);
-      }
-    }
+    RUpgrade.upgradeFromUrl(
+        "https://abce-commerce.com/#/pages/H5/other/autoload");
   }
 
   final List<Widget> _pages = [
@@ -166,12 +174,12 @@ class _HomePageState extends State<HomePage> {
                   TextButton(
                     child: Text('Yes'),
                     onPressed: () {
-                        if(Platform.isAndroid){
-                          SystemNavigator.pop();
-                        }else if(Platform.isIOS){
-                          exit(0);
-                        }
-                       // 替换为你应用的主页
+                      if (Platform.isAndroid) {
+                        SystemNavigator.pop();
+                      } else if (Platform.isIOS) {
+                        exit(0);
+                      }
+                      // 替换为你应用的主页
                     },
                   ),
                 ],
@@ -193,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       provider.currentPageIndex = index;
                     });
-
                   }),
               bottomNavigationBar: BottomNavigationBar(
                 onTap: (index) {

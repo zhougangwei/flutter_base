@@ -43,7 +43,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Color(0xff072D8C),
+        backgroundColor: Theme.of(context).primaryColor,
         actions: <Widget>[
           Row(
             children: [

@@ -13,15 +13,11 @@ class UpdateDialog extends StatelessWidget {
       content: Text(message),
       actions: <Widget>[
         TextButton(
-          child: Text('Later'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text('Update now'),
-          onPressed: onConfirm,
-        ),
+            child: Text('Update now'),
+            onPressed: () {
+              onConfirm();
+              Navigator.of(context).pop();
+            }),
       ],
     );
   }

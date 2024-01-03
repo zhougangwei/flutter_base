@@ -413,7 +413,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
               itemCount: featurednlist.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // 一行显示
-                childAspectRatio: 335 / 520, // 调整子项的宽高比例
+                childAspectRatio: 335 / 550, // 调整子项的宽高比例
                 crossAxisSpacing: 10, // 子项之间的横向间距
                 mainAxisSpacing: 10, // 两个子项
               ),

@@ -1,4 +1,5 @@
 import 'package:abce/home/contact_us.dart';
+import 'package:abce/login/h5_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -158,6 +159,10 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
             Navigator.of(context).pop();
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => ContactUsPage()));
+          }),
+          buildGestureDetector('Privacy Policy', false, ontap: () {
+            Navigator.of(context).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>H5Page(title:'Privacy Policy',url:'https://abce-commerce.com/#/pages/H5/other/ysxy')));
           }),
         ],
       ),

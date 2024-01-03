@@ -352,7 +352,7 @@ class _Add_AddressState extends State<Add_Address> {
                 child: TextField(
                   maxLines: 10,
                   controller: smartController,
-                  textAlign: TextAlign.start,
+                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 24.sp),
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
