@@ -16,7 +16,6 @@ class UpdateDialog extends StatelessWidget {
             child: Text('Update now'),
             onPressed: () {
               onConfirm();
-              Navigator.of(context).pop();
             }),
       ],
     );

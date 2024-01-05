@@ -4,6 +4,7 @@ import 'package:abce/shop/bean/page_bean_entity.dart';
 import 'package:abce/widget/rounded_searchbar.dart';
 import 'package:abce/utils/common_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -34,24 +35,63 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
   List<TypeItemEntity> typeList = [];
   List<FeatureEntity> featurednlist = [];
   var datapost = {"page": "1", "limit": "4"};
+  String _netType = "";
+  final GlobalKey<HomeCarouselBannerState> bannerKey = GlobalKey<HomeCarouselBannerState>();
 
   List<PageBeanEntity> pageList = [];
 
   String keyworde = "";
 
+  /// 设置网络切换监听
+  connectListener() async {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      (Connectivity().checkConnectivity()).then((connectResult) {
+        if (connectResult == ConnectivityResult.none) {
+          _netType = "";
+        } else if (connectResult == ConnectivityResult.wifi) {
+          _netType = connectResult.toString();
+        }
+        if(_netType .isNotEmpty){
+          bannerKey?.currentState?.refresh();
+          getTypeList();
+          relatedList();
+          getGoodsCat();
+          getPageList();
+        }
+      });
+    });
+  }
+
+
+  void getConnectType()  {
+    var connectResult =  (Connectivity().checkConnectivity());
+    if (connectResult == ConnectivityResult.none) {
+      _netType = "4G";
+    } else if (connectResult == ConnectivityResult.wifi) {
+      _netType = connectResult.toString();
+    }
+  }
   @override
   void initState() {
     super.initState();
-    print('加载initState');
+    // 设置网络变化监听
+    connectListener();
+    // 获取网络连接状态
+    getConnectType();
+    print('_netType 加载initState');
     getTypeList();
     relatedList();
     getGoodsCat();
     getPageList();
   }
 
+  Future<bool> isConnected() async {
+    var connectResult = await (Connectivity().checkConnectivity());
+    return connectResult != ConnectivityResult.none;
+  }
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final localizations = S.of(context);
     return Scaffold(
         body: CustomScrollView(
@@ -63,7 +103,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
             seachgoods('ALL GOODS');
           },
         )),
-        SliverToBoxAdapter(child: HomeCarouselBanner(from: 'tpl1_slider')),
+        SliverToBoxAdapter(child: HomeCarouselBanner(key:bannerKey,from: 'tpl1_slider')),
         buildTypeList(),
         buildFeatured(localizations),
         buildGoodCastList(),
@@ -577,5 +617,12 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
         });
       }
     }).catchError((err) {});
+  }
+
+  clickRefresh() {
+    getTypeList();
+    relatedList();
+    getGoodsCat();
+    getPageList();
   }
 }

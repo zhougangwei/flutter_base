@@ -12,13 +12,13 @@ import 'bean/good_cat_bean_entity.dart';
 
 class HomeCarouselBanner extends StatefulWidget {
   final String from;
-  HomeCarouselBanner({required this.from});
+  HomeCarouselBanner({super.key,required this.from});
 
   @override
-  _HomeCarouselBannerState createState() => _HomeCarouselBannerState();
+  HomeCarouselBannerState createState() => HomeCarouselBannerState();
 }
 
-class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
+class HomeCarouselBannerState extends State<HomeCarouselBanner> {
   List<String> bannerList = [];
 
   @override
@@ -57,5 +57,9 @@ class _HomeCarouselBannerState extends State<HomeCarouselBanner> {
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.h),
             child: Carousel(bannerList)));
+  }
+
+  void refresh() {
+    getBanner();
   }
 }
