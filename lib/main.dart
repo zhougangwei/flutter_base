@@ -130,8 +130,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void upgradeFromUrl() async {
-    RUpgrade.upgradeFromUrl(
-        "https://abce-commerce.com/#/pages/H5/other/autoload");
+
+    if (Platform.isIOS) {
+      bool? isSuccess = await RUpgrade.upgradeFromAppStore(
+        '6475349143', //例如:微信的AppId:414478124
+      );
+    } else if (Platform.isAndroid) {
+      RUpgrade.upgradeFromUrl(
+          "https://abce-commerce.com/#/pages/H5/other/autoload");
+
   }
 
   final List<Widget> _pages = [
