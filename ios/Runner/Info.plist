@@ -27,11 +27,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need to access your camera to take new photos</string>
+	<string>abce need to use camera permissions for the photo upload function of the avatar</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>We need to access your microphone to record the video</string>
+	<string>abce need to access your microphone to record the video for the photo upload function of the avatar</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need to access your album to select images</string>
+	<string>abce  need to access your album for the photo upload function of the avatar </string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

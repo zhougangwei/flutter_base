@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     } else if (Platform.isAndroid) {
       RUpgrade.upgradeFromUrl(
           "https://abce-commerce.com/#/pages/H5/other/autoload");
-
+    }
   }
 
   final List<Widget> _pages = [
