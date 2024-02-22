@@ -39,7 +39,7 @@ class _MinePageState extends State<MinePage>
   ScrollController _scrollController2 = ScrollController();
   bool _isLoading = false;
   List<OrderBeanList>? orderlist;
-  var datapost = {"page": 1, "limit": "10"};
+  var datapost = {"page": 1, "limit": "50"};
   int pageNum = 1;
   int currentPage = 0;
 

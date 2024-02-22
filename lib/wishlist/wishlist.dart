@@ -24,7 +24,7 @@ class _WishListPageState extends State<WishListPage>
   ScrollController _scrollController = ScrollController();
   List<CollectItemEntity> wishlishlist = [];
   int pageNum = 1;
-  var datapost = {"page": "1", "limit": "10"};
+  var datapost = {"page": "1", "limit": "30"};
   bool _isLoading = false;
   double _lastScrollPosition = 0;
 

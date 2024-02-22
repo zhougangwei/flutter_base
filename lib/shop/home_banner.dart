@@ -28,7 +28,7 @@ class HomeCarouselBannerState extends State<HomeCarouselBanner> {
   }
 
   void getBanner() {
-    var data = {"page": 1, "limit": 10, "code": widget.from};
+    var data = {"page": 1, "limit": 30, "code": widget.from};
     ApiClient().openbanner(data).then((res) {
       setState(() {
         if (res['status']) {
