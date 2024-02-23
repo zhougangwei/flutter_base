@@ -378,8 +378,17 @@ class _Add_AddressState extends State<Add_Address> {
                         String name = datas[0];
                         List<String> namelist = name.split(' ');
                         if (namelist.length >= 2) {
-                          String lastName = namelist[0];
-                          String firstName = namelist[1];
+                          String firstName = '';
+                          String lastName = '';
+                          if(namelist.length>2){
+                            for(int i=0;i<namelist.length-1;i++){
+                              lastName=lastName+namelist[i];
+                            }
+                            firstName=namelist[namelist.length-1];
+                          }else{
+                            firstName=namelist[1];
+                             lastName = namelist[0];
+                          }
                           firstNameController.text = firstName;
                           lastNameController.text = lastName;
                         }
@@ -399,6 +408,13 @@ class _Add_AddressState extends State<Add_Address> {
                           countryController.text = country;
                           cityController.text = city;
                           streetController.text = menpai;
+                          String etc='';
+                          if(addresslist.length>3){
+                            for(int i=1;i<addresslist.length-2;i++){
+                              etc=etc+addresslist[i];
+                            }
+                          }
+                          etcController.text=etc;
                         }
 
                         String youbian = datas[3];

@@ -100,7 +100,7 @@ class _ShopGoodsScrollViewState extends State<ShopGoodsScrollView>
         SliverToBoxAdapter(child: RoundedSearchBar(
           onKeyword: (String word) {
             this.keyworde = word;
-            seachgoods('ALL GOODS');
+            seachgoods('SEARCH');
           },
         )),
         SliverToBoxAdapter(child: HomeCarouselBanner(key:bannerKey,from: 'tpl1_slider')),
