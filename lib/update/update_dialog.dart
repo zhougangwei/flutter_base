@@ -17,7 +17,13 @@ class UpdateDialog extends StatelessWidget {
             onPressed: () {
               onConfirm();
             }),
+        TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
       ],
+      contentPadding: EdgeInsets.all(20.0),
     );
   }
 }

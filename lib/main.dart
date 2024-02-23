@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> upgrade(BuildContext scontext) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
+    String version = '1.0.0';
     print("version:" + version);
     String type = Platform.isAndroid
         ? "1"
@@ -110,7 +110,6 @@ class _HomePageState extends State<HomePage> {
     ApiClient().checkUpdate({'version': version, 'type': type}).then((res) {
       if (res != null && res['status'] == false) {
         showDialog(
-          barrierDismissible: false,
           context: scontext,
           builder: (BuildContext context) {
             return WillPopScope(
@@ -120,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     'A new version is available, please update to the latest version for a better experience.',
                 onConfirm: () {
                   upgradeFromUrl();
-                },
+                }
               ),
             );
           },
