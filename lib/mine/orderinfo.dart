@@ -3,6 +3,7 @@ import 'package:abce/shop/bean/orderinfobean_entity.dart';
 import 'package:abce/widget/custom_scaffoldr.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../generated/json/base/json_convert_content.dart';
@@ -206,6 +207,24 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                         Text(item?.orderChildId ?? "",style: TextStyle(
                             fontSize: 24.sp
                             )),
+                        SizedBox(width: 20.w),
+                        Container(
+                          padding: EdgeInsets.all(20.h),
+                          alignment: Alignment.center,
+                          color: Color(0xff072D8C),
+                          child: GestureDetector(
+                            onTap: (){
+                              Clipboard.setData(ClipboardData(text: item?.orderChildId ?? ""));
+                              successToShow('Copy succeeded');
+                            },
+                            child: Text(
+                              localizations.copy,
+                              style: TextStyle(
+                                  fontSize: 28.sp, color: Colors.white),
+                            ),
+                          ),
+                        )
+
                       ],
                     ),
                   SizedBox(height: 20.h),
