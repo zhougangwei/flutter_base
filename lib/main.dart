@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> upgrade(BuildContext scontext) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = '1.0.0';
+    String version = packageInfo.version;
     print("version:" + version);
     String type = Platform.isAndroid
         ? "1"
