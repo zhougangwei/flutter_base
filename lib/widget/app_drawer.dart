@@ -1,7 +1,9 @@
 import 'package:abce/home/contact_us.dart';
 import 'package:abce/login/h5_page.dart';
+import 'package:abce/network/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../eventbus/eventbus.dart';
@@ -12,6 +14,8 @@ import '../home/voucher.dart';
 import '../login/login_locale.dart';
 import '../login/login_page.dart';
 import '../login/page_controller_provider.dart';
+import '../mine/login_out.dart';
+import '../utils/sp_utils.dart';
 
 class AppDrawerWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -164,6 +168,13 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
             Navigator.of(context).pop();
             Navigator.push(context, MaterialPageRoute(builder: (context) =>H5Page(title:'Privacy Policy',url:'https://abce-commerce.com/#/pages/H5/other/ysxy')));
           }),
+          buildGestureDetector('Delete Account', false, ontap: () {
+            if(LoginStatus.hasLogin()){
+              loginout();
+            }
+          }),
+
+
         ],
       ),
     );
@@ -196,6 +207,38 @@ class _AppDrawerWidgetState extends State<AppDrawerWidget> {
       return Icon(Icons.add, size: 25.w, color: Color(0xff333333));
     } else {
       return Container();
+    }
+  }
+
+  Future<void> loginout() async {
+    Navigator.of(context).pop();
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LogoutDialog();
+      },
+    );
+    if (confirm == true) {
+      SPUtils.setString('token', '');
+      bus.emit('Login', false);
+      ApiClient().delUser({}).then((res) {
+        setState(() {
+          if (res['status']) {
+            Fluttertoast.showToast(
+              msg: 'delete success',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xff072D8C),
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          }
+        });
+      }).catchError((err) {
+        err.toString();
+      });
+
     }
   }
 }

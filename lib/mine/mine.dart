@@ -20,6 +20,7 @@ import '../shop/bean/user_info_entity.dart';
 import '../utils/common_utils.dart';
 import '../utils/sp_utils.dart';
 import 'balance.dart';
+import 'exit_account.dart';
 import 'login_out.dart';
 import 'orderinfo.dart';
 
@@ -768,7 +769,7 @@ class _MinePageState extends State<MinePage>
     bool confirm = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return LogoutDialog();
+        return ExitDialog();
       },
     );
 

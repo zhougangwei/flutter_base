@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LogoutDialog extends StatelessWidget {
+class ExitDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Warning！！！'),
-      content: Text('Are you sure you want to delete the account? This will be irreversible!'),
+      title: Text('Point'),
+      content: Text('Are you sure you want to exit account?'),
       actions: [
         TextButton(
           onPressed: () {

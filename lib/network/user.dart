@@ -117,6 +117,13 @@ class ApiClient {
     return await post(url: url, params: params, auth: true, showToast: false);
   }
 
+  Future delUser(Map<String, dynamic> params) async {
+    params['method'] = 'user.delUser';
+    return await post(url: url, params: params, auth: true, showToast: false);
+  }
+
+
+
 // 删除购物车item
   Future<dynamic> delShip(Map<String, dynamic> params) async {
     params?['method'] = 'cartShip.delShip';
