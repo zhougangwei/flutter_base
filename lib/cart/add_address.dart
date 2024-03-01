@@ -97,7 +97,7 @@ class _Add_AddressState extends State<Add_Address> {
     var localizations = S.of(context);
     return Container(
         color: Colors.white,
-        height: 1000.h,
+        height: 1200.h,
         child: Stack(
           children: [
             Column(
@@ -351,6 +351,7 @@ class _Add_AddressState extends State<Add_Address> {
                 height: 200.h,
                 child: TextField(
                   maxLines: 10,
+                  textInputAction: TextInputAction.done,
                   controller: smartController,
                    textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 24.sp),

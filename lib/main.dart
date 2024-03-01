@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Positioned(
                 right: 30.w,
-                bottom: 130.w,
+                bottom: 200.w,
                 child: GestureDetector(
                     onTap: () {
                       showHelp(context);
