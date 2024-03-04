@@ -1,5 +1,6 @@
 import 'package:abce/shop/bean/good_bean_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -153,9 +154,14 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goods_data?.name ?? '',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 32.sp)),
+                  GestureDetector(
+                    child: Text(goods_data?.name ?? '',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 32.sp)),
+                    onLongPress:(){
+                      gotoClip(goods_data?.name);
+    } ,
+                  ),
                   SizedBox(height: 20.sp), // 设置间距
                   Row(
                     children: [
@@ -165,11 +171,11 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                     ],
                   ),
                   SizedBox(height: 18.h), // 设置间距
-                  Text('\$${goods_data?.price ?? ''}',
+                  SelectableText('\$${goods_data?.price ?? ''}',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 50.sp)),
                   SizedBox(height: 10.h), // 设置间距
-                  Text('In Stock (${goods_data?.stock ?? ''})',
+                  SelectableText('In Stock (${goods_data?.stock ?? ''})',
                       style: TextStyle(
                           fontSize: 26.sp,
                           color: Theme.of(context).primaryColor)),
@@ -184,8 +190,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                             width: 26.w),
                         SizedBox(width: 10.w),
                         Expanded(
-                          child: Text(goods_data?.canshu?[0]?.value ?? '',
-                              softWrap: true,
+                          child: SelectableText(goods_data?.canshu?[0]?.value ?? '',
                               style: TextStyle(fontSize: 28.sp)),
                         )
                       ]),
@@ -231,9 +236,8 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                           style: TextStyle(fontSize: 30.sp,fontWeight: FontWeight.bold)),
                       SizedBox(width: 20.w),
                       Expanded(
-                          child: Text(goods_data?.tags ?? '',
+                          child: SelectableText(goods_data?.tags ?? '',
                               maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: 30.sp))),
                     ],
                   ),
@@ -288,6 +292,11 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
       );
     else
       return GestureDetector(
+        onLongPress: (){
+          gotoClip(default_spes_desc![default_spes_desc?.keys?.first]
+              .values
+              .toList()[i]['name']);
+        },
         onTap: () {
           setState(() {
             currentIndex = i;
@@ -522,4 +531,11 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  gotoClip(String? name) {
+    if(name!=null){
+      Clipboard.setData(ClipboardData(text: name));
+      successToShow('Copy succeeded');
+    }
+  }
 }
