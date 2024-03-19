@@ -121,12 +121,7 @@ class _MultiAddressState extends State<MultiAddress> {
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return Add_Address();
-                              });
+                          showAddress(context,item.id);
                         },
                         child: Container(
                             width: 100.w,
@@ -140,4 +135,14 @@ class _MultiAddressState extends State<MultiAddress> {
       ),
     );
   }
+
+  void showAddress(BuildContext context,id) async {
+    bool confirm = await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Add_Address(type: '2',cart_id: id);
+        });
+    if (confirm == true) {
+      Navigator.of(context).pop(true);
+    }}
 }

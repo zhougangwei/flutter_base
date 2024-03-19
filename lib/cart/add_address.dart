@@ -7,14 +7,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../generated/l10n.dart';
 
 class Add_Address extends StatefulWidget {
-  const Add_Address({super.key});
+  const Add_Address({super.key, required this.type,required this.cart_id});
+
+  final String type;
+  final int cart_id;
 
   @override
   State<Add_Address> createState() => _Add_AddressState();
 }
 
 class _Add_AddressState extends State<Add_Address> {
-  Map<String, dynamic> datapost = {"is_def": 1};
+  Map<String, dynamic> datapost = {};
   String smartData ='';
 
   final TextEditingController firstNameController = TextEditingController();
@@ -33,7 +36,13 @@ class _Add_AddressState extends State<Add_Address> {
   @override
   void initState() {
     super.initState();
-    this.datapost['is_def'] = 1;
+
+    if(widget.type=='1'){
+      this.datapost['is_def'] = 1;
+    }else if(widget.type=='2'){
+      this.datapost['is_def']=2;
+      this.datapost['cart_id']=widget.cart_id;
+    }
   }
 
   void addAddress() {
@@ -75,8 +84,7 @@ class _Add_AddressState extends State<Add_Address> {
     }
 
     if (datapost['city'] == null) {
-      // errorToShow('Please enter Your City');
-      // return;
+      // errorToShof
     }
     if (datapost['state'] == null) {
       // errorToShow('Please enter Your State');

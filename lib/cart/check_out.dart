@@ -360,7 +360,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       },
                       child: Container(color: Colors.transparent),
                     )),
-                    Add_Address()
+                    Add_Address(type: '1',cart_id: 0)
                   ])));
         });
     if (confirm == true) {
@@ -413,12 +413,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  void showMultiDialog(BuildContext context) {
-    showModalBottomSheet(
+  void showMultiDialog(BuildContext context) async {
+    bool confirm = await showModalBottomSheet(
         context: context,
         builder: (context) {
           return MultiAddress(orderlist: orderlist ?? []);
         });
+    if (confirm == true) {
+      defaultship={};
+      this.getCatoPeration();
+    }
   }
 
   void getCatoPeration() {
@@ -646,6 +650,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           hasAddress = false;
           break;
         }
+      }else{
+        hasAddress =false;
       }
     }
     if (hasAddress == false) {
