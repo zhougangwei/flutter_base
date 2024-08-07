@@ -42,6 +42,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   bool _isExpanded = false;
   bool _isReviewExpanded = false;
   Map<String, dynamic>? Size;
+  Map<String, dynamic>? Colorr;
   Map<String, dynamic>? default_spes_desc;
   int currentIndex = 0;
 
@@ -85,6 +86,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
               if (res['data']['spes_desc'] != null &&
                   res['data']['spes_desc'] != "") {
                 this.Size = res['data']['spes_desc']['Size'];
+                this.Colorr = res['data']['spes_desc']['Color'];
               }
               if (res['data']['product'] != null &&
                   res['data']['product'] != "") {
@@ -268,7 +270,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
     );
   }
 
-  Widget obtainSIzeContainer(int i) {
+  Widget obtainSIzeContainer(int i, default_spes_desc) {
     if (currentIndex == i)
       return Container(
         margin: EdgeInsets.only(right: 25.w),
@@ -283,7 +285,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
           child: Padding(
             padding: const EdgeInsets.all(5),
             child: Text(
-              default_spes_desc![default_spes_desc?.keys?.first]
+              default_spes_desc
                   .values
                   .toList()[i]['name'],
             ),
@@ -293,14 +295,14 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
     else
       return GestureDetector(
         onLongPress: (){
-          gotoClip(default_spes_desc![default_spes_desc?.keys?.first]
+          gotoClip(default_spes_desc
               .values
               .toList()[i]['name']);
         },
         onTap: () {
           setState(() {
             currentIndex = i;
-            changeSpes(default_spes_desc![default_spes_desc?.keys?.first]
+            changeSpes(default_spes_desc
                 .values
                 .toList()[i]['product_id']
                 .toString());
@@ -312,7 +314,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: Text(
-                default_spes_desc![default_spes_desc?.keys?.first]
+                default_spes_desc
                     .values
                     .toList()[i]['name'],
               ),
@@ -471,24 +473,31 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
 
   Widget obtainDefaultContainer() {
     if (default_spes_desc != null &&
-        default_spes_desc?.keys?.first != null &&
+        default_spes_desc?.keys?.length != null &&
         default_spes_desc?.values != null) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(default_spes_desc?.keys?.first ?? '' + ":",
-                style: TextStyle(fontSize: 26.sp)),
-            SizedBox(height: 15.h),
-            Wrap(children: [
-              for (var i = 0;
+
+      return ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+        itemCount: default_spes_desc?.keys?.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(default_spes_desc?.keys?.elementAt(index) ?? '' + ":",
+                    style: TextStyle(fontSize: 26.sp)),
+                SizedBox(height: 15.h),
+                Wrap(children: [
+                  for (var i = 0;
                   i <
-                      default_spes_desc?[default_spes_desc?.keys?.first]
+                      default_spes_desc?[default_spes_desc?.keys?.elementAt(index)]
                           ?.length;
                   i++)
-                obtainSIzeContainer(i),
-            ])
-          ]);
+                    obtainSIzeContainer(i,default_spes_desc?[default_spes_desc?.keys?.elementAt(index)]),
+                ])
+              ]);
+        });
     } else {
       return Container();
     }
