@@ -14,6 +14,7 @@ description: A Flutter app for eBooks
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 version: 2.4.4
+versionCode: 3
 
 environment:
   sdk: '>=3.0.6 <4.0.0'

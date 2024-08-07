@@ -87,13 +87,13 @@ class _HomePageState extends State<HomePage> {
               onWillPop: () async => false,//关键代码
               child: PrivacyPolicyDialog(onConfirm: () {
                 SPUtils.setBool("hasAccept", true);
-                upgrade(context);
+                //upgrade(context);
               }),
             );
           },
         );
       } else {
-        upgrade(context);
+        //upgrade(context);
       }
     });
   }
