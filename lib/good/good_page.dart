@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:abce/shop/bean/good_bean_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +46,9 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   Map<String, dynamic>? Size;
   Map<String, dynamic>? Colorr;
   Map<String, dynamic>? default_spes_desc;
+  late HashMap<int, int> indexMap;
   int currentIndex = 0;
+
 
   late S localizations;
 
@@ -54,6 +58,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   @override
   void initState() {
     super.initState();
+    indexMap=HashMap();
     getGoodsInfo();
     getgoodscomment();
   }
@@ -270,8 +275,8 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
     );
   }
 
-  Widget obtainSIzeContainer(int i, default_spes_desc) {
-    if (currentIndex == i)
+  Widget obtainSIzeContainer(int i, default_spes_desc,int index) {
+    if (indexMap[index] == i || indexMap[index]==null) {
       return Container(
         margin: EdgeInsets.only(right: 25.w),
         child: Container(
@@ -292,7 +297,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
           ),
         ),
       );
-    else
+    } else {
       return GestureDetector(
         onLongPress: (){
           gotoClip(default_spes_desc
@@ -302,6 +307,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
         onTap: () {
           setState(() {
             currentIndex = i;
+            indexMap.putIfAbsent(index, () => currentIndex);
             changeSpes(default_spes_desc
                 .values
                 .toList()[i]['product_id']
@@ -322,6 +328,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
           ),
         ),
       );
+    }
   }
 
   Widget obtainNotFav(String text) {
@@ -494,7 +501,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                       default_spes_desc?[default_spes_desc?.keys?.elementAt(index)]
                           ?.length;
                   i++)
-                    obtainSIzeContainer(i,default_spes_desc?[default_spes_desc?.keys?.elementAt(index)]),
+                    obtainSIzeContainer(i,default_spes_desc?[default_spes_desc?.keys?.elementAt(index)],index),
                 ])
               ]);
         });
