@@ -47,7 +47,6 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   Map<String, dynamic>? Colorr;
   Map<String, dynamic>? default_spes_desc;
   late HashMap<int, int> indexMap;
-  int currentIndex = 0;
 
 
   late S localizations;
@@ -97,6 +96,14 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
                   res['data']['product'] != "") {
                 this.default_spes_desc =
                     res['data']['product']['default_spes_desc'];
+
+                if(this.default_spes_desc!=null && this.default_spes_desc!.length>0){
+                  for (int i = 0; i < this.default_spes_desc!.length; i++) {
+                    this.indexMap[i]=0;
+                  }
+                }
+
+
               }
             } catch (e) {}
             //{\"853\":\"50ml\",\"854\":\"100ml\",\"856\":\"30ml\"}
@@ -276,7 +283,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
   }
 
   Widget obtainSIzeContainer(int i, default_spes_desc,int index) {
-    if (indexMap[index] == i || indexMap[index]==null) {
+    if (indexMap[index] == i ) {
       return Container(
         margin: EdgeInsets.only(right: 25.w),
         child: Container(
@@ -306,8 +313,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
         },
         onTap: () {
           setState(() {
-            currentIndex = i;
-            indexMap.putIfAbsent(index, () => currentIndex);
+            indexMap[index]=i;
             changeSpes(default_spes_desc
                 .values
                 .toList()[i]['product_id']
@@ -462,6 +468,7 @@ class _GoodPageState extends State<GoodPage> with AutomaticKeepAliveClientMixin 
           this.goods_data?.price = res['data']['price'];
           product_id =res['data']['id'];
           this.default_spes_desc = res['data']['default_spes_desc'];
+
         });
       }
     }).catchError((err) {});
